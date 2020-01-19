@@ -17,6 +17,8 @@ namespace Parser
         public char EndChar { get; private set; }
 
         public string SourceText { get; }
+
+        public int Priority { get; }
         public Function(string text, char separator)
         {
             this.SourceText = text;

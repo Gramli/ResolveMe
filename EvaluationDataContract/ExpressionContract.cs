@@ -6,25 +6,25 @@ using System.Text;
 namespace EvaluationDataContract
 {
     [DataContract]
-    public class Equation
+    public class ExpressionContract
     {
         [DataMember]
-        public List<Equation> Childs { get; private set; } = null;
+        public List<ExpressionContract> Childs { get; private set; } = null;
         [DataMember]
         public string Value { get; private set; }
         [DataMember]
-        public Equation Parent { get; private set; } = null;
+        public ExpressionContract Parent { get; private set; } = null;
 
-        public Equation(string value, Equation parent)
+        public ExpressionContract(string value, ExpressionContract parent)
             : this(value)
         {
             this.Parent = parent;
         }
-        public Equation(string value)
+        public ExpressionContract(string value)
         {
             this.Value = value;
         }
 
-        public Equation() { }
+        public ExpressionContract() { }
     }
 }
