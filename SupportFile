@@ -1,0 +1,32 @@
+GRAMMAR
+expression = { prefix_function | infix_operator | variable | number };
+prefix_function = letter, letter, { letter | digit }, "(", { variable | double | infix_operator, "," }, variable | double | variable | infix_operator ")";
+infix_operator = variable | double, math_operator, variable | double ;
+variable = letter, { letter | digit } ;
+number = ["-"] { digit }, [ ".", digit * ] ;
+math_operator = "<" | ">" | "+" | "-" | "*" | "/";
+letter = "A" | "B" | "C" | "D" | "E" | "F" | "G"
+       | "H" | "I" | "J" | "K" | "L" | "M" | "N"
+       | "O" | "P" | "Q" | "R" | "S" | "T" | "U"
+       | "V" | "W" | "X" | "Y" | "Z" | "a" | "b"
+       | "c" | "d" | "e" | "f" | "g" | "h" | "i"
+       | "j" | "k" | "l" | "m" | "n" | "o" | "p"
+       | "q" | "r" | "s" | "t" | "u" | "v" | "w"
+       | "x" | "y" | "z" ;
+digit = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" ;
+
+infix, prefix, postfix
+https://runestone.academy/runestone/books/published/pythonds/BasicDS/InfixPrefixandPostfixExpressions.html
+
+RPN
+https://en.wikipedia.org/wiki/Reverse_Polish_notation
+pseudocode
+for each token in the postfix expression:
+  if token is an operator:
+    operand_2 ← pop from the stack
+    operand_1 ← pop from the stack
+    result ← evaluate token with operand_1 and operand_2
+    push result back onto the stack
+  else if token is an operand:
+    push token onto the stack
+result ← pop from the stack
