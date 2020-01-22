@@ -22,13 +22,15 @@ namespace Parser
         {
             List<NonTerminal> result = new List<NonTerminal>();
 
-            this.Grammar = grammar.Replace(" ",string.Empty);
-            IEnumerable<string> productionRules = SplitByTermination(this.Grammar).Reverse();
-            foreach (string productionRule in productionRules)
+            this.Grammar = grammar.Replace(" ", string.Empty);
+            string[] productionRules = SplitByTermination(this.Grammar).Reverse().ToArray();
+            for (int i = 0; i < productionRules.Length - 1; i++)
             {
-                NonTerminal nonTerminal = GetNonTerminal(productionRule, result);
+                NonTerminal nonTerminal = GetNonTerminal(productionRules[i], result);
                 result.Add(nonTerminal);
             }
+            NonTerminal startSymbolNonTerminal = GetNonTerminal(productionRules[productionRules.Length - 1], result);
+            StartSymbol startSymbol = new StartSymbol()
         }
 
         private NonTerminal GetNonTerminal(string productionRule, List<NonTerminal> listOfExistedTerminals)
