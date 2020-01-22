@@ -6,11 +6,16 @@ namespace Parser.EBNF
 {
     public class NonTerminal : Terminal
     {
-        private GrammarItem rule;
-        public NonTerminal(string name, GrammarItem rule)
+        private IEBNFItem rule;
+        public NonTerminal(string name, IEBNFItem rule)
             : base(name)
         {
             this.rule = rule;
+        }
+
+        public override string Rebuild()
+        {
+            return base.Rebuild();
         }
 
         public override bool Is(string value)

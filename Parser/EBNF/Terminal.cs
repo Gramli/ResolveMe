@@ -4,12 +4,12 @@ using System.Text;
 
 namespace Parser.EBNF
 {
-    public class Terminal : GrammarItem
+    public class Terminal : IEBNFItem
     {
-        public string Symbol { get; private set; }
+        public string Representation { get; private set; }
         public Terminal(string value)
         {
-            this.Symbol = value;
+            this.Representation = value;
         }
 
         public virtual bool Is(string value)
@@ -19,7 +19,12 @@ namespace Parser.EBNF
 
         public virtual int GetLength()
         {
-            return this.Symbol.Length;
+            return this.Representation.Length;
+        }
+
+        public virtual string Rebuild()
+        {
+            return $"\"{this.Representation}\"";
         }
     }
 }

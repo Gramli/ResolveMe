@@ -4,19 +4,13 @@ using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Linq;
+using Parser.EBNF.ProductionRuleElements;
 
 namespace Parser
 {
     public class EBNFParser
     {
         public const string definition = " = ";
-        public const string concatenation = " , ";
-        public const string termination = " ;";
-        public const string alternation = " | ";
-        public const string optional = "[]";
-        public const string repetition = "{}";
-        public const string grouping = "()";
-
 
         public string Grammar { get; private set; }
         public EBNFParser(string grammar)
@@ -28,48 +22,73 @@ namespace Parser
         {
             List<NonTerminal> result = new List<NonTerminal>();
 
-            this.Grammar = grammar;
-            string[] grammarItems = grammar.Split(EBNFParser.termination);
-            foreach (string item in grammarItems)
+            this.Grammar = grammar.Replace(" ",string.Empty);
+            IEnumerable<string> productionRules = SplitByTermination(this.Grammar).Reverse();
+            foreach (string productionRule in productionRules)
             {
-                NonTerminal nonTerminal = GetNonTerminal(item, result);
+                NonTerminal nonTerminal = GetNonTerminal(productionRule, result);
                 result.Add(nonTerminal);
             }
         }
 
-        private NonTerminal GetNonTerminal(string production, List<NonTerminal> listOfExistedTerminals)
+        private NonTerminal GetNonTerminal(string productionRule, List<NonTerminal> listOfExistedTerminals)
         {
-            string[] nonTerminalProductionRule = production.Split(EBNFParser.definition);
-            GrammarItem nonTerminalRule = GetGrammarItem(nonTerminalProductionRule[1], listOfExistedTerminals);
-            NonTerminal result = new NonTerminal(nonTerminalProductionRule[0], nonTerminalRule);
+            string[] splittedProductionRule = SplitByDefinition(productionRule);
+            IEBNFItem nonTerminalRule = GetEBNFItem(splittedProductionRule[1], listOfExistedTerminals);
+            NonTerminal result = new NonTerminal(splittedProductionRule[0], nonTerminalRule);
             return result;
 
         }
 
-        private GrammarItem GetGrammarItem(string rule, List<NonTerminal> listOfExistedTerminals)
+        private string[] SplitByTermination(string productionRules)
         {
-            GrammarItem result = null;
-            GrammarItem left = GetFirstGrammarItem(rule, listOfExistedTerminals);
-            string restOfRule = rule.Substring(0, left.GetLength());
+            return Regex.Split(productionRules, ";$");
+        }
+
+        private string[] SplitByDefinition(string productionRule)
+        {
+            string[] result = new string[2];
+            int definitionIndex = productionRule.IndexOf(EBNFParser.definition);
+            result[0] = productionRule.Substring(0, definitionIndex);
+            definitionIndex++;
+            result[1] = productionRule.Substring(definitionIndex, productionRule.Length - definitionIndex);
+            return result;
+        }
+
+        private IEBNFItem GetEBNFItem(string rule, List<NonTerminal> listOfExistedTerminals)
+        {
+            IEBNFItem result = null;
+            IEBNFItem left = GetStartEBNFItem(rule, listOfExistedTerminals);
+            string restOfRule = rule.Substring(0, left.Rebuild().Length);
             string firstChar = restOfRule[0].ToString();
             if (firstChar.Equals(Termination.notation))
                 result = new Termination(left);
             else
             {
                 string newRule = restOfRule.Substring(0, 1);
+                IEBNFItem right = GetEBNFItem(newRule, listOfExistedTerminals);
                 switch (firstChar)
                 {
                     case Alternation.notation:
-                        result = new Alternation(left, GetGrammarItem(newRule, listOfExistedTerminals));
+                        result = new Alternation(left, right);
+                        break;
+                    case Concatenation.notation:
+                        result = new Concatenation(left, right);
                         break;
                 }
             }
             return result;
         }
 
-        private GrammarItem GetFirstGrammarItem(string rule, List<NonTerminal> listOfExistedTerminals)
+        /// <summary>
+        /// Try to find EBNFItem which can can be on right side
+        /// </summary>
+        /// <param name="rule"></param>
+        /// <param name="listOfExistedTerminals"></param>
+        /// <returns></returns>
+        private IEBNFItem GetStartEBNFItem(string rule, List<NonTerminal> listOfExistedTerminals)
         {
-            GrammarItem result = null;
+            IEBNFItem result = null;
             string firstChar = rule[0].ToString();
             //terminal
             if (firstChar.Equals('"'))
@@ -93,14 +112,17 @@ namespace Parser
                         break;
                     builder.Append(rule[i]);
                 }
-                result = (from item in listOfExistedTerminals where item.Symbol.Equals(builder.ToString()) select item).Single();
+                result = (from item in listOfExistedTerminals where item.Representation.Equals(builder.ToString()) select item).Single();
             }
             else if (Regex.IsMatch(firstChar, @"[\[\{\(]"))
             {
-                switch(firstChar)
+                switch (firstChar)
                 {
+                    case Repetition.notation:
+                        break;
+                    case Optional.notation:
+                        break;
                     case Grouping.notation:
-
                         break;
                 }
             }

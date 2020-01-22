@@ -1,26 +1,21 @@
 {
   "format": 1,
   "restore": {
-    "E:\\GitHub\\ResolveMe\\PictureEvaluator\\PictureEvaluator.csproj": {}
+    "C:\\github\\ResolveMe\\PictureEvaluator\\PictureEvaluator.csproj": {}
   },
   "projects": {
-    "E:\\GitHub\\ResolveMe\\PictureEvaluator\\PictureEvaluator.csproj": {
+    "C:\\github\\ResolveMe\\PictureEvaluator\\PictureEvaluator.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\GitHub\\ResolveMe\\PictureEvaluator\\PictureEvaluator.csproj",
+        "projectUniqueName": "C:\\github\\ResolveMe\\PictureEvaluator\\PictureEvaluator.csproj",
         "projectName": "PictureEvaluator",
-        "projectPath": "E:\\GitHub\\ResolveMe\\PictureEvaluator\\PictureEvaluator.csproj",
-        "packagesPath": "C:\\Users\\dbalc\\.nuget\\packages\\",
-        "outputPath": "E:\\GitHub\\ResolveMe\\PictureEvaluator\\obj\\",
+        "projectPath": "C:\\github\\ResolveMe\\PictureEvaluator\\PictureEvaluator.csproj",
+        "packagesPath": "C:\\Users\\balcadan\\.nuget\\packages\\",
+        "outputPath": "C:\\github\\ResolveMe\\PictureEvaluator\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "E:\\Microsoft\\Xamarin\\NuGet\\",
-          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
-        ],
         "configFilePaths": [
-          "C:\\Users\\dbalc\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
+          "C:\\Users\\balcadan\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "netcoreapp2.1"
@@ -51,10 +46,16 @@
             }
           },
           "imports": [
-            "net461"
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
           ],
           "assetTargetFallback": true,
-          "warn": true
+          "warn": true,
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.100\\RuntimeIdentifierGraph.json"
         }
       }
     }

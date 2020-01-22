@@ -4,9 +4,9 @@ using System.Text;
 
 namespace Parser.EBNF
 {
-    public interface GrammarItem
+    public interface IEBNFItem
     {
-        string Symbol { get; }
+        string Representation { get; }
         bool Is(string value);
 
         /// <summary>
@@ -14,5 +14,7 @@ namespace Parser.EBNF
         /// </summary>
         /// <returns></returns>
         int GetLength();
+
+        string Rebuild();
     }
 }
