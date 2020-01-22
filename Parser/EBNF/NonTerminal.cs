@@ -4,23 +4,41 @@ using System.Text;
 
 namespace Parser.EBNF
 {
-    public class NonTerminal : Terminal
+    /// <summary>
+    /// Represents NonTerminal in EBNF
+    /// </summary>
+    public class NonTerminal : IEBNFItem
     {
-        private IEBNFItem rule;
-        public NonTerminal(string name, IEBNFItem rule)
-            : base(name)
+        public const string definition = "=";
+        /// <summary>
+        /// NonTerminal value on right side
+        /// </summary>
+        private IEBNFItem rightSide;
+
+        /// <summary>
+        /// NonTerminal Name, right side of definition
+        /// </summary>
+        public string Name { get; private set; }
+
+        /// <summary>
+        /// inicialize name and item ->right and left side
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="rightSide"></param>
+        public NonTerminal(string name, IEBNFItem rightSide)
         {
-            this.rule = rule;
+            this.Name = name;
+            this.rightSide = rightSide;
         }
 
-        public override string Rebuild()
+        public virtual string Rebuild()
         {
-            return base.Rebuild();
+            return  $"{this.Name}{NonTerminal.definition}{this.rightSide.Rebuild()}";
         }
 
-        public override bool Is(string value)
+        public virtual bool Is(string value)
         {
-            return this.rule.Is(value);
+            rightSide.
         }
     }
 }

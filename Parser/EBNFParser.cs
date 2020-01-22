@@ -10,27 +10,26 @@ namespace Parser
 {
     public class EBNFParser
     {
-        public const string definition = " = ";
-
         public string Grammar { get; private set; }
         public EBNFParser(string grammar)
         {
             Parse(this.Grammar);
         }
 
-        private void Parse(string grammar)
+        private StartSymbol Parse(string grammar)
         {
-            List<NonTerminal> result = new List<NonTerminal>();
+            List<NonTerminal> productionRules = new List<NonTerminal>();
 
             this.Grammar = grammar.Replace(" ", string.Empty);
-            string[] productionRules = SplitByTermination(this.Grammar).Reverse().ToArray();
-            for (int i = 0; i < productionRules.Length - 1; i++)
+            string[] productionRulesStrings = SplitByTermination(this.Grammar).Reverse().ToArray();
+            for (int i = 0; i < productionRulesStrings.Length - 1; i++)
             {
-                NonTerminal nonTerminal = GetNonTerminal(productionRules[i], result);
-                result.Add(nonTerminal);
+                NonTerminal nonTerminal = GetNonTerminal(productionRulesStrings[i], productionRules);
+                productionRules.Add(nonTerminal);
             }
-            NonTerminal startSymbolNonTerminal = GetNonTerminal(productionRules[productionRules.Length - 1], result);
-            StartSymbol startSymbol = new StartSymbol()
+            NonTerminal startSymbolNonTerminal = GetNonTerminal(productionRulesStrings[productionRulesStrings.Length - 1], productionRules);
+            StartSymbol startSymbol = new StartSymbol(startSymbolNonTerminal.Name, startSymbolNonTerminal, productionRules);
+            return startSymbol;
         }
 
         private NonTerminal GetNonTerminal(string productionRule, List<NonTerminal> listOfExistedTerminals)
@@ -44,13 +43,13 @@ namespace Parser
 
         private string[] SplitByTermination(string productionRules)
         {
-            return Regex.Split(productionRules, ";$");
+            return Regex.Split(productionRules, $"{Termination.notation}$");
         }
 
         private string[] SplitByDefinition(string productionRule)
         {
             string[] result = new string[2];
-            int definitionIndex = productionRule.IndexOf(EBNFParser.definition);
+            int definitionIndex = productionRule.IndexOf(NonTerminal.definition);
             result[0] = productionRule.Substring(0, definitionIndex);
             definitionIndex++;
             result[1] = productionRule.Substring(definitionIndex, productionRule.Length - definitionIndex);
@@ -71,12 +70,8 @@ namespace Parser
                 IEBNFItem right = GetEBNFItem(newRule, listOfExistedTerminals);
                 switch (firstChar)
                 {
-                    case Alternation.notation:
-                        result = new Alternation(left, right);
-                        break;
-                    case Concatenation.notation:
-                        result = new Concatenation(left, right);
-                        break;
+                    case Alternation.notation: result = new Alternation(left, right); break;
+                    case Concatenation.notation: result = new Concatenation(left, right); break;
                 }
             }
             return result;
@@ -114,10 +109,11 @@ namespace Parser
                         break;
                     builder.Append(rule[i]);
                 }
-                result = (from item in listOfExistedTerminals where item.Representation.Equals(builder.ToString()) select item).Single();
+                result = (from item in listOfExistedTerminals where item.Name.Equals(builder.ToString()) select item).Single();
             }
             else if (Regex.IsMatch(firstChar, @"[\[\{\(]"))
             {
+
                 switch (firstChar)
                 {
                     case Repetition.notation:
@@ -130,6 +126,11 @@ namespace Parser
             }
             return result;
 
+        }
+
+        private List<NonTerminal> GetProductionRules(string endString)
+        {
+            throw new NotImplementedException();
         }
     }
 }

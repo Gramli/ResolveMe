@@ -4,13 +4,15 @@ using System.Text;
 
 namespace Parser.EBNF.ProductionRuleElements
 {
+    /// <summary>
+    /// EBNF Repetition rule (group)
+    /// </summary>
     public class Repetition : IGroupProductionRule
     {
         public const string notation = "{";
         public const string endNotation = "{";
         public string Notation { get { return Repetition.endNotation; } }
         public string EndNotation { get { return Repetition.notation; } }
-        public string Representation { get {  } }
 
         public List<IEBNFItem> Items { get; private set; }
 
@@ -23,19 +25,14 @@ namespace Parser.EBNF.ProductionRuleElements
         {
             throw new NotImplementedException();
         }
-        public int GetLength()
-        {
-            int length = 0;
-            foreach (IEBNFItem item in this.Items)
-                length += item.GetLength();
-            return length;
-        }
 
         public string Rebuild()
         {
             StringBuilder result = new StringBuilder();
+            result.Append(Repetition.notation);
             foreach (IEBNFItem item in this.Items)
                 result.Append(item.Rebuild());
+            result.Append(Repetition.endNotation);
             return result.ToString();
         }
     }

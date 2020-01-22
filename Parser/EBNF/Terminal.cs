@@ -1,15 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Parser.EBNF
 {
+    /// <summary>
+    /// Represents terminal in ENBF
+    /// </summary>
     public class Terminal : IEBNFItem
     {
-        public string Representation { get; private set; }
+        /// <summary>
+        /// Terminal representation - its character or string
+        /// </summary>
+        public string Value { get; private set; }
         public Terminal(string value)
         {
-            this.Representation = value;
+            this.Value = value;
         }
 
         public virtual bool Is(string value)
@@ -17,14 +21,13 @@ namespace Parser.EBNF
             throw new NotImplementedException();
         }
 
-        public virtual int GetLength()
-        {
-            return this.Representation.Length;
-        }
-
+        /// <summary>
+        /// Returns terminal in grammar
+        /// </summary>
+        /// <returns></returns>
         public virtual string Rebuild()
         {
-            return $"\"{this.Representation}\"";
+            return $"\"{this.Value}\"";
         }
     }
 }

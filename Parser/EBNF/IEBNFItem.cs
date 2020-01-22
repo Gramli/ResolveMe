@@ -4,17 +4,16 @@ using System.Text;
 
 namespace Parser.EBNF
 {
+    /// <summary>
+    /// Represents item of EBNF grammar
+    /// </summary>
     public interface IEBNFItem
     {
-        string Representation { get; }
         bool Is(string value);
-
         /// <summary>
-        /// PREJMENOVAT
+        /// Allows to rebuilt item like is written in grammar
         /// </summary>
         /// <returns></returns>
-        int GetLength();
-
         string Rebuild();
     }
 }

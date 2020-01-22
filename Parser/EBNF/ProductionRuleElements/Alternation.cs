@@ -4,12 +4,14 @@ using System.Text;
 
 namespace Parser.EBNF.ProductionRuleElements
 {
+    /// <summary>
+    /// EBNF Alternation rule
+    /// </summary>
     public class Alternation : IProductionRule
     {
         public const string notation = "|";
 
         public string Notation { get { return Alternation.notation; } }
-        public string Representation { get { return Alternation.notation; } }
         public IEBNFItem Left { get; private set; }
 
         public IEBNFItem Right { get; private set; }
@@ -25,14 +27,9 @@ namespace Parser.EBNF.ProductionRuleElements
             return this.Left.Is(value) || this.Right.Is(value);
         }
 
-        public int GetLength()
-        {
-            return Representation.Length;
-        }
-
         public string Rebuild()
         {
-            return $"{this.Left.Rebuild()}{this.Representation}{this.Right.Rebuild()}";
+            return $"{this.Left.Rebuild()}{this.Notation}{this.Right.Rebuild()}";
         }
     }
 }

@@ -4,16 +4,25 @@ using System.Text;
 
 namespace Parser.EBNF
 {
-    public class StartSymbol : Terminal
+    /// <summary>
+    /// Represents start symbol in EBNF grammar
+    /// </summary>
+    public class StartSymbol : NonTerminal
     {
-        public IEBNFItem StartSymbolRule { get; private set; }
-
+        /// <summary>
+        /// Production rules cached by its names
+        /// </summary>
         private Dictionary<string, NonTerminal> productionRules;
 
+        /// <summary>
+        /// Inicialize StartSymbol
+        /// </summary>
+        /// <param name="name">left side of dedication</param>
+        /// <param name="startSymbolRule">rule</param>
+        /// <param name="productionRules">production rules in grammar</param>
         public StartSymbol(string name, IEBNFItem startSymbolRule, IEnumerable<NonTerminal> productionRules) 
-            : base(name)
+            : base(name, startSymbolRule)
         {
-            this.StartSymbolRule = startSymbolRule;
             InicializeProductionRules(productionRules);
         }
 
@@ -21,7 +30,21 @@ namespace Parser.EBNF
         {
             this.productionRules = new Dictionary<string, NonTerminal>();
             foreach (NonTerminal productionRule in productionRules)
-                this.productionRules[productionRule.Representation] = productionRule;
+                this.productionRules[productionRule.Name] = productionRule;
+        }
+
+        public override bool Is(string value)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Rebuild start symbol right side - rule
+        /// </summary>
+        /// <returns></returns>
+        public override string Rebuild()
+        {
+            return base.Rebuild();
         }
     }
 }

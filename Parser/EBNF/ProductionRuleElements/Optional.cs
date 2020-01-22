@@ -4,22 +4,23 @@ using System.Text;
 
 namespace Parser.EBNF.ProductionRuleElements
 {
+    /// <summary>
+    /// EBNF Optional rule (group)
+    /// </summary>
     public class Optional : IGroupProductionRule
     {
         public const string notation = "[";
 
-        public const string endNotation = "[";
+        public const string endNotation = "]";
 
-        public string Notation => throw new NotImplementedException();
-        public string EndNotation => throw new NotImplementedException();
+        public string Notation { get { return Optional.notation; } }
+        public string EndNotation { get { return Optional.endNotation; } }
 
-        public List<IEBNFItem> Items => throw new NotImplementedException();
+        public List<IEBNFItem> Items { get; private set; }
 
-        public string Representation => throw new NotImplementedException();
-
-        public int GetLength()
+        public Optional(List<IEBNFItem> items)
         {
-            throw new NotImplementedException();
+            this.Items = items;
         }
 
         public bool Is(string value)
@@ -29,7 +30,12 @@ namespace Parser.EBNF.ProductionRuleElements
 
         public string Rebuild()
         {
-            throw new NotImplementedException();
+            StringBuilder result = new StringBuilder();
+            result.Append(Optional.notation);
+            foreach (IEBNFItem item in this.Items)
+                result.Append(item.Rebuild());
+            result.Append(Optional.endNotation);
+            return result.ToString();
         }
     }
 }

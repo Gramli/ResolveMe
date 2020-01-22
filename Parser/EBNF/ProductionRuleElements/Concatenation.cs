@@ -4,11 +4,13 @@ using System.Text;
 
 namespace Parser.EBNF.ProductionRuleElements
 {
+    /// <summary>
+    /// EBNF Concatenation rule
+    /// </summary>
     public class Concatenation : IProductionRule
     {
         public const string notation = ",";
         public string Notation { get { return Concatenation.notation; } }
-        public string Representation { get {  } }
         public IEBNFItem Left { get; private set; }
 
         public IEBNFItem Right { get; private set; }
@@ -24,14 +26,9 @@ namespace Parser.EBNF.ProductionRuleElements
             throw new NotImplementedException();
         }
 
-        public int GetLength()
-        {
-            return Representation.Length;
-        }
-
         public string Rebuild()
         {
-            return $"{this.Left.Rebuild()}{this.Representation}{this.Right.Rebuild()}";
+            return $"{this.Left.Rebuild()}{this.Notation}{this.Right.Rebuild()}";
         }
     }
 }

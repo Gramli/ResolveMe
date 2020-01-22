@@ -4,20 +4,22 @@ using System.Text;
 
 namespace Parser.EBNF.ProductionRuleElements
 {
+    /// <summary>
+    /// EBNF Grouping rule (group)
+    /// </summary>
     public class Grouping : IGroupProductionRule
     {
         public const string notation = "(";
 
-        public const string endNotation = "(";
-        public string Notation { get { return Grouping.endNotation; } }
-        public string EndNotation { get { return Grouping.notation; } }
-        public string Representation => throw new NotImplementedException();
+        public const string endNotation = ")";
+        public string Notation { get { return Grouping.notation; } }
+        public string EndNotation { get { return Grouping.endNotation; } }
 
-        public List<IEBNFItem> Items => throw new NotImplementedException();
+        public List<IEBNFItem> Items { get; private set; }
 
-        public int GetLength()
+        public Grouping(List<IEBNFItem> items)
         {
-            throw new NotImplementedException();
+            this.Items = items;
         }
 
         public bool Is(string value)
@@ -27,7 +29,12 @@ namespace Parser.EBNF.ProductionRuleElements
 
         public string Rebuild()
         {
-            throw new NotImplementedException();
+            StringBuilder result = new StringBuilder();
+            result.Append(Grouping.notation);
+            foreach (IEBNFItem item in this.Items)
+                result.Append(item.Rebuild());
+            result.Append(Grouping.endNotation);
+            return result.ToString();
         }
     }
 }

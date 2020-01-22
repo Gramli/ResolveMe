@@ -1,7 +1,7 @@
 GRAMMAR
-expression = { prefix_function | infix_operator | variable | number };
-prefix_function = letter, letter, { letter | digit }, "(", { variable | double | infix_operator, "," }, variable | double | variable | infix_operator ")";
-infix_operator = variable | double, math_operator, variable | double ;
+expression = { prefix_function | infix_function | variable | number };
+prefix_function = letter, letter, { letter | digit }, { variable | number | infix_function, "," }, variable | number | variable | infix_function;
+infix_function = variable | number, math_operator, variable | number ;
 variable = letter, { letter | digit } ;
 number = ["-"] { digit }, [ ".", digit * ] ;
 math_operator = "<" | ">" | "+" | "-" | "*" | "/";

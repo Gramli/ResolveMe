@@ -4,11 +4,13 @@ using System.Text;
 
 namespace Parser.EBNF.ProductionRuleElements
 {
+    /// <summary>
+    /// EBNF termination rule
+    /// </summary>
     public class Termination : IProductionRule
     {
         public const string notation = ";";
         public string Notation { get { return Termination.notation; } }
-        public string Representation { get {  } }
         public IEBNFItem Left { get; private set; }
 
         public Termination(IEBNFItem left)
@@ -21,14 +23,9 @@ namespace Parser.EBNF.ProductionRuleElements
             return this.Left.Is(value);
         }
 
-        public int GetLength()
-        {
-            return this.Representation.Length;
-        }
-
         public string Rebuild()
         {
-            return $"{this.Left.Rebuild()}{this.Representation}";
+            return $"{this.Left.Rebuild()}{this.Notation}";
         }
     }
 }
