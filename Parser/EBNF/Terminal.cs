@@ -18,7 +18,7 @@ namespace Parser.EBNF
 
         public virtual bool Is(string value)
         {
-            throw new NotImplementedException();
+            return this.Value.Equals(value);
         }
 
         /// <summary>

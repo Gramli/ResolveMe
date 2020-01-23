@@ -120,8 +120,6 @@ namespace Parser
                         break;
                     case Optional.notation:
                         break;
-                    case Grouping.notation:
-                        break;
                 }
             }
             return result;

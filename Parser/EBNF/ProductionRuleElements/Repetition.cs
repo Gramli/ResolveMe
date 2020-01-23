@@ -10,7 +10,7 @@ namespace Parser.EBNF.ProductionRuleElements
     public class Repetition : IGroupProductionRule
     {
         public const string notation = "{";
-        public const string endNotation = "{";
+        public const string endNotation = "}";
         public string Notation { get { return Repetition.endNotation; } }
         public string EndNotation { get { return Repetition.notation; } }
 
