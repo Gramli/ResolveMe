@@ -16,7 +16,7 @@ namespace Parser.EBNF
         private IEBNFItem rightSide;
 
         /// <summary>
-        /// NonTerminal Name, right side of definition
+        /// NonTerminal Name, left side of definition
         /// </summary>
         public string Name { get; private set; }
 

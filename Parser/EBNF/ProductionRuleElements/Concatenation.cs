@@ -23,7 +23,7 @@ namespace Parser.EBNF.ProductionRuleElements
 
         public bool Is(string value)
         {
-            throw new NotImplementedException();
+            
         }
 
         public string Rebuild()

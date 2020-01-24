@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Parser.EBNF
 {
@@ -31,6 +30,17 @@ namespace Parser.EBNF
             this.productionRules = new Dictionary<string, NonTerminal>();
             foreach (NonTerminal productionRule in productionRules)
                 this.productionRules[productionRule.Name] = productionRule;
+        }
+
+        public List<string> Recognize(string value)
+        {
+            List<string> result = new List<string>();
+            foreach(var productionRule in this.productionRules)
+            {
+                if (productionRule.Value.Is(value)) 
+                    result.Add(productionRule.Key);
+            }
+            return result;
         }
 
         public override bool Is(string value)
