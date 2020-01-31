@@ -10,24 +10,24 @@ namespace Parser.EBNF
         /// <summary>
         /// Terminal representation - its character or string
         /// </summary>
-        public string Value { get; private set; }
+        private readonly string _value;
         public Terminal(string value)
         {
-            this.Value = value;
+            this._value = value;
         }
 
-        public virtual bool Is(string value)
+        public bool Is(string value)
         {
-            return this.Value.Equals(value);
+            return this._value.Equals(value);
         }
 
         /// <summary>
         /// Returns terminal in grammar
         /// </summary>
         /// <returns></returns>
-        public virtual string Rebuild()
+        public string Rebuild()
         {
-            return $"\"{this.Value}\"";
+            return $"\"{this._value}\"";
         }
     }
 }

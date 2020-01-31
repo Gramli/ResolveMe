@@ -9,11 +9,11 @@ namespace Parser.EBNF
     /// </summary>
     public class NonTerminal : IEBNFItem
     {
-        public const string definition = "=";
+        public const string Definition = "=";
         /// <summary>
         /// NonTerminal value on right side
         /// </summary>
-        private IEBNFItem rightSide;
+        private readonly IEBNFItem _rightSide;
 
         /// <summary>
         /// NonTerminal Name, left side of definition
@@ -28,17 +28,17 @@ namespace Parser.EBNF
         public NonTerminal(string name, IEBNFItem rightSide)
         {
             this.Name = name;
-            this.rightSide = rightSide;
+            this._rightSide = rightSide;
         }
 
         public virtual string Rebuild()
         {
-            return  $"{this.Name}{NonTerminal.definition}{this.rightSide.Rebuild()}";
+            return  $"{this.Name}{NonTerminal.Definition}{this._rightSide.Rebuild()}";
         }
 
         public virtual bool Is(string value)
         {
-            rightSide.
+            //_rightSide.
         }
     }
 }

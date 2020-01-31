@@ -11,8 +11,8 @@ namespace Parser.EBNF.ProductionRuleElements
     {
         public const string notation = "{";
         public const string endNotation = "}";
-        public string Notation { get { return Repetition.endNotation; } }
-        public string EndNotation { get { return Repetition.notation; } }
+        public string Notation => Repetition.notation;
+        public string EndNotation => Repetition.endNotation;
 
         public List<IEBNFItem> Items { get; private set; }
 
@@ -29,10 +29,10 @@ namespace Parser.EBNF.ProductionRuleElements
         public string Rebuild()
         {
             StringBuilder result = new StringBuilder();
-            result.Append(Repetition.notation);
+            result.Append(this.Notation);
             foreach (IEBNFItem item in this.Items)
                 result.Append(item.Rebuild());
-            result.Append(Repetition.endNotation);
+            result.Append(this.EndNotation);
             return result.ToString();
         }
     }

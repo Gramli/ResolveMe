@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 
 namespace Parser.EBNF
 {
@@ -11,7 +12,7 @@ namespace Parser.EBNF
         /// <summary>
         /// Production rules cached by its names
         /// </summary>
-        private Dictionary<string, NonTerminal> productionRules;
+        private Dictionary<string, NonTerminal> _productionRules;
 
         /// <summary>
         /// Inicialize StartSymbol
@@ -27,25 +28,47 @@ namespace Parser.EBNF
 
         private void InicializeProductionRules(IEnumerable<NonTerminal> productionRules)
         {
-            this.productionRules = new Dictionary<string, NonTerminal>();
+            this._productionRules = new Dictionary<string, NonTerminal>();
             foreach (NonTerminal productionRule in productionRules)
-                this.productionRules[productionRule.Name] = productionRule;
+                this._productionRules[productionRule.Name] = productionRule;
         }
 
-        public List<string> Recognize(string value)
+        public NonTerminal Recognize(string value)
         {
-            List<string> result = new List<string>();
-            foreach(var productionRule in this.productionRules)
+            NonTerminal result = null;
+            foreach(var productionRule in this._productionRules)
             {
-                if (productionRule.Value.Is(value)) 
-                    result.Add(productionRule.Key);
+                if (!productionRule.Value.Is(value)) continue;
+                result = productionRule.Value;
+                break;
             }
+            return result;
+        }
+
+        public bool Recognize(string value, params string[] ruleNames)
+        {
+            var result = false;
+            foreach (var ruleName in ruleNames)
+            {
+                if (this._productionRules.ContainsKey(ruleName))
+                {
+                    result = this._productionRules[ruleName].Is(value);
+                }   
+            }
+
             return result;
         }
 
         public override bool Is(string value)
         {
-            throw new NotImplementedException();
+            StringBuilder readed = new StringBuilder();
+            for (int i = 0; i < value.Length; i++)
+            {
+                readed.Append(value[i]);
+                string actual = readed.ToString();
+                
+
+            }
         }
 
         /// <summary>

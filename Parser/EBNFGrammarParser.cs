@@ -49,7 +49,7 @@ namespace Parser
         private string[] SplitByDefinition(string productionRule)
         {
             string[] result = new string[2];
-            int definitionIndex = productionRule.IndexOf(NonTerminal.definition);
+            int definitionIndex = productionRule.IndexOf(NonTerminal.Definition);
             result[0] = productionRule.Substring(0, definitionIndex);
             definitionIndex++;
             result[1] = productionRule.Substring(definitionIndex, productionRule.Length - definitionIndex);

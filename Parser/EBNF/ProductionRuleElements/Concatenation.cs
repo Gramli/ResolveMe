@@ -10,15 +10,15 @@ namespace Parser.EBNF.ProductionRuleElements
     public class Concatenation : IProductionRule
     {
         public const string notation = ",";
-        public string Notation { get { return Concatenation.notation; } }
-        public IEBNFItem Left { get; private set; }
+        public string Notation => Concatenation.notation;
+        private readonly IEBNFItem _left;
 
-        public IEBNFItem Right { get; private set; }
+        private readonly IEBNFItem _right;
 
         public Concatenation(IEBNFItem left, IEBNFItem right)
         {
-            this.Left = left;
-            this.Right = right;
+            this._left = left;
+            this._right = right;
         }
 
         public bool Is(string value)
@@ -28,7 +28,7 @@ namespace Parser.EBNF.ProductionRuleElements
 
         public string Rebuild()
         {
-            return $"{this.Left.Rebuild()}{this.Notation}{this.Right.Rebuild()}";
+            return $"{this._left.Rebuild()}{this.Notation}{this._right.Rebuild()}";
         }
     }
 }

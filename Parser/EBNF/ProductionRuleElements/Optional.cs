@@ -13,8 +13,8 @@ namespace Parser.EBNF.ProductionRuleElements
 
         public const string endNotation = "]";
 
-        public string Notation { get { return Optional.notation; } }
-        public string EndNotation { get { return Optional.endNotation; } }
+        public string Notation => Optional.notation;
+        public string EndNotation => Optional.endNotation;
 
         public List<IEBNFItem> Items { get; private set; }
 
