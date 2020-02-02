@@ -9,13 +9,13 @@ namespace Parser
     /// Shunting-yard algorithm
     /// Method for parsing mathematical expressions specified in infix notation.
     /// </summary>
-    public class ShuntingYard
+    public class EBNFExpressionParser
     {
-        private StartSymbol _startSymbolOfEBNF;
+        private EBNFMathGrammar _grammar;
 
-        public ShuntingYard(StartSymbol startSymbolOfEBNF)
+        public EBNFExpressionParser(EBNFMathGrammar grammar)
         {
-            this._startSymbolOfEBNF = startSymbolOfEBNF;
+            this._grammar = grammar;
         }
 
         public void ReadExpression(string expression)
@@ -29,7 +29,7 @@ namespace Parser
                 actual = (UndefinedToken)token;
                 break;
             }
-            
+
             //continue in reading
             for (int i = 1; i < expression.Length; i++)
             {
@@ -38,10 +38,16 @@ namespace Parser
                 {
                     case IToken opToken when opToken is OperatorToken:
 
-                        NonTerminal nonTerminal = this._startSymbolOfEBNF.Recognize(actual.Value);
+                        NonTerminal nonTerminal = this._grammar.Recognize(actual.Value);
+                        //non terminal musi projit gramatikou !!
                         if (nonTerminal != null)
                         {
-                            
+                            switch (nonTerminal.Name)
+                            {
+                                case string number when number.Equals(this._grammar.NumberNonTerminalName): break;
+                                case string variable when variable.Equals(this._grammar.VariableNonTerminalName): break;
+                                    //doplnit zbytek dle gramatiky
+                            }
                         }
                         break;
                     case IToken valToken when valToken is UndefinedToken:
@@ -53,22 +59,22 @@ namespace Parser
         private IToken CreateToken(char tokenChar)
         {
             IToken result = null;
-                switch (tokenChar)
-                {
-                    case '+':
-                    case '-':
-                    case '*':
-                    case '/':
-                        result = new OperatorToken(tokenChar.ToString());
-                        break;
-                    case '^': break;
-                    case '(': break;
-                    case ')': break;
-                    default:
-                        result = new UndefinedToken(tokenChar.ToString());
-                        break;
-                }
-                return result;
+            switch (tokenChar)
+            {
+                case '+':
+                case '-':
+                case '*':
+                case '/':
+                    result = new OperatorToken(tokenChar.ToString());
+                    break;
+                case '^': break;
+                case '(': break;
+                case ')': break;
+                default:
+                    result = new UndefinedToken(tokenChar.ToString());
+                    break;
+            }
+            return result;
         }
     }
 }

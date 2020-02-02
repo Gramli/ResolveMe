@@ -45,20 +45,6 @@ namespace Parser.EBNF
             return result;
         }
 
-        public bool Recognize(string value, params string[] ruleNames)
-        {
-            var result = false;
-            foreach (var ruleName in ruleNames)
-            {
-                if (this._productionRules.ContainsKey(ruleName))
-                {
-                    result = this._productionRules[ruleName].Is(value);
-                }   
-            }
-
-            return result;
-        }
-
         public override bool Is(string value)
         {
             StringBuilder readed = new StringBuilder();

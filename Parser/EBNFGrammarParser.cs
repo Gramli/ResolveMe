@@ -8,20 +8,18 @@ using Parser.EBNF.ProductionRuleElements;
 
 namespace Parser
 {
-    public class EBNFParser
+    public class EBNFParser : IEBNFGrammarParser
     {
-        public string Grammar { get; private set; }
-        public EBNFParser(string grammar)
+        public EBNFParser()
         {
-            Parse(this.Grammar);
         }
 
-        private StartSymbol Parse(string grammar)
+        public StartSymbol Parse(string grammar)
         {
             List<NonTerminal> productionRules = new List<NonTerminal>();
 
-            this.Grammar = grammar.Replace(" ", string.Empty);
-            string[] productionRulesStrings = SplitByTermination(this.Grammar).Reverse().ToArray();
+            grammar = grammar.Replace(" ", string.Empty);
+            string[] productionRulesStrings = SplitByTermination(grammar).Reverse().ToArray();
             for (int i = 0; i < productionRulesStrings.Length - 1; i++)
             {
                 NonTerminal nonTerminal = GetNonTerminal(productionRulesStrings[i], productionRules);
