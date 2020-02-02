@@ -6,7 +6,7 @@ using System.Text.RegularExpressions;
 using System.Linq;
 using Parser.EBNF.ProductionRuleElements;
 
-namespace Parser
+namespace Parser.EBNF
 {
     public class EBNFParser : IEBNFGrammarParser
     {

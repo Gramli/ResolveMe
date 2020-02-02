@@ -1,4 +1,4 @@
-expression = { prefix_function | infix_function };
+expression = { prefix_function | infix_function, function_parameter };
 prefix_function = letter, letter, word, "(", { prefix_function_parameter, "," }, prefix_function_parameter ")" ;
 prefix_function_parameter = function_parameter | infix_function ;
 infix_function = function_parameter, math_operator, function_parameter ;

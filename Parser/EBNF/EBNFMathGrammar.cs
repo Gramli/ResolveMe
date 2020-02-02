@@ -3,17 +3,17 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Parser
+namespace Parser.EBNF
 {
     public class EBNFMathGrammar : IMathExpressionGrammar
     {
-        public string NumberNonTerminalName => throw new NotImplementedException();
+        public string NumberNonTerminalName => "number";
 
-        public string VariableNonTerminalName => throw new NotImplementedException();
+        public string VariableNonTerminalName => "variable";
 
-        public string InfixFuncNonTerminalName => throw new NotImplementedException();
+        public string InfixFuncNonTerminalName => "infix_function";
 
-        public string PrefixFuncNonTerminalName => throw new NotImplementedException();
+        public string PrefixFuncNonTerminalName => "prefix_function";
 
         private StartSymbol _startSymbol;
         private readonly IEBNFGrammarParser _parser;
