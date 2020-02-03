@@ -4,3 +4,13 @@
 Parser/obj/
 
 .idea/.idea.ResolveMe/.idea/
+
+ParserRESTService/obj/
+
+PictureEvaluator/obj/
+
+EvaluationDataContract/obj/
+
+NumberEvaluator/obj/
+
+NumberEvaluatorRESTService/obj/
