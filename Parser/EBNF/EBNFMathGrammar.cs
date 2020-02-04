@@ -5,6 +5,9 @@ using System.Text;
 
 namespace Parser.EBNF
 {
+    /// <summary>
+    /// Extended Backus Naus Form mathematical grammar 
+    /// </summary>
     public class EBNFMathGrammar : IMathExpressionGrammar
     {
         public string NumberNonTerminalName => "number";
@@ -29,6 +32,11 @@ namespace Parser.EBNF
         {
             this._startSymbol = this._parser.Parse(grammar);
             //set functions
+        }
+        
+        public bool IsExpression(string nonTerminalName)
+        {
+            return  this._startSymbol.Is(nonTerminalName);
         }
 
         public NonTerminal Recognize(string value)

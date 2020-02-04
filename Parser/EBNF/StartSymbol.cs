@@ -32,7 +32,10 @@ namespace Parser.EBNF
             foreach (NonTerminal productionRule in productionRules)
                 this._productionRules[productionRule.Name] = productionRule;
         }
-
+        
+        /// <summary>
+        /// Try to recognize which nonterminal rule can apply on value
+        /// </summary>
         public NonTerminal Recognize(string value)
         {
             NonTerminal result = null;
@@ -45,6 +48,9 @@ namespace Parser.EBNF
             return result;
         }
 
+        /// <summary>
+        /// Determines if value belongs to grammar
+        /// </summary>
         public override bool Is(string value)
         {
             StringBuilder readed = new StringBuilder();
