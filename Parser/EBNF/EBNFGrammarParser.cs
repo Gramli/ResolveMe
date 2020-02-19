@@ -72,7 +72,7 @@ namespace Parser.EBNF
         }
 
         /// <summary>
-        /// Try to find EBNFItem which can can be on right side
+        /// Try to find EBNFItem which can be on right side
         /// </summary>
         /// <param name="rule"></param>
         /// <param name="listOfExistedTerminals"></param>
@@ -105,24 +105,22 @@ namespace Parser.EBNF
                 }
                 result = (from item in listOfExistedTerminals where item.Name.Equals(builder.ToString()) select item).Single();
             }
+            //repetition or optional
             else if (Regex.IsMatch(firstChar.ToString(), @"[\[\{\(]"))
             {
-
-                switch (firstChar)
+                string restOfRepRule = rule.Substring(0, 1);
+                IEBNFItem rootItem = GetEBNFItem(restOfRepRule, listOfExistedTerminals);
+                switch (firstChar.ToString())
                 {
                     case Repetition.notation:
+                        result = new Repetition(rootItem);
                         break;
                     case Optional.notation:
+                        result = new Optional(rootItem);
                         break;
                 }
             }
             return result;
-
-        }
-
-        private List<NonTerminal> GetProductionRules(string endString)
-        {
-            throw new NotImplementedException();
         }
     }
 }

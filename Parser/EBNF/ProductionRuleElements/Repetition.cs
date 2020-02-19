@@ -14,11 +14,11 @@ namespace Parser.EBNF.ProductionRuleElements
         public string Notation => Repetition.notation;
         public string EndNotation => Repetition.endNotation;
 
-        public List<IEBNFItem> Items { get; private set; }
+        private readonly IEBNFItem item;
 
-        public Repetition(List<IEBNFItem> items)
+        public Repetition(IEBNFItem item)
         {
-            this.Items = items;
+            this.item = item;
         }
 
         public bool Is(string value)
@@ -28,12 +28,7 @@ namespace Parser.EBNF.ProductionRuleElements
 
         public string Rebuild()
         {
-            StringBuilder result = new StringBuilder();
-            result.Append(this.Notation);
-            foreach (IEBNFItem item in this.Items)
-                result.Append(item.Rebuild());
-            result.Append(this.EndNotation);
-            return result.ToString();
+            return $"{this.Notation}{this.item.Rebuild()}{this.EndNotation}";
         }
     }
 }

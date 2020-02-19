@@ -13,9 +13,5 @@ namespace Parser.EBNF
         /// End notation of production rule in EBNF
         /// </summary>
         string EndNotation { get; }
-        /// <summary>
-        /// Items in production rule
-        /// </summary>
-        List<IEBNFItem> Items { get; }
     }
 }

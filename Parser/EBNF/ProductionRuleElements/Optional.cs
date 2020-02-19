@@ -16,11 +16,11 @@ namespace Parser.EBNF.ProductionRuleElements
         public string Notation => Optional.notation;
         public string EndNotation => Optional.endNotation;
 
-        public List<IEBNFItem> Items { get; private set; }
+        private readonly IEBNFItem item;
 
-        public Optional(List<IEBNFItem> items)
+        public Optional(IEBNFItem item)
         {
-            this.Items = items;
+            this.item = item;
         }
 
         public bool Is(string value)
@@ -30,12 +30,7 @@ namespace Parser.EBNF.ProductionRuleElements
 
         public string Rebuild()
         {
-            StringBuilder result = new StringBuilder();
-            result.Append(Optional.notation);
-            foreach (IEBNFItem item in this.Items)
-                result.Append(item.Rebuild());
-            result.Append(Optional.endNotation);
-            return result.ToString();
+            return $"{this.Notation}{this.item.Rebuild()}{this.EndNotation}";
         }
     }
 }
