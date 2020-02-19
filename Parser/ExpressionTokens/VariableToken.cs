@@ -12,9 +12,10 @@ namespace Parser.ExpressionTokens
         {
             this.VariableName = variableName;
         }
-        public object GetValue()
+
+        public string GetStringRepresentation()
         {
-            throw new NotImplementedException();
+            return this.VariableName;
         }
     }
 }

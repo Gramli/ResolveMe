@@ -53,6 +53,8 @@ namespace Parser.EBNF
         /// </summary>
         public override bool Is(string value)
         {
+            throw new NotImplementedException();
+            
             StringBuilder readed = new StringBuilder();
             for (int i = 0; i < value.Length; i++)
             {
@@ -61,15 +63,6 @@ namespace Parser.EBNF
                 
 
             }
-        }
-
-        /// <summary>
-        /// Rebuild start symbol right side - rule
-        /// </summary>
-        /// <returns></returns>
-        public override string Rebuild()
-        {
-            return base.Rebuild();
         }
     }
 }

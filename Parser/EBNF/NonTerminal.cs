@@ -38,7 +38,7 @@ namespace Parser.EBNF
 
         public virtual bool Is(string value)
         {
-            //_rightSide.
+            throw new NotImplementedException();
         }
     }
 }

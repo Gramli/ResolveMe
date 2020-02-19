@@ -9,32 +9,28 @@ using Parser.EBNF.ProductionRuleElements;
 namespace Parser.EBNF
 {
     public class EBNFParser : IEBNFGrammarParser
-    {
-        public EBNFParser()
-        {
-        }
-
+    { 
         public StartSymbol Parse(string grammar)
         {
-            List<NonTerminal> productionRules = new List<NonTerminal>();
+            var productionRules = new List<NonTerminal>();
 
             grammar = grammar.Replace(" ", string.Empty);
-            string[] productionRulesStrings = SplitByTermination(grammar).Reverse().ToArray();
-            for (int i = 0; i < productionRulesStrings.Length - 1; i++)
+            var productionRulesStrings = SplitByTermination(grammar).Reverse().ToArray();
+            for (var i = 0; i < productionRulesStrings.Length - 1; i++)
             {
-                NonTerminal nonTerminal = GetNonTerminal(productionRulesStrings[i], productionRules);
+                var nonTerminal = GetNonTerminal(productionRulesStrings[i], productionRules);
                 productionRules.Add(nonTerminal);
             }
-            NonTerminal startSymbolNonTerminal = GetNonTerminal(productionRulesStrings[productionRulesStrings.Length - 1], productionRules);
-            StartSymbol startSymbol = new StartSymbol(startSymbolNonTerminal.Name, startSymbolNonTerminal, productionRules);
+            var startSymbolNonTerminal = GetNonTerminal(productionRulesStrings[productionRulesStrings.Length - 1], productionRules);
+            var startSymbol = new StartSymbol(startSymbolNonTerminal.Name, startSymbolNonTerminal, productionRules);
             return startSymbol;
         }
 
         private NonTerminal GetNonTerminal(string productionRule, List<NonTerminal> listOfExistedTerminals)
         {
-            string[] splittedProductionRule = SplitByDefinition(productionRule);
-            IEBNFItem nonTerminalRule = GetEBNFItem(splittedProductionRule[1], listOfExistedTerminals);
-            NonTerminal result = new NonTerminal(splittedProductionRule[0], nonTerminalRule);
+            var splittedProductionRule = SplitByDefinition(productionRule);
+            var nonTerminalRule = GetEBNFItem(splittedProductionRule[1], listOfExistedTerminals);
+            var result = new NonTerminal(splittedProductionRule[0], nonTerminalRule);
             return result;
 
         }
@@ -46,8 +42,8 @@ namespace Parser.EBNF
 
         private string[] SplitByDefinition(string productionRule)
         {
-            string[] result = new string[2];
-            int definitionIndex = productionRule.IndexOf(NonTerminal.Definition);
+            var result = new string[2];
+            var definitionIndex = productionRule.IndexOf(NonTerminal.Definition, StringComparison.InvariantCulture);
             result[0] = productionRule.Substring(0, definitionIndex);
             definitionIndex++;
             result[1] = productionRule.Substring(definitionIndex, productionRule.Length - definitionIndex);
@@ -57,15 +53,15 @@ namespace Parser.EBNF
         private IEBNFItem GetEBNFItem(string rule, List<NonTerminal> listOfExistedTerminals)
         {
             IEBNFItem result = null;
-            IEBNFItem left = GetStartEBNFItem(rule, listOfExistedTerminals);
-            string restOfRule = rule.Substring(0, left.Rebuild().Length);
-            string firstChar = restOfRule[0].ToString();
+            var left = GetStartEBNFItem(rule, listOfExistedTerminals);
+            var restOfRule = rule.Substring(0, left.Rebuild().Length);
+            var firstChar = restOfRule[0].ToString();
             if (firstChar.Equals(Termination.notation))
                 result = new Termination(left);
             else
             {
-                string newRule = restOfRule.Substring(0, 1);
-                IEBNFItem right = GetEBNFItem(newRule, listOfExistedTerminals);
+                var newRule = restOfRule.Substring(0, 1);
+                var right = GetEBNFItem(newRule, listOfExistedTerminals);
                 switch (firstChar)
                 {
                     case Alternation.notation: result = new Alternation(left, right); break;
@@ -84,12 +80,12 @@ namespace Parser.EBNF
         private IEBNFItem GetStartEBNFItem(string rule, List<NonTerminal> listOfExistedTerminals)
         {
             IEBNFItem result = null;
-            string firstChar = rule[0].ToString();
+            var firstChar = rule[0];
             //terminal
             if (firstChar.Equals('"'))
             {
-                StringBuilder builder = new StringBuilder();
-                for (int i = 1; i < rule.Length; i++)
+                var builder = new StringBuilder();
+                for (var i = 1; i < rule.Length; i++)
                 {
                     if (rule[i].Equals('"'))
                         break;
@@ -98,18 +94,18 @@ namespace Parser.EBNF
                 result = new Terminal(builder.ToString());
             }
             //nonTerminal
-            else if (Regex.IsMatch(firstChar, "[a-zA-Z]"))
+            else if (Regex.IsMatch(firstChar.ToString(), "[a-zA-Z]"))
             {
-                StringBuilder builder = new StringBuilder();
-                for (int i = 0; i < rule.Length; i++)
+                var builder = new StringBuilder();
+                foreach (var t in rule)
                 {
-                    if (Regex.IsMatch(rule[i].ToString(), @"[,;|\[\]\{\}\(\)]"))
+                    if (Regex.IsMatch(t.ToString(), @"[,;|\[\]\{\}\(\)]"))
                         break;
-                    builder.Append(rule[i]);
+                    builder.Append(t);
                 }
                 result = (from item in listOfExistedTerminals where item.Name.Equals(builder.ToString()) select item).Single();
             }
-            else if (Regex.IsMatch(firstChar, @"[\[\{\(]"))
+            else if (Regex.IsMatch(firstChar.ToString(), @"[\[\{\(]"))
             {
 
                 switch (firstChar)

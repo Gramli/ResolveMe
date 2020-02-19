@@ -4,14 +4,14 @@
     {
         public string Value { get; private set; }
         
-        public ValueToken(string value)
+        public UndefinedToken(string value)
         {
             this.Value = value;
         }
 
-        public object GetValue()
+        public string GetStringRepresentation()
         {
-            throw new System.NotImplementedException();
+            return this.Value;
         }
 
         public void Concat(UndefinedToken other)

@@ -3,9 +3,9 @@
     public interface IToken
     {
         /// <summary>
-        /// Returns token value boxed in object
+        /// Create token as string
         /// </summary>
         /// <returns></returns>
-        object GetValue();
+        string GetStringRepresentation();
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace Parser.ExpressionTokens
+﻿using System.Globalization;
+
+namespace Parser.ExpressionTokens
 {
     public class NumberToken : IToken
     {
@@ -14,9 +16,9 @@
             this._value = double.Parse(number, System.Globalization.NumberStyles.Float);
         }
 
-        public object GetValue()
+        public string GetStringRepresentation()
         {
-            return this._value;
+            return this._value.ToString(CultureInfo.InvariantCulture);
         }
     }
 }

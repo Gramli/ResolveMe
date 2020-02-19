@@ -34,9 +34,9 @@ namespace Parser.EBNF
             //set functions
         }
         
-        public bool IsExpression(string nonTerminalName)
+        public bool IsExpression(string expression)
         {
-            return  this._startSymbol.Is(nonTerminalName);
+            return  this._startSymbol.Is(expression);
         }
 
         public NonTerminal Recognize(string value)

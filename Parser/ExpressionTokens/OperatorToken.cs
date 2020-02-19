@@ -8,8 +8,8 @@
         {
             this._operatorString = operatorString;
         }
-        
-        public object GetValue()
+
+        public string GetStringRepresentation()
         {
             return this._operatorString;
         }
