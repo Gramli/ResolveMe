@@ -28,8 +28,13 @@ namespace Parser.EBNF.ProductionRuleElements
             for(var i=0; i<value.Length;i++)
             {
                 builder.Append(value[i]);
-                var restOfValue = value.Substring(i, value.Length - i);
-                if (this._left.Is(builder.ToString()) && this._right.Is(restOfValue))
+                var subI = i + 1;
+                var restOfValue = value.Substring(subI, value.Length - subI);
+                bool left = this._left.Is(builder.ToString()) || this._left is Optional;
+
+                throw new NotImplementedException();
+
+                if (this._left.Is(builder.ToString()) && this._right.Is(restOfValue)) //TODO DAN AND NEPLATI PRO OPTIONAL
                 {
                     result = true;
                     break;

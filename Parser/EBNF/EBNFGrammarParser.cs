@@ -9,7 +9,7 @@ using Parser.EBNF.ProductionRuleElements;
 namespace Parser.EBNF
 {
     public class EBNFParser : IEBNFGrammarParser
-    { 
+    {
         public StartSymbol Parse(string grammar)
         {
             var productionRules = new List<NonTerminal>();
@@ -18,6 +18,7 @@ namespace Parser.EBNF
             var productionRulesStrings = SplitByTermination(grammar).Reverse().ToArray();
             for (var i = 0; i < productionRulesStrings.Length - 1; i++)
             {
+                if (string.IsNullOrEmpty(productionRulesStrings[i])) continue;
                 var nonTerminal = GetNonTerminal(productionRulesStrings[i], productionRules);
                 productionRules.Add(nonTerminal);
             }
@@ -37,7 +38,7 @@ namespace Parser.EBNF
 
         private string[] SplitByTermination(string productionRules)
         {
-            return Regex.Split(productionRules, $"{Termination.notation}$");
+            return Regex.Split(productionRules, $"(?<=[{Termination.notation}])");
         }
 
         private string[] SplitByDefinition(string productionRule)
@@ -50,18 +51,21 @@ namespace Parser.EBNF
             return result;
         }
 
-        private IEBNFItem GetEBNFItem(string rule, List<NonTerminal> listOfExistedTerminals)
+        private IEBNFItem GetEBNFItem(string rule, List<NonTerminal> listOfExistedTerminals, string endNotation = null)
         {
             IEBNFItem result = null;
             var left = GetStartEBNFItem(rule, listOfExistedTerminals);
-            var restOfRule = rule.Substring(0, left.Rebuild().Length);
+            var lengthOfLeftRule = left.Rebuild().Length;
+            var restOfRule = rule.Substring(lengthOfLeftRule, rule.Length - lengthOfLeftRule);
             var firstChar = restOfRule[0].ToString();
-            if (firstChar.Equals(Termination.notation))
+            if (!string.IsNullOrEmpty(endNotation) && firstChar.Equals(endNotation))
+                result = left;
+            else if (IsTermination(firstChar))
                 result = new Termination(left);
             else
             {
-                var newRule = restOfRule.Substring(0, 1);
-                var right = GetEBNFItem(newRule, listOfExistedTerminals);
+                var newRule = restOfRule.Substring(1, restOfRule.Length - 1);
+                var right = GetEBNFItem(newRule, listOfExistedTerminals, endNotation);
                 switch (firstChar)
                 {
                     case Alternation.notation: result = new Alternation(left, right); break;
@@ -108,19 +112,25 @@ namespace Parser.EBNF
             //repetition or optional
             else if (Regex.IsMatch(firstChar.ToString(), @"[\[\{\(]"))
             {
-                var restOfRepRule = rule.Substring(0, 1);
-                var rootItem = GetEBNFItem(restOfRepRule, listOfExistedTerminals);
+                var restOfRepRule = rule.Substring(1, rule.Length - 1);
                 switch (firstChar.ToString())
                 {
                     case Repetition.notation:
-                        result = new Repetition(rootItem);
+                        var repItem = GetEBNFItem(restOfRepRule, listOfExistedTerminals, Repetition.endNotation);
+                        result = new Repetition(repItem);
                         break;
                     case Optional.notation:
-                        result = new Optional(rootItem);
+                        var opItem = GetEBNFItem(restOfRepRule, listOfExistedTerminals, Optional.endNotation);
+                        result = new Optional(opItem);
                         break;
                 }
             }
             return result;
+        }
+
+        private bool IsTermination(string item)
+        {
+            return Termination.notation.Equals(item);
         }
     }
 }

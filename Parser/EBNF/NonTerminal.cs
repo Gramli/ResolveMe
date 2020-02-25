@@ -33,7 +33,7 @@ namespace Parser.EBNF
 
         public virtual string Rebuild()
         {
-            return  $"{this.Name}{NonTerminal.Definition}{this._rightSide.Rebuild()}";
+            return $"{this.Name}"; // {NonTerminal.Definition}{this._rightSide.Rebuild()}";
         }
 
         public virtual bool Is(string value)

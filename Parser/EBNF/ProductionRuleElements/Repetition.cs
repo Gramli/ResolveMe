@@ -24,7 +24,7 @@ namespace Parser.EBNF.ProductionRuleElements
         public bool Is(string value)
         {
             var result = false;
-            if (!this._item.Is(value))
+            if (!this._item.Is(value) && !string.IsNullOrEmpty(value))
             {
                 var builder = new StringBuilder();
                 for (var i = 0; i < value.Length; i++)
@@ -36,7 +36,8 @@ namespace Parser.EBNF.ProductionRuleElements
                             result = true;
                         else
                         {
-                            result = this.Is(value.Substring(i, value.Length - i));
+                            var subi = i + 1;
+                            result = this.Is(value.Substring(subi, value.Length - subi));
                             break;
                         }
                     }
