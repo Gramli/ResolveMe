@@ -23,7 +23,20 @@ namespace Parser.EBNF.ProductionRuleElements
 
         public bool Is(string value)
         {
-            
+            var result = false;
+            var builder = new StringBuilder();
+            for(var i=0; i<value.Length;i++)
+            {
+                builder.Append(value[i]);
+                var restOfValue = value.Substring(i, value.Length - i);
+                if (this._left.Is(builder.ToString()) && this._right.Is(restOfValue))
+                {
+                    result = true;
+                    break;
+                }
+            }
+
+            return result;
         }
 
         public string Rebuild()

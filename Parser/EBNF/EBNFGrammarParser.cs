@@ -108,8 +108,8 @@ namespace Parser.EBNF
             //repetition or optional
             else if (Regex.IsMatch(firstChar.ToString(), @"[\[\{\(]"))
             {
-                string restOfRepRule = rule.Substring(0, 1);
-                IEBNFItem rootItem = GetEBNFItem(restOfRepRule, listOfExistedTerminals);
+                var restOfRepRule = rule.Substring(0, 1);
+                var rootItem = GetEBNFItem(restOfRepRule, listOfExistedTerminals);
                 switch (firstChar.ToString())
                 {
                     case Repetition.notation:

@@ -41,28 +41,13 @@ namespace Parser.EBNF
             NonTerminal result = null;
             foreach(var productionRule in this._productionRules)
             {
-                if (!productionRule.Value.Is(value)) continue;
-                result = productionRule.Value;
-                break;
+                if (productionRule.Value.Is(value))
+                {
+                    result = productionRule.Value;
+                    break;
+                }
             }
             return result;
-        }
-
-        /// <summary>
-        /// Determines if value belongs to grammar
-        /// </summary>
-        public override bool Is(string value)
-        {
-            throw new NotImplementedException();
-            
-            StringBuilder readed = new StringBuilder();
-            for (int i = 0; i < value.Length; i++)
-            {
-                readed.Append(value[i]);
-                string actual = readed.ToString();
-                
-
-            }
         }
     }
 }
