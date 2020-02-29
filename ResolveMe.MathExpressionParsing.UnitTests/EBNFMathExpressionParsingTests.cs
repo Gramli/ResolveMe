@@ -19,6 +19,9 @@ namespace ResolveMe.MathExpressionParsing.UnitTests
         private string infix_operation = "infix_operation = [\"(\"], infix_operation_parameter , math_operator, infix_operation_parameter,  [\")\"];";
         private string infix_operation_parameter = " infix_operation_parameter = function_parameter, infix_operation';";
         private string infix_operationDer = "infix_operation' = infix_operation' | ε ;";
+        private string infix_function = "infix_function = { [\"(\"], function_parameter, math_operator, function_parameter ,  [\")\"] };";
+
+
         private string prefix_operation_parameter = "prefix_function_parameter = function_parameter | infix_operation ;";
         private string prefix_operation = "prefix_operation = letter, letter, word, \"(\", { prefix_operation_parameter | prefix_operation, \", \" }, prefix_operation_parameter | prefix_operation, \")\" ;";
 
@@ -136,10 +139,10 @@ namespace ResolveMe.MathExpressionParsing.UnitTests
         public void EvaluateInfixFunction()
         {
             var builder = new StringBuilder();
-            builder.Append("expression =  infix_operation ;");
-            builder.Append(infix_operation);
-            builder.Append(infix_operation_parameter);
-            builder.Append(infix_operationDer);
+            builder.Append("expression =  infix_function ;");
+            //builder.Append(infix_operation);
+            //builder.Append(infix_operation_parameter);
+            builder.Append(infix_function);
             builder.Append(functionParameter);
             builder.Append(number);
             builder.Append(variable);

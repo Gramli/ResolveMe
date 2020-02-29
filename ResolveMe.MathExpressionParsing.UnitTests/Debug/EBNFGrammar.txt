@@ -1,12 +1,22 @@
-expression = { prefix_function | infix_function | function_parameter };
-prefix_function = letter, letter, word, "(", { prefix_function_parameter, "," }, prefix_function_parameter, ")" ;
-prefix_function_parameter = function_parameter | infix_function ;
-infix_function = function_parameter, math_operator, function_parameter ;
-function_parameter = variable | number ;
+expression = [plus | minus], term ,{ ( plus | minus ) , term };
+term = factor, { (times | divide) , factor };
+factor = double | variable| function | l_round, expression, r_round | matrix;
+function = letter, letter, word, l_round, expression, { comma, expression } r_round;
+matrix = l_square, expression, {comma, expression}, r_square;
 variable = letter, word ;
 word = { letter | digit } ;
-number = ["-"], digit, { digit }, [ ".",  { digit } ] ;
-math_operator = "<" | ">" | "+" | "-" | "*" | "/";
+double = ["-"], digit, { digit }, [ ".",  { digit } ] ;
+l_round = "(" ;
+r_round = ")" ;
+l_square="[";
+r_square="]";
+comma = "," ;
+plus   ="+";
+minus  ="-";
+times  ="*";
+divide ="/";
+biggerThan = ">";
+lesserThan = "<";
 letter = "A" | "B" | "C" | "D" | "E" | "F" | "G"
        | "H" | "I" | "J" | "K" | "L" | "M" | "N"
        | "O" | "P" | "Q" | "R" | "S" | "T" | "U"

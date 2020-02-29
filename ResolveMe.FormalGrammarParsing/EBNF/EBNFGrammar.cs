@@ -32,12 +32,12 @@ namespace ResolveMe.FormalGrammarParsing.EBNF
         /// <returns></returns>
         public bool IsExpression(string value)
         {
-            return this._startSymbol.IsExpression(value);
+            return this._startSymbol.IsExpression(value.ToLower());
         }
 
         public bool IsNonTerminal(string nonTerminalName, string value)
         {
-            return this._startSymbol.IsNonTerminal(nonTerminalName, value);
+            return this._startSymbol.IsNonTerminal(nonTerminalName, value.ToLower());
         }
     }
 }

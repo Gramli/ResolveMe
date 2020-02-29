@@ -20,7 +20,7 @@ namespace ResolveMe.FormalGrammarParsing.EBNF.EBNFItems
         /// </summary>
         public string Name { get; private set; }
 
-        public bool Empty => this._rightSide != null;
+        public bool IsOptional => this._rightSide.IsOptional;
 
         /// <summary>
         /// inicialize name and right side
@@ -51,11 +51,6 @@ namespace ResolveMe.FormalGrammarParsing.EBNF.EBNFItems
         public virtual bool Is(string value)
         {
             return this._rightSide.Is(value);
-        }
-
-        public bool IsOptional()
-        {
-            return this._rightSide.IsOptional();
         }
     }
 }

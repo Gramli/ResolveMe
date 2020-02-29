@@ -11,7 +11,7 @@ namespace ResolveMe.FormalGrammarParsing.EBNF
     public class EBNFGrammarParser : IEBNFGrammarParser
     {
         private readonly List<NonTerminal> _emptyRules; 
-        private readonly string _termination = ";";
+        private const string _termination = ";";
 
         public EBNFGrammarParser()
         {
@@ -58,7 +58,7 @@ namespace ResolveMe.FormalGrammarParsing.EBNF
 
         private string[] SplitByTermination(string productionRules)
         {
-            return Regex.Split(productionRules, $"(?<=[{this._termination}])");
+            return Regex.Split(productionRules, $"(?<=[{EBNFGrammarParser._termination}])");
         }
 
         private string[] SplitByDefinition(string productionRule)
@@ -104,67 +104,71 @@ namespace ResolveMe.FormalGrammarParsing.EBNF
         private IEBNFItem GetStartEBNFItem(string rule, List<NonTerminal> listOfExistedTerminals)
         {
             IEBNFItem result = null;
-            var firstChar = rule[0];
-            //terminal
-            if (firstChar.Equals('"'))
+
+            switch(rule[0].ToString())
             {
-                var builder = new StringBuilder();
-                for (var i = 1; i < rule.Length; i++)
-                {
-                    if (rule[i].Equals('"'))
-                        break;
-                    builder.Append(rule[i]);
-                }
-                result = new Terminal(builder.ToString());
-            }
-            else if(firstChar.ToString().Equals(EndRecursion.Current.Notation))
-            {
-                return EndRecursion.Current;
-            }
-            //nonTerminal
-            else if (Regex.IsMatch(firstChar.ToString(), "[a-zA-Z]"))
-            {
-                var builder = new StringBuilder();
-                foreach (var t in rule)
-                {
-                    if (Regex.IsMatch(t.ToString(), @"[,;|\[\]\{\}\(\)]"))
-                        break;
-                    builder.Append(t);
-                }
-                result = (from item in listOfExistedTerminals where item.Name.Equals(builder.ToString()) select item).SingleOrDefault();
-                if (result == null)
-                {
-                    var emptyNonTerm = new NonTerminal(builder.ToString());
-                    this._emptyRules.Add(emptyNonTerm);
-                    result = emptyNonTerm;
-                }
-            }
-            //repetition or optional
-            else if (Regex.IsMatch(firstChar.ToString(), @"[\[\{\(]"))
-            {
-                var restOfRepRule = rule.Substring(1, rule.Length - 1);
-                switch (firstChar.ToString())
-                {
-                    case Repetition.notation:
-                        var repItem = GetEBNFItem(restOfRepRule, listOfExistedTerminals, Repetition.endNotation);
-                        result = new Repetition(repItem);
-                        break;
-                    case Optional.notation:
-                        var opItem = GetEBNFItem(restOfRepRule, listOfExistedTerminals, Optional.endNotation);
-                        result = new Optional(opItem);
-                        break;
-                }
-            }
-            else 
-            {
-                throw new Exception();
+                case "\"":
+                    {
+                        var builder = new StringBuilder();
+                        for (var i = 1; i < rule.Length; i++)
+                        {
+                            if (rule[i].Equals('"'))
+                                break;
+                            builder.Append(rule[i]);
+                        }
+                        result = new Terminal(builder.ToString());
+                    }
+                    break;
+                case var endItem when endItem.Equals(EndRecursion.Current.Notation):
+                    result = EndRecursion.Current;
+                    break;
+                case var nonItem when Regex.IsMatch(nonItem.ToString(), "[a-zA-Z]"):
+                    {
+                        var builder = new StringBuilder();
+                        foreach (var t in rule)
+                        {
+                            if (Regex.IsMatch(t.ToString(), @"[,;|\[\]\{\}\(\)]"))
+                                break;
+                            builder.Append(t);
+                        }
+                        result = (from item in listOfExistedTerminals where item.Name.Equals(builder.ToString()) select item).SingleOrDefault();
+                        if (result == null)
+                        {
+                            var emptyNonTerm = new NonTerminal(builder.ToString());
+                            this._emptyRules.Add(emptyNonTerm);
+                            result = emptyNonTerm;
+                        }
+                    }
+                    break;
+                case var groupItem when Regex.IsMatch(groupItem, @"[\[\{\(]"):
+                    {
+                        var restOfRepRule = rule.Substring(1, rule.Length - 1);
+                        switch (groupItem)
+                        {
+                            case Repetition.notation:
+                                var repItem = GetEBNFItem(restOfRepRule, listOfExistedTerminals, Repetition.endNotation);
+                                result = new Repetition(repItem);
+                                break;
+                            case Optional.notation:
+                                var opItem = GetEBNFItem(restOfRepRule, listOfExistedTerminals, Optional.endNotation);
+                                result = new Optional(opItem);
+                                break;
+                            case Grouping.notation:
+                                var grItem = GetEBNFItem(restOfRepRule, listOfExistedTerminals, Grouping.endNotation);
+                                result = new Grouping(grItem);
+                                break;
+                        }
+                    }
+                    break;
+                default:
+                    throw new ArgumentException($"Can't recognize character: {rule[0]}");
             }
             return result;
         }
 
         private bool IsTermination(string item)
         {
-            return item.Equals(this._termination);
+            return item.Equals(EBNFGrammarParser._termination);
         }
     }
 }

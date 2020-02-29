@@ -10,6 +10,8 @@ namespace ResolveMe.FormalGrammarParsing.EBNF.EBNFItems.ProductionRuleElements
         public const string notation = ",";
         public string Notation => Concatenation.notation;
 
+        public bool IsOptional => this._left.IsOptional && this._right.IsOptional;
+
         private readonly IEBNFItem _left;
 
         private readonly IEBNFItem _right;
@@ -22,29 +24,24 @@ namespace ResolveMe.FormalGrammarParsing.EBNF.EBNFItems.ProductionRuleElements
 
         public bool Is(string value)
         {
-            var result = false;
-            if (string.IsNullOrEmpty(value) && this._left.IsOptional() && this._right.IsOptional())
-                result = true;
-            else if (this._right.IsOptional() && this._left.Is(value) || this._left.IsOptional() && this._right.Is(value))
-                result = true;
-            else if (!string.IsNullOrEmpty(value))
-            {
-                var builder = new StringBuilder();
-                for (var i = 0; i < value.Length; i++)
-                {
-                    builder.Append(value[i]);
-                    var subI = i + 1;
-                    var restOfValue = value.Substring(subI, value.Length - subI);
+            var isNullOrEmpty = string.IsNullOrEmpty(value);
+            var result = isNullOrEmpty && this._left.IsOptional && this._right.IsOptional ||
+                this._right.IsOptional && this._left.Is(value) || this._left.IsOptional && this._right.Is(value);
 
-                    bool leftIs = this._left.Is(builder.ToString());
-                    if (leftIs && this._right.IsOptional() && string.IsNullOrEmpty(restOfValue)
-                        || leftIs && this._right.Is(restOfValue))
+            if (!result && !isNullOrEmpty)
+            {
+                var actualValue = string.Empty;
+                for (int i = 0; i < value.Length - 1; i++)
+                {
+                    actualValue += value[i];
+                    var ii = i + 1;
+                    var restOfValue = value.Substring(ii, value.Length - ii);
+                    if (this._left.Is(actualValue) && this._right.Is(restOfValue))
                     {
                         result = true;
                         break;
                     }
                 }
-
             }
 
             return result;
@@ -53,11 +50,6 @@ namespace ResolveMe.FormalGrammarParsing.EBNF.EBNFItems.ProductionRuleElements
         public string Rebuild()
         {
             return $"{this._left.Rebuild()}{this.Notation}{this._right.Rebuild()}";
-        }
-
-        public bool IsOptional()
-        {
-            return false;
         }
     }
 }

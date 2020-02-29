@@ -13,6 +13,8 @@ namespace ResolveMe.FormalGrammarParsing.EBNF.EBNFItems.ProductionRuleElements
 
         public string Notation => Alternation.notation;
 
+        public bool IsOptional => this._left.IsOptional && this._right.IsOptional;
+
         private readonly IEBNFItem _left;
 
         private readonly IEBNFItem _right;
@@ -25,18 +27,12 @@ namespace ResolveMe.FormalGrammarParsing.EBNF.EBNFItems.ProductionRuleElements
 
         public bool Is(string value)
         {
-            //in case of recursion
-            return this._right.Is(value) || this._left.Is(value);
+            return this._left.Is(value) || this._right.Is(value);
         }
 
         public string Rebuild()
         {
             return $"{this._left.Rebuild()}{this.Notation}{this._right.Rebuild()}";
-        }
-
-        public bool IsOptional()
-        {
-            return false;
         }
     }
 }

@@ -12,6 +12,8 @@ namespace ResolveMe.FormalGrammarParsing.EBNF.EBNFItems
         /// </summary>
         private readonly string _value;
 
+        public bool IsOptional => false;
+
         public Terminal(string value)
         {
             this._value = value;
@@ -29,11 +31,6 @@ namespace ResolveMe.FormalGrammarParsing.EBNF.EBNFItems
         public string Rebuild()
         {
             return $"\"{this._value}\"";
-        }
-
-        public bool IsOptional()
-        {
-            return false;
         }
     }
 }

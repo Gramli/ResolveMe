@@ -19,7 +19,6 @@
         /// <summary>
         /// Determines that item is optional in EBNF structure
         /// </summary>
-        /// <returns></returns>
-        bool IsOptional();
+        bool IsOptional { get; }
     }
 }

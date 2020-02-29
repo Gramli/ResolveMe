@@ -14,6 +14,8 @@ namespace ResolveMe.FormalGrammarParsing.EBNF.EBNFItems.ProductionRuleElements
         public string Notation => Optional.notation;
         public string EndNotation => Optional.endNotation;
 
+        public bool IsOptional => true;
+
         private readonly IEBNFItem _item;
 
         public Optional(IEBNFItem item)
@@ -29,11 +31,6 @@ namespace ResolveMe.FormalGrammarParsing.EBNF.EBNFItems.ProductionRuleElements
         public string Rebuild()
         {
             return $"{this.Notation}{this._item.Rebuild()}{this.EndNotation}";
-        }
-
-        public bool IsOptional()
-        {
-            return true;
         }
     }
 }

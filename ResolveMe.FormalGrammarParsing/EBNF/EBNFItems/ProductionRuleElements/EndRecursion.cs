@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace ResolveMe.FormalGrammarParsing.EBNF.EBNFItems.ProductionRuleElements
+﻿namespace ResolveMe.FormalGrammarParsing.EBNF.EBNFItems.ProductionRuleElements
 {
     public class EndRecursion : IProductionRule
     {
@@ -17,16 +13,13 @@ namespace ResolveMe.FormalGrammarParsing.EBNF.EBNFItems.ProductionRuleElements
             }
         }
 
+        public bool IsOptional => false;
+
         public string Notation => "ε";
 
         public bool Is(string value)
         {
             return true;
-        }
-
-        public bool IsOptional()
-        {
-            return false;
         }
 
         public string Rebuild()
