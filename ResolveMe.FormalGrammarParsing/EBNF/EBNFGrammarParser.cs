@@ -25,6 +25,8 @@ namespace ResolveMe.FormalGrammarParsing.EBNF
 
             grammar = grammar.Replace(" ", string.Empty);
             grammar = grammar.ToLowerInvariant();
+            grammar = grammar.Replace(Environment.NewLine, string.Empty);
+
             var productionRulesStrings = SplitByTermination(grammar).Reverse().ToArray();
             for (var i = 0; i < productionRulesStrings.Length - 1; i++)
             {
@@ -33,6 +35,7 @@ namespace ResolveMe.FormalGrammarParsing.EBNF
                 productionRules.Add(nonTerminal);
             }
             var startSymbolNonTerminal = GetNonTerminal(productionRulesStrings[productionRulesStrings.Length - 1], productionRules);
+            productionRules.Add(startSymbolNonTerminal);
             var startSymbol = new EBNFStartSymbol(startSymbolNonTerminal, productionRules);
             SetEmptyRules(startSymbol);
             return startSymbol;

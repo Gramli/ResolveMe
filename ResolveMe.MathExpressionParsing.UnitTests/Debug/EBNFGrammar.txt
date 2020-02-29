@@ -1,26 +1,22 @@
-expression = [plus | minus], term ,{ ( plus | minus ) , term };
+expression = [ plus | minus ], term ,{ ( plus | minus ) , term };
 term = factor, { (times | divide) , factor };
-factor = double | variable| function | l_round, expression, r_round | matrix;
-function = letter, letter, word, l_round, expression, { comma, expression } r_round;
-matrix = l_square, expression, {comma, expression}, r_square;
+factor = double | variable | function | l_round, expression, r_round;
+function = letter, letter, word, l_round, { expression, comma }, expression, r_round;
 variable = letter, word ;
 word = { letter | digit } ;
 double = ["-"], digit, { digit }, [ ".",  { digit } ] ;
 l_round = "(" ;
 r_round = ")" ;
-l_square="[";
-r_square="]";
+l_square = "[" ;
+r_square = "]" ;
 comma = "," ;
-plus   ="+";
-minus  ="-";
-times  ="*";
-divide ="/";
-biggerThan = ">";
-lesserThan = "<";
-letter = "A" | "B" | "C" | "D" | "E" | "F" | "G"
-       | "H" | "I" | "J" | "K" | "L" | "M" | "N"
-       | "O" | "P" | "Q" | "R" | "S" | "T" | "U"
-       | "V" | "W" | "X" | "Y" | "Z" | "a" | "b"
+plus   ="+" ;
+minus  ="-" ;
+times  ="*" ;
+divide ="/" ;
+biggerThan = ">" ;
+lesserThan = "<" ;
+letter = "a" | "b"
        | "c" | "d" | "e" | "f" | "g" | "h" | "i"
        | "j" | "k" | "l" | "m" | "n" | "o" | "p"
        | "q" | "r" | "s" | "t" | "u" | "v" | "w"

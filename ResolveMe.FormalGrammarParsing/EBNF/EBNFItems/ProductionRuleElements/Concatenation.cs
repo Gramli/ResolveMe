@@ -43,7 +43,6 @@ namespace ResolveMe.FormalGrammarParsing.EBNF.EBNFItems.ProductionRuleElements
                     }
                 }
             }
-
             return result;
         }
 
