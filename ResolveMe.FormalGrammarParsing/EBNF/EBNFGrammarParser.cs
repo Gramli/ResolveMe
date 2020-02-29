@@ -1,22 +1,30 @@
-﻿using Parser.EBNF.EBNFItems;
-using Parser.EBNF.EBNFItems.ProductionRuleElements;
+﻿using ResolveMe.FormalGrammarParsing.EBNF.EBNFItems;
+using ResolveMe.FormalGrammarParsing.EBNF.EBNFItems.ProductionRuleElements;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace Parser.EBNF
+namespace ResolveMe.FormalGrammarParsing.EBNF
 {
     public class EBNFGrammarParser : IEBNFGrammarParser
     {
+        private readonly List<NonTerminal> _emptyRules; 
         private readonly string _termination = ";";
+
+        public EBNFGrammarParser()
+        {
+            this._emptyRules = new List<NonTerminal>();
+        }
 
         public IEBNFStartSymbol Parse(string grammar)
         {
+            this._emptyRules.Clear();
             var productionRules = new List<NonTerminal>();
 
             grammar = grammar.Replace(" ", string.Empty);
+            grammar = grammar.ToLowerInvariant();
             var productionRulesStrings = SplitByTermination(grammar).Reverse().ToArray();
             for (var i = 0; i < productionRulesStrings.Length - 1; i++)
             {
@@ -25,8 +33,18 @@ namespace Parser.EBNF
                 productionRules.Add(nonTerminal);
             }
             var startSymbolNonTerminal = GetNonTerminal(productionRulesStrings[productionRulesStrings.Length - 1], productionRules);
-            var result = new EBNFStartSymbol(startSymbolNonTerminal, productionRules);
-            return result;
+            var startSymbol = new EBNFStartSymbol(startSymbolNonTerminal, productionRules);
+            SetEmptyRules(startSymbol);
+            return startSymbol;
+        }
+
+        private void SetEmptyRules(IEBNFStartSymbol startSymbol)
+        {
+            foreach(var rule in this._emptyRules)
+            {
+                IEBNFItem item = startSymbol.GetNonTerminal(rule.Name);
+                rule.SetRightSide(item);
+            }
         }
 
         private NonTerminal GetNonTerminal(string productionRule, List<NonTerminal> listOfExistedTerminals)
@@ -99,6 +117,10 @@ namespace Parser.EBNF
                 }
                 result = new Terminal(builder.ToString());
             }
+            else if(firstChar.ToString().Equals(EndRecursion.Current.Notation))
+            {
+                return EndRecursion.Current;
+            }
             //nonTerminal
             else if (Regex.IsMatch(firstChar.ToString(), "[a-zA-Z]"))
             {
@@ -109,7 +131,13 @@ namespace Parser.EBNF
                         break;
                     builder.Append(t);
                 }
-                result = (from item in listOfExistedTerminals where item.Name.Equals(builder.ToString()) select item).Single();
+                result = (from item in listOfExistedTerminals where item.Name.Equals(builder.ToString()) select item).SingleOrDefault();
+                if (result == null)
+                {
+                    var emptyNonTerm = new NonTerminal(builder.ToString());
+                    this._emptyRules.Add(emptyNonTerm);
+                    result = emptyNonTerm;
+                }
             }
             //repetition or optional
             else if (Regex.IsMatch(firstChar.ToString(), @"[\[\{\(]"))
@@ -126,6 +154,10 @@ namespace Parser.EBNF
                         result = new Optional(opItem);
                         break;
                 }
+            }
+            else 
+            {
+                throw new Exception();
             }
             return result;
         }

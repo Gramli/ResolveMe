@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Parser.EBNF.ProductionRuleElements
+namespace Parser.EBNF.EBNFItems.ProductionRuleElements
 {
     /// <summary>
     /// EBNF Alternation rule
@@ -12,6 +12,7 @@ namespace Parser.EBNF.ProductionRuleElements
         public const string notation = "|";
 
         public string Notation => Alternation.notation;
+
         private readonly IEBNFItem _left;
 
         private readonly IEBNFItem _right;
@@ -30,6 +31,11 @@ namespace Parser.EBNF.ProductionRuleElements
         public string Rebuild()
         {
             return $"{this._left.Rebuild()}{this.Notation}{this._right.Rebuild()}";
+        }
+
+        public bool IsOptional()
+        {
+            return false;
         }
     }
 }

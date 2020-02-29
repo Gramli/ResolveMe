@@ -1,5 +1,6 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Parser.EBNF;
+using Parser.EBNF.EBNFItems;
 using System.IO;
 using System.Text;
 
@@ -15,7 +16,7 @@ namespace Parser.UnitTests
         private string word = "word = { letter | digit } ;";
         private string variable = "variable = letter, word ;";
         private string functionParameter = "function_parameter = variable | number ;";
-        private string number = "number = [\" - \"], { digit }, [ \".\",  { digit } ] ;";
+        private string number = "number = [\" - \"], digit, { digit }, [ \".\",  { digit } ] ;";
 
         [TestMethod]
         public void EvaluateOneCharExpression()
@@ -26,10 +27,11 @@ namespace Parser.UnitTests
             builder.Append(letter);
             builder.Append(digit);
 
-            EBNFParser parser = new EBNFParser();
-            StartSymbol startSymbol = parser.Parse(builder.ToString());
-            Assert.IsTrue(startSymbol.Is("A"));
-            Assert.IsFalse(startSymbol.Is("AB"));
+            EBNFGrammarParser parser = new EBNFGrammarParser();
+            IEBNFStartSymbol symbol = parser.Parse(builder.ToString());
+            IEBNFGrammar grammar = new MathGrammarEBNF(symbol);
+            Assert.IsTrue(grammar.IsExpression("A"));
+            Assert.IsFalse(grammar.IsExpression("AB"));
         }
 
         [TestMethod]
@@ -40,12 +42,13 @@ namespace Parser.UnitTests
             builder.Append(letter);
             builder.Append(digit);
 
-            EBNFParser parser = new EBNFParser();
-            StartSymbol startSymbol = parser.Parse(builder.ToString());
-            Assert.IsTrue(startSymbol.Is("A"));
-            Assert.IsTrue(startSymbol.Is("AB"));
-            Assert.IsTrue(startSymbol.Is("AB1"));
-            Assert.IsFalse(startSymbol.Is("AB1<"));
+            IEBNFGrammarParser parser = new EBNFGrammarParser();
+            IEBNFStartSymbol symbol = parser.Parse(builder.ToString());
+            IEBNFGrammar grammar = new MathGrammarEBNF(symbol);
+            Assert.IsTrue(grammar.IsExpression("A"));
+            Assert.IsTrue(grammar.IsExpression("AB"));
+            Assert.IsTrue(grammar.IsExpression("ABRAKADABRA12"));
+            Assert.IsFalse(grammar.IsExpression("AB1<"));
         }
 
         [TestMethod]
@@ -57,13 +60,14 @@ namespace Parser.UnitTests
             builder.Append(letter);
             builder.Append(digit);
 
-            EBNFParser parser = new EBNFParser();
-            StartSymbol startSymbol = parser.Parse(builder.ToString());
-            Assert.IsTrue(startSymbol.Is("A"));
-            Assert.IsTrue(startSymbol.Is("AB"));
-            Assert.IsTrue(startSymbol.Is("AB1"));
-            Assert.IsFalse(startSymbol.Is("AB1<"));
-            Assert.IsFalse(startSymbol.Is(""));
+            IEBNFGrammarParser parser = new EBNFGrammarParser();
+            IEBNFStartSymbol symbol = parser.Parse(builder.ToString());
+            IEBNFGrammar grammar = new MathGrammarEBNF(symbol);
+            Assert.IsTrue(grammar.IsExpression("A"));
+            Assert.IsTrue(grammar.IsExpression("AB"));
+            Assert.IsTrue(grammar.IsExpression("AB1"));
+            Assert.IsFalse(grammar.IsExpression("AB1<"));
+            Assert.IsFalse(grammar.IsExpression(""));
         }
 
         [TestMethod]
@@ -76,13 +80,16 @@ namespace Parser.UnitTests
             builder.Append(letter);
             builder.Append(digit);
 
-            EBNFParser parser = new EBNFParser();
-            StartSymbol startSymbol = parser.Parse(builder.ToString());
-            Assert.IsTrue(startSymbol.Is("1"));
-            Assert.IsTrue(startSymbol.Is("-1"));
-            Assert.IsTrue(startSymbol.Is("1.211"));
-            Assert.IsTrue(startSymbol.Is("-1.211"));
-            Assert.IsTrue(startSymbol.Is("12000"));
+            IEBNFGrammarParser parser = new EBNFGrammarParser();
+            IEBNFStartSymbol symbol = parser.Parse(builder.ToString());
+            IEBNFGrammar grammar = new MathGrammarEBNF(symbol);
+            Assert.IsTrue(grammar.IsExpression("1"));
+            Assert.IsTrue(grammar.IsExpression("-1"));
+            Assert.IsTrue(grammar.IsExpression("1.211"));
+            Assert.IsTrue(grammar.IsExpression("-1.211"));
+            Assert.IsTrue(grammar.IsExpression("12000"));
+            Assert.IsFalse(grammar.IsExpression("A"));
+            Assert.IsFalse(grammar.IsExpression("ABCBC"));
         }
     }
 }

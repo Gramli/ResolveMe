@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Parser.EBNF
+namespace Parser.EBNF.EBNFItems
 {
     /// <summary>
     /// Represents terminal in ENBF
@@ -11,6 +11,7 @@ namespace Parser.EBNF
         /// Terminal representation - its character or string
         /// </summary>
         private readonly string _value;
+
         public Terminal(string value)
         {
             this._value = value;
@@ -28,6 +29,11 @@ namespace Parser.EBNF
         public string Rebuild()
         {
             return $"\"{this._value}\"";
+        }
+
+        public bool IsOptional()
+        {
+            return false;
         }
     }
 }

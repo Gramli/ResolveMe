@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Parser.EBNF
+﻿namespace ResolveMe.FormalGrammarParsing.EBNF.EBNFItems
 {
     /// <summary>
     /// Group production rule in EBNF

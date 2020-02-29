@@ -1,4 +1,4 @@
-﻿namespace Parser
+﻿namespace ResolveMe.MathExpressionParsing
 {
     /// <summary>
     /// Interface for matmematical expression grammars

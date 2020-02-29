@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Text;
 
-namespace Parser.EBNF.ProductionRuleElements
+namespace ResolveMe.FormalGrammarParsing.EBNF.EBNFItems.ProductionRuleElements
 {
     /// <summary>
     /// EBNF Repetition rule (group)
@@ -23,8 +21,8 @@ namespace Parser.EBNF.ProductionRuleElements
 
         public bool Is(string value)
         {
-            var result = false;
-            if (!this._item.Is(value) && !string.IsNullOrEmpty(value))
+            var result = true;
+            if (!string.IsNullOrEmpty(value) &&!this._item.Is(value))
             {
                 var builder = new StringBuilder();
                 for (var i = 0; i < value.Length; i++)
@@ -32,25 +30,23 @@ namespace Parser.EBNF.ProductionRuleElements
                     builder.Append(value[i]);
                     if (this._item.Is(builder.ToString()))
                     {
-                        if (i == value.Length - 1)
-                            result = true;
-                        else
-                        {
-                            var subi = i + 1;
-                            result = this.Is(value.Substring(subi, value.Length - subi));
-                            break;
-                        }
+                        builder.Clear();
                     }
+                    else if (i == value.Length - 1)
+                        result = false;
                 }
             }
-            else
-                result = true;
             return result;
         }
 
         public string Rebuild()
         {
             return $"{this.Notation}{this._item.Rebuild()}{this.EndNotation}";
+        }
+
+        public bool IsOptional()
+        {
+            return true;
         }
     }
 }

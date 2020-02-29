@@ -1,4 +1,4 @@
-﻿namespace Parser.EBNF
+﻿namespace ResolveMe.FormalGrammarParsing.EBNF
 {
     public interface IEBNFGrammarParser
     {
