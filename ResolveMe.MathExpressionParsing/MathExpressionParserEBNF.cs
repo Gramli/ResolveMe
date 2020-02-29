@@ -19,13 +19,13 @@ namespace ResolveMe.MathExpressionParsing
 
         public Queue<IToken> ReadExpression(string expression)
         {
+            if (!this._grammar.IsExpression(expression))
+                throw new ArgumentException("Can't recognize expression.");
             return ReadExpression(expression, null);
         }
 
         private Queue<IToken> ReadExpression(string expression, char? endCharacter)
         {
-            //TODO check if expression
-
             var result = new Queue<IToken>();
             UndefinedToken lastUndefined = null;
 

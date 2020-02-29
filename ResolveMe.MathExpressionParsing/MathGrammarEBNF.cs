@@ -11,7 +11,7 @@ namespace ResolveMe.MathExpressionParsing
 
         public bool IsNumber(string expression)
         {
-            return base.IsNonTerminal("number", expression);
+            return base.IsNonTerminal("double", expression);
         }
 
         public bool IsVariable(string expression)
@@ -21,7 +21,7 @@ namespace ResolveMe.MathExpressionParsing
 
         public bool IsPrefixFunction(string expression)
         {
-            return base.IsNonTerminal("prefix_function", expression);
+            return base.IsNonTerminal("function", expression);
         }
     }
 }

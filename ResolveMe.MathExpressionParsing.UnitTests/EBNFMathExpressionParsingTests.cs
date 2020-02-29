@@ -1,7 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ResolveMe.FormalGrammarParsing.EBNF;
 using System.IO;
-using System.Text;
 
 namespace ResolveMe.MathExpressionParsing.UnitTests
 {
@@ -20,12 +19,12 @@ namespace ResolveMe.MathExpressionParsing.UnitTests
         [TestMethod]
         public void EvaluateFunction()
         {
-            //Assert.IsTrue(grammar.IsExpression("(-9.9874551)"));
-            //Assert.IsTrue(grammar.IsExpression("sin(a)"));
-            //Assert.IsTrue(grammar.IsExpression("sin(a+9.2)"));
-            //Assert.IsTrue(grammar.IsExpression("var1"));
-            //Assert.IsTrue(grammar.IsExpression("max(25,a,14,45)"));
-            //Assert.IsTrue(grammar.IsExpression("sin(a+9.2)*var1+15"));
+            Assert.IsTrue(grammar.IsExpression("(-9.9874551)"));
+            Assert.IsTrue(grammar.IsExpression("sin(a)"));
+            Assert.IsTrue(grammar.IsExpression("sin(a+9.2)"));
+            Assert.IsTrue(grammar.IsExpression("var1"));
+            Assert.IsTrue(grammar.IsExpression("max(25,a,14,45)"));
+            Assert.IsTrue(grammar.IsExpression("sin(a+9.2)*var1+15"));
             Assert.IsTrue(grammar.IsExpression("-sin(0.2)*3+15/max(25,1,14,47,87,7)"));
         }
     }
