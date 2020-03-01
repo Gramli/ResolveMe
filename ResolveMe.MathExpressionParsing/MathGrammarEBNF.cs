@@ -1,4 +1,4 @@
-﻿using ResolveMe.FormalGrammarParsing.EBNF;
+﻿using Amy.EBNF;
 
 namespace ResolveMe.MathExpressionParsing
 {

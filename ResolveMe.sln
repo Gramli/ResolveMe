@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29102.190
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ResolveMe.FormalGrammarParsing", "ResolveMe.FormalGrammarParsing\ResolveMe.FormalGrammarParsing.csproj", "{7F9E6476-245E-47DC-8907-0BB31368AB1A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ResolveMe.MathExpressionParsing", "ResolveMe.MathExpressionParsing\ResolveMe.MathExpressionParsing.csproj", "{24B93552-AD8D-4341-A453-2402C6FA1E8C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ResolveMe.MathExpressionParsing", "ResolveMe.MathExpressionParsing\ResolveMe.MathExpressionParsing.csproj", "{24B93552-AD8D-4341-A453-2402C6FA1E8C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ResolveMe.MathExpressionParsing.UnitTests", "ResolveMe.MathExpressionParsing.UnitTests\ResolveMe.MathExpressionParsing.UnitTests.csproj", "{99E5A1B6-2A14-4000-87CB-9CCABFE4D3FB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ResolveMe.MathExpressionParsing.UnitTests", "ResolveMe.MathExpressionParsing.UnitTests\ResolveMe.MathExpressionParsing.UnitTests.csproj", "{99E5A1B6-2A14-4000-87CB-9CCABFE4D3FB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Amy", "..\Amy\Amy\Amy.csproj", "{134198B1-DDBD-4D02-A860-6CC6A7A8C508}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,10 +15,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{7F9E6476-245E-47DC-8907-0BB31368AB1A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7F9E6476-245E-47DC-8907-0BB31368AB1A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7F9E6476-245E-47DC-8907-0BB31368AB1A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7F9E6476-245E-47DC-8907-0BB31368AB1A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{24B93552-AD8D-4341-A453-2402C6FA1E8C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{24B93552-AD8D-4341-A453-2402C6FA1E8C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{24B93552-AD8D-4341-A453-2402C6FA1E8C}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -27,6 +23,10 @@ Global
 		{99E5A1B6-2A14-4000-87CB-9CCABFE4D3FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{99E5A1B6-2A14-4000-87CB-9CCABFE4D3FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{99E5A1B6-2A14-4000-87CB-9CCABFE4D3FB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{134198B1-DDBD-4D02-A860-6CC6A7A8C508}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{134198B1-DDBD-4D02-A860-6CC6A7A8C508}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{134198B1-DDBD-4D02-A860-6CC6A7A8C508}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{134198B1-DDBD-4D02-A860-6CC6A7A8C508}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

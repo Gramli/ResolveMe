@@ -17,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ResolveMe.FormalGrammarParsing\ResolveMe.FormalGrammarParsing.csproj" />
+    <ProjectReference Include="..\..\Amy\Amy\Amy.csproj" />
     <ProjectReference Include="..\ResolveMe.MathExpressionParsing\ResolveMe.MathExpressionParsing.csproj" />
   </ItemGroup>
 

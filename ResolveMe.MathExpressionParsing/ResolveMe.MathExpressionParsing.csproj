@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ResolveMe.FormalGrammarParsing\ResolveMe.FormalGrammarParsing.csproj" />
+    <ProjectReference Include="..\..\Amy\Amy\Amy.csproj" />
   </ItemGroup>
 
 </Project>
