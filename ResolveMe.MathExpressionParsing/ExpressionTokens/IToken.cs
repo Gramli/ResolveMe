@@ -1,6 +1,6 @@
 ﻿using Amy;
 
-namespace ResolveMe.MathExpressionParsing.ExpressionTokens
+namespace ResolveMe.MathCompiler.ExpressionTokens
 {
     public interface IToken : ICompileResult
     {

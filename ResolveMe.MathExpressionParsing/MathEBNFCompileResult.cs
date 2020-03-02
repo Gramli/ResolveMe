@@ -1,6 +1,6 @@
 ﻿using Amy;
 
-namespace ResolveMe.MathExpressionParsing
+namespace ResolveMe.MathCompiler
 {
     public class MathEBNFCompileResult : ICompileResult
     {

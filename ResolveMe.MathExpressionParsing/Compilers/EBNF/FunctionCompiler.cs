@@ -1,11 +1,11 @@
 ﻿using Amy;
 using Amy.EBNF.EBNFItems;
-using ResolveMe.MathExpressionParsing.ExpressionTokens;
+using ResolveMe.MathCompiler.ExpressionTokens;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ResolveMe.MathExpressionParsing.Compilers
+namespace ResolveMe.MathCompiler.Compilers.EBNF
 {
     public class FunctionCompiler : NonTerminal
     {
@@ -14,7 +14,7 @@ namespace ResolveMe.MathExpressionParsing.Compilers
         {
         }
 
-        public override ICompileResult Compile(string value)
+        public ICompileResult Compile(string value)
         {
             throw new NotImplementedException();
         }

@@ -1,9 +1,9 @@
 ﻿using Amy;
 using Amy.EBNF.EBNFItems;
-using ResolveMe.MathExpressionParsing.ExpressionTokens;
+using ResolveMe.MathCompiler.ExpressionTokens;
 using System;
 
-namespace ResolveMe.MathExpressionParsing.Compilers
+namespace ResolveMe.MathCompiler.Compilers.EBNF
 {
     public class NumberCompiler : NonTerminal
     {
@@ -12,8 +12,9 @@ namespace ResolveMe.MathExpressionParsing.Compilers
         {
         }
 
-        public override ICompileResult Compile(string value)
+        public ICompileResult Compile(string value)
         {
+            if(Is(value))
             return new NumberToken(Convert.ToDouble(value));
         }
     }

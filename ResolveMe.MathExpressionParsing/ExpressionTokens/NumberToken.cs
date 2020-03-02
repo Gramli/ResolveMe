@@ -1,6 +1,6 @@
 ﻿using System.Globalization;
 
-namespace ResolveMe.MathExpressionParsing.ExpressionTokens
+namespace ResolveMe.MathCompiler.ExpressionTokens
 {
     public class NumberToken : IToken
     {

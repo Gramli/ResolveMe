@@ -1,7 +1,7 @@
 ﻿using Amy;
 using System;
 
-namespace ResolveMe.MathExpressionParsing.Compilers
+namespace ResolveMe.MathCompiler.Compilers.EBNF
 {
     public class VariableCompiler : ICompiler
     {

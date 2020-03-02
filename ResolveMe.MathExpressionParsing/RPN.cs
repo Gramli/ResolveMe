@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace ResolveMe.MathExpressionParsing
+namespace ResolveMe.MathCompiler
 {
     /// <summary>
     /// Reverse Polish notation

@@ -1,12 +1,12 @@
-﻿using ResolveMe.MathExpressionParsing.ExpressionTokens;
+﻿using ResolveMe.MathCompiler.ExpressionTokens;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace ResolveMe.MathExpressionParsing
+namespace ResolveMe.MathCompiler
 {
     /// <summary>
-    /// Mathematical expression ResolveMe.MathExpressionParsing using Extended Backus Naus form grammar
+    /// Mathematical expression using Extended Backus Naus form grammar
     /// </summary>
     public class MathExpressionParserEBNF
     {

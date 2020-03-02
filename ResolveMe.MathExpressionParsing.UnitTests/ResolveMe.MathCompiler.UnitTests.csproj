@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
@@ -18,7 +18,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\Amy\Amy\Amy.csproj" />
-    <ProjectReference Include="..\ResolveMe.MathExpressionParsing\ResolveMe.MathExpressionParsing.csproj" />
+    <ProjectReference Include="..\ResolveMe.MathExpressionParsing\ResolveMe.MathCompiler.csproj" />
   </ItemGroup>
 
   <ItemGroup>

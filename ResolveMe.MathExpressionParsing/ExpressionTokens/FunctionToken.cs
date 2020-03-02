@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Text;
 
-namespace ResolveMe.MathExpressionParsing.ExpressionTokens
+namespace ResolveMe.MathCompiler.ExpressionTokens
 {
     public class FunctionToken : IToken
     {

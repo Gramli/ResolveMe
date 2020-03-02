@@ -1,4 +1,4 @@
-﻿namespace ResolveMe.MathExpressionParsing.ExpressionTokens
+﻿namespace ResolveMe.MathCompiler.ExpressionTokens
 {
     internal class UndefinedToken : IToken
     {

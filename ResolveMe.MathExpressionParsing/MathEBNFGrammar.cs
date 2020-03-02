@@ -1,7 +1,7 @@
 ﻿using Amy;
 using Amy.EBNF;
 
-namespace ResolveMe.MathExpressionParsing
+namespace ResolveMe.MathCompiler
 {
     public class MathEBNFGrammar : EBNFGrammar
     {
@@ -10,7 +10,7 @@ namespace ResolveMe.MathExpressionParsing
         {
         }
 
-        public override ICompileResult Compile(string value)
+        public ICompileResult Compile(string value)
         {
             throw new System.NotImplementedException();
         }

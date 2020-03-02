@@ -3,7 +3,7 @@ using Amy.EBNF;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.IO;
 
-namespace ResolveMe.MathExpressionParsing.UnitTests
+namespace ResolveMe.MathCompiler.UnitTests
 {
     [TestClass]
     public class EBNFMathExpressionParsingTests
