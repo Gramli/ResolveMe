@@ -1,4 +1,5 @@
-﻿using Amy.EBNF;
+﻿using Amy;
+using Amy.EBNF;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.IO;
 
@@ -7,13 +8,13 @@ namespace ResolveMe.MathExpressionParsing.UnitTests
     [TestClass]
     public class EBNFMathExpressionParsingTests
     {
-        private readonly IEBNFGrammar grammar;
+        private readonly IFormalGrammar grammar;
         public EBNFMathExpressionParsingTests()
         {
             EBNFGrammarParserCustom parser = new EBNFGrammarParserCustom();
             string file = File.ReadAllText("Debug/EBNFGrammar.txt");
-            IEBNFStartSymbol symbol = parser.Parse(file);
-            this.grammar = new MathGrammarEBNF(symbol);
+            IStartSymbol symbol = parser.Parse(file);
+            this.grammar = new MathEBNFGrammar(symbol);
         }
 
         [TestMethod]

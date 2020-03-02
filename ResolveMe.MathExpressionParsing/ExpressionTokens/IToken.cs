@@ -1,6 +1,8 @@
-﻿namespace ResolveMe.MathExpressionParsing.ExpressionTokens
+﻿using Amy;
+
+namespace ResolveMe.MathExpressionParsing.ExpressionTokens
 {
-    public interface IToken
+    public interface IToken : ICompileResult
     {
         /// <summary>
         /// Create token as string

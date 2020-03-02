@@ -10,9 +10,9 @@ namespace ResolveMe.MathExpressionParsing
     /// </summary>
     public class MathExpressionParserEBNF
     {
-        private readonly MathGrammarEBNF _grammar;
+        private readonly MathEBNFGrammar _grammar;
 
-        public MathExpressionParserEBNF(MathGrammarEBNF grammar)
+        public MathExpressionParserEBNF(MathEBNFGrammar grammar)
         {
             this._grammar = grammar;
         }
