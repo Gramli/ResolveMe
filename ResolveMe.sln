@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29102.190
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ResolveMe.MathExpressionParsing", "ResolveMe.MathExpressionParsing\ResolveMe.MathExpressionParsing.csproj", "{24B93552-AD8D-4341-A453-2402C6FA1E8C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ResolveMe.MathCompiler", "ResolveMe.MathExpressionParsing\ResolveMe.MathCompiler.csproj", "{24B93552-AD8D-4341-A453-2402C6FA1E8C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ResolveMe.MathExpressionParsing.UnitTests", "ResolveMe.MathExpressionParsing.UnitTests\ResolveMe.MathExpressionParsing.UnitTests.csproj", "{99E5A1B6-2A14-4000-87CB-9CCABFE4D3FB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ResolveMe.MathCompiler.UnitTests", "ResolveMe.MathExpressionParsing.UnitTests\ResolveMe.MathCompiler.UnitTests.csproj", "{99E5A1B6-2A14-4000-87CB-9CCABFE4D3FB}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Amy", "..\Amy\Amy\Amy.csproj", "{134198B1-DDBD-4D02-A860-6CC6A7A8C508}"
 EndProject
