@@ -1,11 +1,11 @@
 ﻿using Amy;
 using Amy.EBNF;
 
-namespace ResolveMe.MathCompiler
+namespace ResolveMe.MathCompiler.Compilers.EBNF
 {
-    public class MathEBNFGrammar : EBNFGrammar
+    public class MathEBNFGrammarCompiler : EBNFGrammar, ICompiler
     {
-        public MathEBNFGrammar(IStartSymbol startSymbol) 
+        public MathEBNFGrammarCompiler(IStartSymbol startSymbol) 
             : base(startSymbol)
         {
         }

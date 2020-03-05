@@ -8,6 +8,10 @@ namespace ResolveMe.MathCompiler.ExpressionTokens
     {
         public string VariableName { get; private set; }
 
+        public VariableToken()
+        { 
+        
+        }
         public VariableToken(string variableName)
         {
             this.VariableName = variableName;

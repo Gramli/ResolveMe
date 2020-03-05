@@ -16,7 +16,40 @@ namespace ResolveMe.MathCompiler.Compilers.EBNF
 
         public ICompileResult Compile(string value)
         {
-            throw new NotImplementedException();
+            if (IsExpression(value))
+            {
+                var structure = FetchLastExpressionStructure();
+                string name = GetName(structure);
+                IEnumerable<IToken> arguments = GetArguments(structure);
+                return new FunctionToken(name, arguments);
+            }
+            else
+                throw new Exception("Compile error");
+        }
+
+        private IEnumerable<IToken> GetArguments(IEnumerable<IFormalGrammarItem> structure)
+        {
+            List<ICompileResult> arguments = new List<ICompileResult>();
+            foreach(var item in structure)
+            {
+                if (item is ICompiler)
+                {
+                    ICompileResult result = ((ICompiler)item).Compile()
+                    arguments.Add()
+                }
+            }
+        }
+
+        private string GetName(IEnumerable<IFormalGrammarItem> structure)
+        {
+            StringBuilder result = new StringBuilder();
+            foreach(var item in structure)
+            {
+                if(item is NonTerminal)
+                {
+
+                }
+            }
         }
     }
 }

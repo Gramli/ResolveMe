@@ -14,7 +14,7 @@ namespace ResolveMe.MathCompiler.UnitTests
             EBNFGrammarParserCustom parser = new EBNFGrammarParserCustom();
             string file = File.ReadAllText("Debug/EBNFGrammar.txt");
             IStartSymbol symbol = parser.Parse(file);
-            this.grammar = new MathEBNFGrammar(symbol);
+            this.grammar = new MathEBNFGrammarCompiler(symbol);
         }
 
         [TestMethod]

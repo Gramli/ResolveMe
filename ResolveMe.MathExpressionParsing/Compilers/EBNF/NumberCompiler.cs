@@ -2,10 +2,11 @@
 using Amy.EBNF.EBNFItems;
 using ResolveMe.MathCompiler.ExpressionTokens;
 using System;
+using System.Collections.Generic;
 
 namespace ResolveMe.MathCompiler.Compilers.EBNF
 {
-    public class NumberCompiler : NonTerminal
+    public class NumberCompiler : NonTerminal, ICompiler
     {
         public NumberCompiler(string name) 
             : base(name)
@@ -14,8 +15,10 @@ namespace ResolveMe.MathCompiler.Compilers.EBNF
 
         public ICompileResult Compile(string value)
         {
-            if(Is(value))
-            return new NumberToken(Convert.ToDouble(value));
+            if (IsExpression(value))
+                return new NumberToken(Convert.ToDouble(value));
+            else
+                throw new Exception("Compile error.");
         }
     }
 }

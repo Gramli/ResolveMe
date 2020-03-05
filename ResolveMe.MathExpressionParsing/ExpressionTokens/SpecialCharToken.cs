@@ -8,6 +8,11 @@ namespace ResolveMe.MathCompiler.ExpressionTokens
     {
         private readonly char _specialChar;
 
+        public SpecialCharToken()
+        {
+
+        }
+
         protected SpecialCharToken(char bracket)
         {
             this._specialChar = bracket;

@@ -3,16 +3,16 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace ResolveMe.MathCompiler
+namespace ResolveMe.MathCompiler.Compilers.EBNF
 {
     /// <summary>
     /// Mathematical expression using Extended Backus Naus form grammar
     /// </summary>
     public class MathExpressionParserEBNF
     {
-        private readonly MathEBNFGrammar _grammar;
+        private readonly MathEBNFGrammarCompiler _grammar;
 
-        public MathExpressionParserEBNF(MathEBNFGrammar grammar)
+        public MathExpressionParserEBNF(MathEBNFGrammarCompiler grammar)
         {
             this._grammar = grammar;
         }

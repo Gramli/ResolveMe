@@ -4,6 +4,11 @@
     {
         private readonly string _operatorString;
         
+        public OperatorToken()
+        {
+
+        }
+
         public OperatorToken(string operatorString)
         {
             this._operatorString = operatorString;

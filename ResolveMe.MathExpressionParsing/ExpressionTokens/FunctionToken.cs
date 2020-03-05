@@ -9,7 +9,7 @@ namespace ResolveMe.MathCompiler.ExpressionTokens
 
         private readonly List<IToken> _arguments;
 
-        public FunctionToken(string name, Queue<IToken> arguments)
+        public FunctionToken(string name, IEnumerable<IToken> arguments)
         {
             this._functionName = name;
             this._arguments = new List<IToken>(arguments);
