@@ -7,7 +7,7 @@ using System.Text;
 
 namespace ResolveMe.MathCompiler.Compilers.EBNF
 {
-    public class FunctionCompiler : NonTerminal
+    public class FunctionCompiler : NonTerminal, ICompiler
     {
         public FunctionCompiler(string name) 
             : base(name)
@@ -34,8 +34,8 @@ namespace ResolveMe.MathCompiler.Compilers.EBNF
             {
                 if (item is ICompiler)
                 {
-                    ICompileResult result = ((ICompiler)item).Compile()
-                    arguments.Add()
+                    ICompileResult result = ((ICompiler)item).Compile();
+                    arguments.Add(result);
                 }
             }
         }
