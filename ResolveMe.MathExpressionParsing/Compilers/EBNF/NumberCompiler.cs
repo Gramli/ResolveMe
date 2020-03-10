@@ -8,7 +8,7 @@ namespace ResolveMe.MathCompiler.Compilers.EBNF
     public class NumberCompiler : NonTerminal, ICompiler
     {
         public NumberCompiler(string name) 
-            : base(name,50)
+            : base(name, 50)
         {
         }
 
