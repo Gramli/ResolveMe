@@ -1,7 +1,7 @@
 ﻿using Amy;
-using Amy.EBNF;
+using Amy.Grammars.EBNF;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.IO;
+using ResolveMe.MathCompiler.Compilers.EBNF;
 
 namespace ResolveMe.MathCompiler.UnitTests
 {
@@ -12,8 +12,8 @@ namespace ResolveMe.MathCompiler.UnitTests
         public EBNFMathExpressionParsingTests()
         {
             EBNFGrammarParserCustom parser = new EBNFGrammarParserCustom();
-            string file = File.ReadAllText("Debug/EBNFGrammar.txt");
-            IStartSymbol symbol = parser.Parse(file);
+            MathEBNFGrammarDefinition definition = new MathEBNFGrammarDefinition();
+            IStartSymbol symbol = parser.Parse(definition);
             this.grammar = new MathEBNFGrammarCompiler(symbol);
         }
 
@@ -29,6 +29,8 @@ namespace ResolveMe.MathCompiler.UnitTests
             Assert.IsTrue(grammar.IsExpression("-sin(0.2)*3+15/max(25,1,14,47,87,7)"));
             Assert.IsTrue(grammar.IsExpression("-sin(0.2)*3+(-9.9874551)/max(25,1,14,47,87,sin(max(24,64)))"));
             Assert.IsTrue(grammar.IsExpression("onscreentime+(((count)-1)*0.9)"));
+            Assert.IsTrue(grammar.IsExpression("-sin(0.2)*3+(-9.9874551)/max(25,1,14,47,87,sin(max(24,64)))"));
+            Assert.IsTrue(grammar.IsExpression("-sin(0.2)*3+(-9.9874551)/max(var1,1,14,47,var1,sin(max(24,var1)))"));
         }
     }
 }

@@ -1,24 +1,25 @@
-﻿using Amy.EBNF.EBNFItems;
+﻿using Amy.Grammars.EBNF.EBNFItems;
+using ResolveMe.MathCompiler.Exceptions;
+using ResolveMe.MathCompiler.ExpressionTokens;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace ResolveMe.MathCompiler.Compilers.EBNF
 {
-    public class StringCompiler<T> : NonTerminal, ICompiler where T : ICompileResult, new()
+    public class StringCompiler<T> : NonTerminal, ICompiler where T : IToken, new()
     {
         public StringCompiler(string name) 
-            : base(name)
+            : base(name, 20)
         {
         }
 
-        public ICompileResult Compile(string value)
+        public IToken Compile(string value)
         {
             if (IsExpression(value))
             {
                 return (T)Activator.CreateInstance(typeof(T), value);
             }
-            else throw new Exception("Compile error");
+            else 
+                throw new CompileException(value, typeof(StringCompiler<T>));
         }
     }
 }

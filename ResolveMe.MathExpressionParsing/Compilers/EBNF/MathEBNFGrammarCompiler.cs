@@ -1,5 +1,6 @@
 ﻿using Amy;
-using Amy.EBNF;
+using Amy.Grammars.EBNF;
+using ResolveMe.MathCompiler.ExpressionTokens;
 
 namespace ResolveMe.MathCompiler.Compilers.EBNF
 {
@@ -10,7 +11,7 @@ namespace ResolveMe.MathCompiler.Compilers.EBNF
         {
         }
 
-        public ICompileResult Compile(string value)
+        public IToken Compile(string value)
         {
             throw new System.NotImplementedException();
         }

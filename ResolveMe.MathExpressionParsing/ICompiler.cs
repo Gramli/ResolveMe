@@ -1,4 +1,6 @@
-﻿namespace ResolveMe.MathCompiler
+﻿using ResolveMe.MathCompiler.ExpressionTokens;
+
+namespace ResolveMe.MathCompiler
 {
     /// <summary>
     /// Represents Compiler
@@ -8,6 +10,6 @@
         /// <summary>
         /// Compile data to ICompileResult
         /// </summary>
-        ICompileResult Compile(string value);
+        IToken Compile(string value);
     }
 }

@@ -2,7 +2,7 @@
 
 namespace ResolveMe.MathCompiler.ExpressionTokens
 {
-    public interface IToken : ICompileResult
+    public interface IToken
     {
         /// <summary>
         /// Create token as string
