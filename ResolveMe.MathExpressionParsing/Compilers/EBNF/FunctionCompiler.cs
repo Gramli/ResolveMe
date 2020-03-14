@@ -17,7 +17,7 @@ namespace ResolveMe.MathCompiler.Compilers.EBNF
         public IToken Compile(string value)
         {
             var structure = ExpressionStructure(value).ToList();
-            if (structure is null || structure.Any())
+            if (!(structure is null) || structure.Any())
             {
                 string name = GetName(structure);
                 IEnumerable<IToken> arguments = GetArguments(structure);
