@@ -1,12 +1,12 @@
 namespace ResolveMe.MathCompiler.ExpressionTokens
 {
-    public class CommaToken : CharToken
+    public class BracketToken : CharToken
     {
-        public CommaToken()
+        public BracketToken()
         {
         }
 
-        public CommaToken(char value) 
+        public BracketToken(char value) 
             : base(value)
         {
         }

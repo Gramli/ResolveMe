@@ -1,22 +1,14 @@
 ﻿namespace ResolveMe.MathCompiler.ExpressionTokens
 {
-    public class OperatorToken : IToken
+    public class OperatorToken : CharToken
     {
-        private readonly string _operatorString;
-        
         public OperatorToken()
         {
-
         }
 
-        public OperatorToken(string operatorString)
+        public OperatorToken(char value) 
+            : base(value)
         {
-            this._operatorString = operatorString;
-        }
-
-        public string GetStringRepresentation()
-        {
-            return this._operatorString;
         }
     }
 }
