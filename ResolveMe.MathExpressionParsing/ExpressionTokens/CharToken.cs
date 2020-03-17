@@ -4,7 +4,7 @@ using System.Text;
 
 namespace ResolveMe.MathCompiler.ExpressionTokens
 {
-    public abstract class CharToken : IToken
+    public abstract class CharToken : IExpressionToken
     {
         public char Char { get; private set; }
 

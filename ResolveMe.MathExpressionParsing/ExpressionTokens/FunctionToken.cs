@@ -3,16 +3,16 @@ using System.Text;
 
 namespace ResolveMe.MathCompiler.ExpressionTokens
 {
-    public class FunctionToken : IToken
+    public class FunctionToken : IExpressionToken
     {
         private readonly string _functionName;
 
-        private readonly List<IToken> _arguments;
+        private readonly List<IExpressionToken> _arguments;
 
-        public FunctionToken(string name, IEnumerable<IToken> arguments)
+        public FunctionToken(string name, IEnumerable<IExpressionToken> arguments)
         {
             this._functionName = name;
-            this._arguments = new List<IToken>(arguments);
+            this._arguments = new List<IExpressionToken>(arguments);
         }
 
         public string GetStringRepresentation()

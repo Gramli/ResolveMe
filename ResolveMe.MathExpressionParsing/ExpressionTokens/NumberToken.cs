@@ -2,7 +2,7 @@
 
 namespace ResolveMe.MathCompiler.ExpressionTokens
 {
-    public class NumberToken : IToken
+    public class NumberToken : IExpressionToken
     {
         private readonly double _value;
         

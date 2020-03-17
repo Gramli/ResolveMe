@@ -1,4 +1,5 @@
 ﻿using ResolveMe.MathCompiler.ExpressionTokens;
+using System.Collections.Generic;
 
 namespace ResolveMe.MathCompiler
 {
@@ -10,6 +11,6 @@ namespace ResolveMe.MathCompiler
         /// <summary>
         /// Compile data to ICompileResult
         /// </summary>
-        IToken Compile(string value);
+        IEnumerable<IExpressionToken> Compile(string value);
     }
 }

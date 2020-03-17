@@ -14,28 +14,28 @@ namespace ResolveMe.MathCompiler.Compilers.EBNF
         {
         }
 
-        public IToken Compile(string value)
+        public IEnumerable<IExpressionToken> Compile(string value)
         {
             var structure = ExpressionStructure(value).ToList();
             if (!(structure is null) || structure.Any())
             {
-                string name = GetName(structure);
-                IEnumerable<IToken> arguments = GetArguments(structure);
-                return new FunctionToken(name, arguments);
+                var name = GetName(structure);
+                var arguments = GetArguments(structure);
+                return new IExpressionToken[] { new FunctionToken(name, arguments) };
             }
             else
                 throw new CompileException(value, typeof(FunctionCompiler));
         }
 
-        private IEnumerable<IToken> GetArguments(IList<IExpressionItem> structure)
+        private IEnumerable<IExpressionToken> GetArguments(IList<IExpressionItem> structure)
         {
-            List<IToken> result = new List<IToken>();
+            var result = new List<IExpressionToken>();
             for (int i = 4; i < structure.Count; i++)
             {
                 if (structure[i] is ICompiler)
                 {
-                    IToken tempResult = ((ICompiler)structure[i]).Compile(structure[i].Expression);
-                    result.Add(tempResult);
+                    var tempResult = ((ICompiler)structure[i]).Compile(structure[i].Expression);
+                    result.AddRange(tempResult);
                 }
                 else
                     ThrowICompileException(structure[i].Expression);
@@ -45,16 +45,19 @@ namespace ResolveMe.MathCompiler.Compilers.EBNF
 
         private string GetName(IList<IExpressionItem> structure)
         {
-            TextToken result = new TextToken();
+            var result = new TextToken();
             for (int i = 0; i < 3; i++)
             {
                 if (structure[i] is ICompiler)
                 {
-                    IToken compileResult = ((ICompiler)structure[i]).Compile(structure[i].Expression);
-                    if (compileResult is TextToken)
-                        result.Concat((TextToken)compileResult);
-                    else
-                        throw new CompileException(structure[i].Expression, typeof(TextToken));
+                    var compileResults = ((ICompiler)structure[i]).Compile(structure[i].Expression);
+                    foreach (var compileResult in compileResults)
+                    {
+                        if (compileResult is TextToken)
+                            result.Concat((TextToken)compileResult);
+                        else
+                            throw new CompileException(structure[i].Expression, typeof(TextToken));
+                    }
                 }
                 else
                     ThrowICompileException(structure[i].Expression);

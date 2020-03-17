@@ -2,6 +2,7 @@
 using ResolveMe.MathCompiler.Exceptions;
 using ResolveMe.MathCompiler.ExpressionTokens;
 using System;
+using System.Collections.Generic;
 
 namespace ResolveMe.MathCompiler.Compilers.EBNF
 {
@@ -12,10 +13,10 @@ namespace ResolveMe.MathCompiler.Compilers.EBNF
         {
         }
 
-        public IToken Compile(string value)
+        public IEnumerable<IExpressionToken> Compile(string value)
         {
             if (IsExpression(value))
-                return new NumberToken(Convert.ToDouble(value));
+                return new IExpressionToken[] { new NumberToken(Convert.ToDouble(value)) };
             else
                 throw new CompileException(value, typeof(NumberCompiler));
         }

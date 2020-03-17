@@ -1,8 +1,8 @@
 ﻿using Amy;
 
-namespace ResolveMe.MathCompiler.ExpressionTokens
+namespace ResolveMe.MathCompiler
 {
-    public interface IToken
+    public interface IExpressionToken
     {
         /// <summary>
         /// Create token as string

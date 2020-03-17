@@ -11,7 +11,7 @@ namespace ResolveMe.MathCompiler.Compilers.EBNF
         {
         }
 
-        public IToken Compile(string value)
+        public IExpressionToken Compile(string value)
         {
             throw new System.NotImplementedException();
         }
