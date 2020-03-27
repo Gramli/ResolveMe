@@ -73,5 +73,10 @@ namespace ResolveMe.MathCompiler.Compilers.EBNF
         {
             return (NonTerminal)GetInstance(_emptyNonTerminals[name], name);
         }
+
+        public override EBNFStartSymbol GetStartSymbol(NonTerminal startSymbolNonTerminal, List<NonTerminal> rules)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -83,5 +83,16 @@ namespace ResolveMe.MathCompiler.UnitTests
             Assert.IsTrue(grammar.IsExpression("-cos(0.9)*3+(-12.987)/min(25,1,14,47,87,sin(cos(24,64)))"));
             Assert.IsTrue(grammar.IsExpression("-argsin(0.9)*456+(-12.987)/log(25,1,48,654,87,sin(ln(24,64)))"));
         }
+
+        [TestMethod]
+        public void CompileExpression()
+        {
+            var parser = new EBNFGrammarParserCustom(80);
+            var definition = new MathEBNFGrammarDefinition();
+            var symbol = parser.Parse(definition);
+            var grammar = new MathEBNFGrammarCompiler(symbol);
+
+            grammar.Compile("sin(a)");
+        }
     }
 }

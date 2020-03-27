@@ -7,8 +7,8 @@ namespace ResolveMe.MathCompiler.Compilers.EBNF
 {
     public class CommonCompiler : NonTerminal, ICompiler
     {
-        public CommonCompiler(string name, int cacheLength) 
-            : base(name, cacheLength)
+        public CommonCompiler(string name) 
+            : base(name, 20)
         {
         }
 

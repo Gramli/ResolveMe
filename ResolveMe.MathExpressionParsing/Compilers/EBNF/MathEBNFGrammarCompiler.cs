@@ -1,6 +1,6 @@
 ﻿using Amy;
 using Amy.Grammars.EBNF;
-using ResolveMe.MathCompiler.ExpressionTokens;
+using System.Collections.Generic;
 
 namespace ResolveMe.MathCompiler.Compilers.EBNF
 {
@@ -11,9 +11,10 @@ namespace ResolveMe.MathCompiler.Compilers.EBNF
         {
         }
 
-        public IExpressionToken Compile(string value)
+        public IEnumerable<IExpressionToken> Compile(string value)
         {
-            throw new System.NotImplementedException();
+            return ((ICompiler)this.StartSymbol).Compile(value);
         }
+
     }
 }
