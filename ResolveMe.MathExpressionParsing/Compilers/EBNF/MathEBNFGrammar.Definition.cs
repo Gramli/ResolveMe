@@ -76,7 +76,7 @@ namespace ResolveMe.MathCompiler.Compilers.EBNF
 
         public override EBNFStartSymbol GetStartSymbol(NonTerminal startSymbolNonTerminal, List<NonTerminal> rules)
         {
-            throw new NotImplementedException();
+            return new MathEBNFGrammarStartSymbol(startSymbolNonTerminal, rules);
         }
     }
 }

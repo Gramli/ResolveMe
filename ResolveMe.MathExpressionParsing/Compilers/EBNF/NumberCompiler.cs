@@ -1,4 +1,5 @@
-﻿using Amy.Grammars.EBNF.EBNFItems;
+﻿using Amy;
+using Amy.Grammars.EBNF.EBNFItems;
 using ResolveMe.MathCompiler.Exceptions;
 using ResolveMe.MathCompiler.ExpressionTokens;
 using System;
@@ -15,10 +16,21 @@ namespace ResolveMe.MathCompiler.Compilers.EBNF
 
         public IEnumerable<IExpressionToken> Compile(string value)
         {
-            if (IsExpression(value))
-                return new IExpressionToken[] { new NumberToken(Convert.ToDouble(value)) };
-            else
+            if (!IsExpression(value))
+            {
                 throw new CompileException(value, typeof(NumberCompiler));
+            }
+            return new IExpressionToken[] { new NumberToken(Convert.ToDouble(value)) };
+        }
+
+        public IEnumerable<IExpressionToken> Compile(IExpressionItem item)
+        {
+            if (item is null)
+            {
+                throw new CompileException("Expression item is null.", typeof(NumberCompiler));
+            }
+
+            return Compile(item.Expression);
         }
     }
 }

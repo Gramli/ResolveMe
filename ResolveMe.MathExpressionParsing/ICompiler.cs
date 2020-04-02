@@ -1,4 +1,4 @@
-﻿using ResolveMe.MathCompiler.ExpressionTokens;
+﻿using Amy;
 using System.Collections.Generic;
 
 namespace ResolveMe.MathCompiler
@@ -9,8 +9,13 @@ namespace ResolveMe.MathCompiler
     public interface ICompiler
     {
         /// <summary>
-        /// Compile data to ICompileResult
+        /// Compile data to collection of expressionTokens
         /// </summary>
         IEnumerable<IExpressionToken> Compile(string value);
+
+        /// <summary>
+        /// Compile data to ICompileResult
+        /// </summary>
+        IEnumerable<IExpressionToken> Compile(IExpressionItem item);
     }
 }
