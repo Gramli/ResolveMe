@@ -4,6 +4,7 @@ using ResolveMe.MathCompiler.Exceptions;
 using ResolveMe.MathCompiler.ExpressionTokens;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 
 namespace ResolveMe.MathCompiler.Compilers.EBNF
 {
@@ -20,7 +21,7 @@ namespace ResolveMe.MathCompiler.Compilers.EBNF
             {
                 throw new CompileException(value, typeof(NumberCompiler));
             }
-            return new IExpressionToken[] { new NumberToken(Convert.ToDouble(value)) };
+            return new IExpressionToken[] { new NumberToken(Convert.ToDouble(value, CultureInfo.InvariantCulture)) };
         }
 
         public IEnumerable<IExpressionToken> Compile(IExpressionItem item)

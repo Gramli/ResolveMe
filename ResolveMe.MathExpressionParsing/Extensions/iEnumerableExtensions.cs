@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace ResolveMe.MathCompiler.Extensions
 {
@@ -21,6 +22,32 @@ namespace ResolveMe.MathCompiler.Extensions
                 {
                     yield return InnerSplit(enumerator);
                 }
+            }
+        }
+
+        public static IList<IEnumerable<T>> SplitToArray<T>(
+            this IEnumerable<T> source, int batchCount, int batchLength)
+        {
+            var result = new List<IEnumerable<T>>();
+            using (var enumerator = source.GetEnumerator())
+            {
+                for (var i = 0; i < batchCount - 1; i++)
+                {
+                    result.Add(InnerSplitToArray(enumerator, batchLength));
+                }
+
+                result.Add(InnerSplitToArray(enumerator));
+            }
+
+            return result;
+        }
+
+        private static IEnumerable<T> InnerSplitToArray<T>(
+            IEnumerator<T> source, int length = 0)
+        {
+            for (var i = 0; (i < length || length == 0) && source.MoveNext(); i++)
+            {
+                yield return source.Current;
             }
         }
 

@@ -13,13 +13,11 @@ namespace ResolveMe.MathCompiler.Compilers.EBNF
 
         public IEnumerable<IExpressionToken> Compile(string value)
         {
-            //TODO DAN
             return ((ICompiler)this.StartSymbol).Compile(value);
         }
 
         public IEnumerable<IExpressionToken> Compile(IExpressionItem item)
         {
-            //TODO DAN
             throw new System.NotImplementedException();
         }
     }

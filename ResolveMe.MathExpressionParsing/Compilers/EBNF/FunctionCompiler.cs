@@ -38,7 +38,7 @@ namespace ResolveMe.MathCompiler.Compilers.EBNF
 
         private IExpressionToken[] Compile(IEnumerable<IExpressionItem> structure)
         {
-            var result = structure.Split<IExpressionItem>(2, 3).ToArray();
+            var result = structure.SplitToArray(2, 3);
             var name = GetName(result[0]);
             var arguments = GetArguments(result[1]);
             return new IExpressionToken[] { new FunctionToken(name, arguments) };
@@ -49,11 +49,11 @@ namespace ResolveMe.MathCompiler.Compilers.EBNF
             var result = new List<IExpressionToken>();
             foreach (var expressionItem in structure)
             {
-                if (!(expressionItem is ICompiler))
+                if (!(expressionItem.Item is ICompiler))
                 {
                     ThrowICompileException(expressionItem.Expression);
                 }
-                var tempResult = ((ICompiler)expressionItem).Compile(expressionItem.Expression);
+                var tempResult = ((ICompiler)expressionItem.Item).Compile(expressionItem);
                 result.AddRange(tempResult);
             }
             return result;
@@ -64,12 +64,12 @@ namespace ResolveMe.MathCompiler.Compilers.EBNF
             var result = new TextToken();
             foreach (var expressionItem in structure)
             {
-                if (!(expressionItem is ICompiler))
+                if (!(expressionItem.Item is ICompiler))
                 {
                     ThrowICompileException(expressionItem.Expression);
                 }
 
-                var compileResults = ((ICompiler)expressionItem).Compile(expressionItem.Expression);
+                var compileResults = ((ICompiler)expressionItem.Item).Compile(expressionItem);
                 foreach (var compileResult in compileResults)
                 {
                     if (!(compileResult is TextToken))

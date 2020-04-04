@@ -39,15 +39,19 @@ namespace ResolveMe.MathCompiler.Compilers.EBNF
         private IEnumerable<IExpressionToken> Compile(IEnumerable<IExpressionItem> structure)
         {
             var result = new List<IExpressionToken>();
-            foreach (var item in structure)
+            foreach (var parentItem in structure)
             {
-                if (!(item is ICompiler))
+                foreach (var item in parentItem.Childs)
                 {
-                    throw new CompileException($"Item {item} is not Compiler.");
-                }
 
-                var childItemCompileResult = ((ICompiler)item).Compile(item.Expression);
-                result.AddRange(childItemCompileResult);
+                    if (!(item.Item is ICompiler))
+                    {
+                        throw new CompileException($"Item {item} is not Compiler.");
+                    }
+
+                    var childItemCompileResult = ((ICompiler)item.Item).Compile(item);
+                    result.AddRange(childItemCompileResult);
+                }
             }
             return result;
         }

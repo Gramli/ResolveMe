@@ -15,14 +15,12 @@ namespace ResolveMe.MathCompiler.Compilers.EBNF
 
         public IEnumerable<IExpressionToken> Compile(string value)
         {
-            //TODO DAN
             return ((ICompiler)this.Rule).Compile(value);
         }
 
         public IEnumerable<IExpressionToken> Compile(IExpressionItem item)
         {
-            //TODO DAN
-            throw new NotImplementedException();
+            return ((ICompiler)this.Rule).Compile(item);
         }
     }
 }

@@ -3,8 +3,10 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ResolveMe.MathCompiler.Compilers.EBNF;
 using System.Collections.Generic;
 using System.Diagnostics;
-using ResolveMe.MathCompiler.Utils;
+using ResolveMe.MathCompiler.Extensions;
 using System.Linq;
+using System.Runtime.InteropServices;
+using ResolveMe.MathCompiler.ExpressionTokens;
 
 namespace ResolveMe.MathCompiler.UnitTests
 {
@@ -95,21 +97,20 @@ namespace ResolveMe.MathCompiler.UnitTests
             var symbol = parser.Parse(definition);
             var grammar = new MathEBNFGrammarCompiler(symbol);
 
-            grammar.Compile("sin(a)");
-        }
+            var result = grammar.Compile("sin(a)");
+            Assert.IsTrue(result.Count().Equals(1));
+            Assert.IsTrue(result.First() is FunctionToken);
 
-        [TestMethod]
-        public void Tests()
-        {
-            IEnumerable<int> enu = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+            var result1 = grammar.Compile("sin(0.2)");
+            Assert.IsTrue(result1.Count().Equals(1));
+            Assert.IsTrue(result1.First() is FunctionToken);
 
-            var result = enu.Split<int>(4,2);
+            var result2 = grammar.Compile("sin(0.2+a)");
+            Assert.IsTrue(result2.Count().Equals(1));
+            Assert.IsTrue(result2.First() is FunctionToken);
 
-            foreach (var item in result)
-            {
-                var ar = item.ToArray();
-            }
-
+            var result3 = grammar.Compile("(-9.9874551)");
+            Assert.IsTrue(result3.Count().Equals(4));
         }
     }
 }
