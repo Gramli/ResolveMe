@@ -29,7 +29,7 @@ namespace ResolveMe.MathCompiler.Compilers.EBNF
 
         public IEnumerable<IExpressionToken> Compile(IExpressionItem item)
         {
-            if (item is null || !item.Childs.Any())
+            if (item is null || item.Childs.IsNullOrEmpty())
             {
                 throw new CompileException($"Expression item is null or item do not has any childs. Expression: {item.Expression}", typeof(FunctionCompiler));
             }

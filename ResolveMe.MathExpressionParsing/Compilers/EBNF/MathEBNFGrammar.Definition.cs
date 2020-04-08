@@ -50,7 +50,7 @@ namespace ResolveMe.MathCompiler.Compilers.EBNF
             { "l_square", typeof(CharCompiler<LeftBracketToken>) },
             { "r_round", typeof(CharCompiler<RightBracketToken>) },
             { "l_round", typeof(CharCompiler<LeftBracketToken>) },
-            { "sign", typeof(CharCompiler<SignToken>) },
+            { "sign", typeof( CharCompiler<SignToken>) },
             { "double", typeof(NumberCompiler) },
             { "word", typeof(StringCompiler<TextToken>) },
             { "variable", typeof(StringCompiler<VariableToken>) },

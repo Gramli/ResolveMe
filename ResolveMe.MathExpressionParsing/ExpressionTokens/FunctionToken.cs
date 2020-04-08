@@ -5,21 +5,21 @@ namespace ResolveMe.MathCompiler.ExpressionTokens
 {
     public class FunctionToken : IExpressionToken
     {
-        private readonly string _functionName;
+        public string FunctionName { get; private set; }
 
-        private readonly List<IExpressionToken> _arguments;
+        public List<IExpressionToken> Arguments { get; private set; }
 
         public FunctionToken(string name, IEnumerable<IExpressionToken> arguments)
         {
-            this._functionName = name;
-            this._arguments = new List<IExpressionToken>(arguments);
+            this.FunctionName = name;
+            this.Arguments = new List<IExpressionToken>(arguments);
         }
 
         public string GetStringRepresentation()
         {
             StringBuilder result = new StringBuilder();
-            result.Append(this._functionName);
-            foreach (var argument in this._arguments)
+            result.Append(this.FunctionName);
+            foreach (var argument in this.Arguments)
             {
                 result.Append(argument.GetStringRepresentation());
             }

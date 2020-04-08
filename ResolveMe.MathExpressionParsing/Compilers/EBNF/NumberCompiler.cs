@@ -1,4 +1,5 @@
 ﻿using Amy;
+using Amy.Extensions;
 using Amy.Grammars.EBNF.EBNFItems;
 using ResolveMe.MathCompiler.Exceptions;
 using ResolveMe.MathCompiler.ExpressionTokens;

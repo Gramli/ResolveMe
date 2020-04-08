@@ -42,6 +42,11 @@ namespace ResolveMe.MathCompiler.Extensions
             return result;
         }
 
+        public static bool IsNullOrEmpty<T>(this IEnumerable<T> source)
+        {
+            return source == null || !source.Any();
+        }
+
         private static IEnumerable<T> InnerSplitToArray<T>(
             IEnumerator<T> source, int length = 0)
         {

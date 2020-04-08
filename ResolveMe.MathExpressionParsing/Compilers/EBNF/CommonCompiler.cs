@@ -1,6 +1,7 @@
 ﻿using Amy;
 using Amy.Grammars.EBNF.EBNFItems;
 using ResolveMe.MathCompiler.Exceptions;
+using ResolveMe.MathCompiler.Extensions;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -15,20 +16,27 @@ namespace ResolveMe.MathCompiler.Compilers.EBNF
 
         public IEnumerable<IExpressionToken> Compile(string value)
         {
-            var structure = ExpressionStructure(value);
+            var result = new List<IExpressionToken>();
 
-            if (structure is null || !structure.Any())
+            var valueStructure = ExpressionStructure(value);
+
+            if (valueStructure is null || !valueStructure.Any())
             {
                 throw new CompileException($"Expression structure is null or do not have any item. Expression: {value}", typeof(CommonCompiler));
             }
 
-            return Compile(structure);
+            foreach (var item in valueStructure)
+            {
+                var childItemStructure = Compile(item.Childs);
+                result.AddRange(childItemStructure);
+            }
 
+            return result;
         }
 
         public IEnumerable<IExpressionToken> Compile(IExpressionItem item)
         {
-            if (item is null || !item.Childs.Any())
+            if (item is null || item.Childs.IsNullOrEmpty())
             {
                 throw new CompileException($"Expression item is null or item do not has any childs. Expression: {item.Expression}", typeof(CommonCompiler));
             }
@@ -39,19 +47,15 @@ namespace ResolveMe.MathCompiler.Compilers.EBNF
         private IEnumerable<IExpressionToken> Compile(IEnumerable<IExpressionItem> structure)
         {
             var result = new List<IExpressionToken>();
-            foreach (var parentItem in structure)
+            foreach (var item in structure)
             {
-                foreach (var item in parentItem.Childs)
+                if (!(item.Item is ICompiler))
                 {
-
-                    if (!(item.Item is ICompiler))
-                    {
-                        throw new CompileException($"Item {item} is not Compiler.");
-                    }
-
-                    var childItemCompileResult = ((ICompiler)item.Item).Compile(item);
-                    result.AddRange(childItemCompileResult);
+                    throw new CompileException($"Item {item} is not Compiler.");
                 }
+
+                var itemStructure = ((ICompiler)item.Item).Compile(item);
+                result.AddRange(itemStructure);
             }
             return result;
         }
