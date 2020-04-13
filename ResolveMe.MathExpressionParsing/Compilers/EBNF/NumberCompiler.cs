@@ -6,6 +6,7 @@ using ResolveMe.MathCompiler.ExpressionTokens;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Threading;
 
 namespace ResolveMe.MathCompiler.Compilers.EBNF
 {

@@ -10,10 +10,11 @@ namespace ResolveMe.MathCompiler.Compilers.EBNF
     {
         private string[] _productionRules = new string[]
         {
-            "expression = [ sign ], term ,{ ( sign ) , term };",
-            "term = factor, { (times | divide) , factor };",
-            "factor = double | variable | function | l_round, expression, r_round;",
-            "function = letter, letter, word, l_round, { expression, comma }, expression, r_round;",
+            "expression = [ sign ], term , { ( plus | minus ) , term };",
+            "term = exponentiation, { (times | divide) , exponentiation };",
+            "exponentiation = factor  | (factor, exponent, factor);",
+            "factor = variable | double | function | (l_round, expression, r_round);",
+            "function = letter, letter, word , l_round, expression, { comma, expression }, r_round;",
             "variable = letter, word;",
             "word = { letter | digit };",
             "double = [sign], digit, { digit }, [ \".\",  { digit } ] ;",
@@ -27,8 +28,7 @@ namespace ResolveMe.MathCompiler.Compilers.EBNF
             "minus  =\"-\" ; ",
             "times  =\"*\" ; ",
             "divide =\"/\" ; ",
-            "biggerThan = \">\" ; ",
-            "lesserThan = \"<\" ; ",
+            "exponent = \"^\";",
             "letter = \"a\" | \"b\" | \"c\" | \"d\" | \"e\" | \"f\" | \"g\" | \"h\" | \"i\" | \"j\" | \"k\" | \"l\" | \"m\" " +
             "| \"n\" | \"o\" | \"p\" | \"q\" | \"r\" | \"s\" | \"t\" | \"u\" | \"v\" | \"w\" | \"x\" | \"y\" | \"z\" ; ",
             "digit = \"0\" | \"1\" | \"2\" | \"3\" | \"4\" | \"5\" | \"6\" | \"7\" | \"8\" | \"9\" ; ",
@@ -39,8 +39,7 @@ namespace ResolveMe.MathCompiler.Compilers.EBNF
         {
             { "digit", typeof(StringCompiler<TextToken>) },
             { "letter", typeof(StringCompiler<TextToken>) },
-            { "lesserThan", typeof(CharCompiler<OperatorToken>) },
-            { "biggerThan", typeof(CharCompiler<OperatorToken>) },
+            { "exponent", typeof(CharCompiler<OperatorToken>) },
             { "divide", typeof(CharCompiler<OperatorToken>) },
             { "times", typeof(CharCompiler<OperatorToken>) },
             { "minus", typeof(CharCompiler<OperatorToken>) },
@@ -56,9 +55,12 @@ namespace ResolveMe.MathCompiler.Compilers.EBNF
             { "variable", typeof(StringCompiler<VariableToken>) },
             { "function", typeof(FunctionCompiler) },
             { "factor", typeof(CommonCompiler) },
+            { "exponentiation", typeof(CommonCompiler) },
             { "term", typeof(CommonCompiler) },
             { "expression", typeof(CommonCompiler) },
         };
+
+        private Dictionary<string, NonTerminal> _createdInstances = new Dictionary<string, NonTerminal>();
 
         public MathEBNFGrammarDefinition()
         {
@@ -71,7 +73,11 @@ namespace ResolveMe.MathCompiler.Compilers.EBNF
 
         public override NonTerminal GetNewNonTerminalInstance(string name)
         {
-            return (NonTerminal)GetInstance(_emptyNonTerminals[name], name);
+            if (!this._createdInstances.ContainsKey(name))
+            {
+                this._createdInstances.Add(name, (NonTerminal)GetInstance(_emptyNonTerminals[name], name));
+            }
+            return this._createdInstances[name];
         }
 
         public override EBNFStartSymbol GetStartSymbol(NonTerminal startSymbolNonTerminal, List<NonTerminal> rules)

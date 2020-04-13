@@ -18,7 +18,7 @@ namespace ResolveMe.MathCompiler.Compilers.EBNF
         public IEnumerable<IExpressionToken> Compile(string value)
         {
             var structure = ExpressionStructure(value).ToList();
-            if (structure is null || !structure.Any())
+            if (structure.IsNullOrEmpty())
             {
                 throw new CompileException($"Expression structure is null or do not have any item. Expression: {value}", typeof(FunctionCompiler));
             }

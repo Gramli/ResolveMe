@@ -1,10 +1,8 @@
 ﻿using Amy;
-using Amy.Extensions;
 using Amy.Grammars.EBNF.EBNFItems;
 using ResolveMe.MathCompiler.Exceptions;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace ResolveMe.MathCompiler.Compilers.EBNF
 {

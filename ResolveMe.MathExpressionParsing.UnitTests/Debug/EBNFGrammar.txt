@@ -1,7 +1,7 @@
 expression = [ sign ], term ,{ ( sign ) , term };
 term = factor, { (times | divide) , factor };
 factor = double | variable | function | l_round, expression, r_round;
-function = letter, letter, word, l_round, { expression, comma }, expression, r_round;
+function = letter, letter, word, l_round, expression, { expression, comma }, r_round;
 variable = letter, word ;
 word = { letter | digit } ;
 double = [sign], digit, { digit }, [ ".",  { digit } ] ;

@@ -20,7 +20,7 @@ namespace ResolveMe.MathCompiler.Compilers.EBNF
 
             var valueStructure = ExpressionStructure(value);
 
-            if (valueStructure is null || !valueStructure.Any())
+            if (valueStructure.IsNullOrEmpty())
             {
                 throw new CompileException($"Expression structure is null or do not have any item. Expression: {value}", typeof(CommonCompiler));
             }

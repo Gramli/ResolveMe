@@ -20,40 +20,81 @@ namespace ResolveMe.MathCompiler.UnitTests
 
         public EBNFMathExpressionParsingTests()
         {
-            this.parser = new EBNFGrammarParserCustom(200);
+            this.parser = new EBNFGrammarParserCustom(50);
             this.definition = new MathEBNFGrammarDefinition();
             this.startSymbol = parser.Parse(definition);
             this.grammar = new MathEBNFGrammarCompiler(startSymbol);
             this.grammarCompiler = (ICompiler)this.grammar;
         }
 
+        [TestMethod]
+        public void ParserPerformance()
+        {
+            TimeSpan timeResult = Time(() =>
+            {
+                var parser = new EBNFGrammarParserCustom(50);
+                var definition = new MathEBNFGrammarDefinition();
+                var startSymbol = parser.Parse(definition);
+            });
+
+            Assert.IsTrue(timeResult.TotalMilliseconds < 1);
+        }
+
 
         [TestMethod]
         public void CheckExpression()
         {
-            //var ebnfStartSymbol = (EBNFStartSymbol)this.startSymbol;
+            var ebnfStartSymbol = (EBNFStartSymbol)this.startSymbol;
 
-            //Assert.IsTrue(ebnfStartSymbol.IsExpression("(-9.9874551)"));
-            //Assert.IsTrue(grammar.IsExpression("sin(a)"));
-            //Assert.IsTrue(grammar.IsExpression("sin(a+9.2)"));
-            //Assert.IsTrue(grammar.IsExpression("var1"));
-            //Assert.IsTrue(grammar.IsExpression("max(25,a,14,45)"));
-            //Assert.IsTrue(grammar.IsExpression("sin(a+9.2)*var1+15"));
-            //Assert.IsTrue(grammar.IsExpression("-sin(0.2)*3+15/max(25,1,14,47,87,7)"));
-            //Assert.IsTrue(grammar.IsExpression("-sin(0.2)*3+(-9.9874551)/max(25,1,14,47,87,sin(max(24,64)))"));
-            //Assert.IsTrue(grammar.IsExpression("onscreentime+(((count)-1)*0.9)"));
-            //Assert.IsTrue(grammar.IsExpression("-sin(0.2)*3+(-9.9874551)/max(25,1,14,47,87,sin(max(24,64)))"));
-            //Assert.IsTrue(grammar.IsExpression("-sin(0.2)*3+(-9.9874551)/max(var1,1,14,47,var1,sin(max(24,var1)))"));
-            //Assert.IsTrue(grammar.IsExpression("-sin(0.3)*3+(-9.9877851)/max(var1,1,144,47,var1,sin(max(2474,var1)))"));
-            //Assert.IsTrue(grammar.IsExpression("-cos(0.9)*3+(-12.987)/min(25,1,14,47,87,sin(cos(24,64)))"));
-            //Assert.IsTrue(grammar.IsExpression("-argsin(0.9)*456+(-12.987)/log(25,1,48,654,87,sin(ln(24,64)))"));
+            Assert.IsTrue(ebnfStartSymbol.IsExpression("(-9.9874551)"));
+            Assert.IsTrue(ebnfStartSymbol.IsExpression("sin(a^2)"));
+            Assert.IsTrue(ebnfStartSymbol.IsExpression("sin(9.2)"));
+            Assert.IsTrue(ebnfStartSymbol.IsExpression("var1"));
+            Assert.IsTrue(ebnfStartSymbol.IsExpression("max(25,a)"));
+            Assert.IsTrue(ebnfStartSymbol.IsExpression("sin(9.2)*var1+15"));
+            Assert.IsTrue(ebnfStartSymbol.IsExpression("-sin(0.2)*3+15/max(25,1)"));
+            Assert.IsTrue(ebnfStartSymbol.IsExpression("onscreentime+(((count)-1)*0.9)"));
+            Assert.IsTrue(ebnfStartSymbol.IsExpression("-argsin(0.9,40)*456-54+(-12.987)"));
+            Assert.IsTrue(ebnfStartSymbol.IsExpression("log10(5)/cos(0.2)*sin(45)"));
         }
 
         [TestMethod]
         public void CompileComplexExpression()
         {
-            var log = this.grammarCompiler.Compile("log(25,1,48,55,64,75)+sin(a)");//,sin(lns(24,64)))");
-            //var result = this.grammarCompiler.Compile("-argsin(0.9)*456+(-12.987)/log(25,1,48,654,87,sin(lns(24,64)))");
+            CheckExpression("max(25,1)+45-ab*bc+log5(12)", new Type[]
+            {
+                typeof(FunctionToken),
+                typeof(OperatorToken),
+                typeof(NumberToken),
+                typeof(OperatorToken),
+                typeof(VariableToken),
+                typeof(OperatorToken),
+                typeof(VariableToken),
+                typeof(OperatorToken),
+                typeof(FunctionToken),
+
+            });
+
+            CheckExpression("-cos(0.9)*456-54+(-12.987)/log10(0.5)/cos(0.2)*sin(0.6)", new Type[]
+            {
+                typeof(SignToken),
+                typeof(FunctionToken),
+                typeof(OperatorToken),
+                typeof(NumberToken),
+                typeof(OperatorToken),
+                typeof(NumberToken),
+                typeof(OperatorToken),
+                typeof(LeftBracketToken),
+                typeof(SignToken),
+                typeof(NumberToken),
+                typeof(RightBracketToken),
+                typeof(OperatorToken),
+                typeof(FunctionToken),
+                typeof(OperatorToken),
+                typeof(FunctionToken),
+                typeof(OperatorToken),
+                typeof(FunctionToken),
+            });
         }
 
         [TestMethod]
@@ -86,7 +127,7 @@ namespace ResolveMe.MathCompiler.UnitTests
             {
                 typeof(LeftBracketToken),
                 typeof(NumberToken),
-                typeof(SignToken),
+                typeof(OperatorToken),
                 typeof(VariableToken),
                 typeof(RightBracketToken)
             });
@@ -99,14 +140,12 @@ namespace ResolveMe.MathCompiler.UnitTests
                 typeof(RightBracketToken)
             });
 
-            CheckFunction("max(25,a,35)", new Type[]
+            CheckFunction("max(25,a)", new Type[]
             {
                 typeof(LeftBracketToken),
                 typeof(NumberToken),
                 typeof(CommaToken),
                 typeof(VariableToken),
-                typeof(CommaToken),
-                typeof(NumberToken),
                 typeof(RightBracketToken)
             });
         }
@@ -120,10 +159,30 @@ namespace ResolveMe.MathCompiler.UnitTests
             Assert.IsTrue(functToken != null);
             Assert.IsTrue(functToken.Arguments.Count == argumentsTypes.Length);
 
-            for(int i=0;i<functToken.Arguments.Count;i++)
+            for (int i = 0; i < functToken.Arguments.Count; i++)
             {
                 Assert.IsTrue(functToken.Arguments[i].GetType().Equals(argumentsTypes[i]));
             }
+        }
+
+        private void CheckExpression(string expresion, Type[] argumentsTypes)
+        {
+            var result = this.grammarCompiler.Compile(expresion).ToList();
+            Assert.IsTrue(result.Count().Equals(argumentsTypes.Length));
+
+
+            for (int i = 0; i < result.Count; i++)
+            {
+                Assert.IsTrue(result[i].GetType().Equals(argumentsTypes[i]));
+            }
+        }
+
+        private TimeSpan Time(Action toTime)
+        {
+            var timer = Stopwatch.StartNew();
+            toTime();
+            timer.Stop();
+            return timer.Elapsed;
         }
     }
 }
