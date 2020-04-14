@@ -44,7 +44,7 @@ namespace ResolveMe.MathCompiler.Extensions
 
         public static bool IsNullOrEmpty<T>(this IEnumerable<T> source)
         {
-            return source == null || !source.Any();
+            return source == null || source.Count() == 0; //use count because of performance
         }
 
         private static IEnumerable<T> InnerSplitToArray<T>(

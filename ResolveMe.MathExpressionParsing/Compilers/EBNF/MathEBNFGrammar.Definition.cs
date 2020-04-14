@@ -35,7 +35,7 @@ namespace ResolveMe.MathCompiler.Compilers.EBNF
         };
         public override string[] ProductionRules => this._productionRules;
 
-        private Dictionary<string, Type> _emptyNonTerminals = new Dictionary<string, Type>()
+        private readonly Dictionary<string, Type> _emptyNonTerminals = new Dictionary<string, Type>()
         {
             { "digit", typeof(StringCompiler<TextToken>) },
             { "letter", typeof(StringCompiler<TextToken>) },
@@ -60,7 +60,7 @@ namespace ResolveMe.MathCompiler.Compilers.EBNF
             { "expression", typeof(CommonCompiler) },
         };
 
-        private Dictionary<string, NonTerminal> _createdInstances = new Dictionary<string, NonTerminal>();
+        private  readonly Dictionary<string, NonTerminal> _createdInstances = new Dictionary<string, NonTerminal>();
 
         public MathEBNFGrammarDefinition()
         {

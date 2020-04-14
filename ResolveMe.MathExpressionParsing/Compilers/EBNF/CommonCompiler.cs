@@ -10,7 +10,7 @@ namespace ResolveMe.MathCompiler.Compilers.EBNF
     public class CommonCompiler : NonTerminal, ICompiler
     {
         public CommonCompiler(string name)
-            : base(name, 20)
+            : base(name)
         {
         }
 

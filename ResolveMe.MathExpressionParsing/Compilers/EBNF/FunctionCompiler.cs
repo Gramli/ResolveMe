@@ -11,7 +11,7 @@ namespace ResolveMe.MathCompiler.Compilers.EBNF
     public class FunctionCompiler : NonTerminal, ICompiler
     {
         public FunctionCompiler(string nonTerminalName)
-            : base(nonTerminalName, 25)
+            : base(nonTerminalName)
         {
         }
 

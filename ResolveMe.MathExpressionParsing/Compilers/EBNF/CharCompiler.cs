@@ -9,7 +9,7 @@ namespace ResolveMe.MathCompiler.Compilers.EBNF
     public class CharCompiler<T> : NonTerminal, ICompiler where T : IExpressionToken, new()
     {
         public CharCompiler(string name)
-            : base(name, 20)
+            : base(name)
         {
         }
 

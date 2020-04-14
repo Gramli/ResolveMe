@@ -1,24 +1,89 @@
-﻿namespace ResolveMe.MathCompiler
+﻿using System.Collections.Generic;
+using ResolveMe.MathCompiler.ExpressionTokens;
+
+namespace ResolveMe.MathCompiler
 {
     public class ExpressionOptimizer
     {
         private readonly char leftBracket = '(';
         private readonly char rightBracket = ')';
 
-        public string TryRemoveOuterBrackets(string value)
+        public IEnumerable<IExpressionToken> SplitLongExpression(string value)
         {
-            if (value[0].Equals(leftBracket) && value[value.Length - 1].Equals(rightBracket))
+            if (value.Length > 15 && !string.IsNullOrEmpty(value))
             {
-                string innerValue = value[1..(value.Length - 1)];
+                var editedValue = TryRemoveOuterBrackets(value);
+                var expressions = new List<IExpressionToken>();
+
+                foreach (var token in editedValue)
+                {
+                    if (!(token is RawToken))
+                    {
+                        expressions.Add(token);
+                    }
+                    else
+                    {
+                        expressions.AddRange(GetTokenTokens(token));
+                    }
+                }
+
+                return expressions;
+            }
+
+            return new List<IExpressionToken>(1) { new RawToken(value) };
+        }
+
+        private IEnumerable<IExpressionToken> GetTokenTokens(IExpressionToken token)
+        {
+            var tokenStringValue = token.GetStringRepresentation();
+
+            var expressions = new List<IExpressionToken>();
+            var operators = new HashSet<char>() { '*', '/', '+', '-', '^' };
+            var brackets = 0;
+
+            for (var i = 0; i < tokenStringValue.Length; i++)
+            {
+                if (tokenStringValue[i].Equals(leftBracket))
+                {
+                    brackets++;
+                }
+                else if (tokenStringValue[i].Equals(rightBracket))
+                {
+                    brackets--;
+                }
+
+                if (operators.Contains(tokenStringValue[i]) && brackets == 0 && i != 0)
+                { 
+                    expressions.AddRange(SplitLongExpression(tokenStringValue[..i]));
+                    expressions.Add(new OperatorToken(tokenStringValue[i]));
+                    expressions.AddRange(SplitLongExpression(tokenStringValue[(i + 1)..]));
+                    break;
+
+                }
+
+            }
+
+            return expressions;
+
+        }
+
+        public IEnumerable<IExpressionToken> TryRemoveOuterBrackets(string value)
+        {
+            var result = new List<IExpressionToken>();
+
+            if (value[0].Equals(leftBracket) && value[^1].Equals(rightBracket))
+            {
+                var innerValue = value[1..^1];
                 var brackets = 0;
 
-                for (int i = 0; i < innerValue.Length; i++)
+                for (var i = 0; i < innerValue.Length; i++)
                 {
-                    bool equalsRightBracket = innerValue[i].Equals(rightBracket);
+                    var equalsRightBracket = innerValue[i].Equals(rightBracket);
 
                     if (brackets.Equals(0) && equalsRightBracket)
                     {
-                        return value;
+                        result.Add(new RawToken(value));
+                        return result;
                     }
                     else if (innerValue[i].Equals(leftBracket))
                     {
@@ -30,10 +95,14 @@
                     }
                 }
 
-                return innerValue;
+                result.Add(new LeftBracketToken());
+                result.Add(new RawToken(innerValue));
+                result.Add(new RightBracketToken());
+                return result;
             }
 
-            return value;
+            result.Add(new RawToken(value));
+            return result;
         }
     }
 }
