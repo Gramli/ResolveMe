@@ -5,12 +5,19 @@ namespace ResolveMe.MathCompiler
 {
     public class ExpressionOptimizer
     {
-        private readonly char leftBracket = '(';
-        private readonly char rightBracket = ')';
+        private readonly char _leftBracket = '(';
+        private readonly char _rightBracket = ')';
+        private readonly uint _optimalExpressionLength;
+        private readonly HashSet<char> _operators = new HashSet<char>() { '*', '/', '+', '-', '^' };
+
+        public ExpressionOptimizer(uint optimalExpressionLength)
+        {
+            this._optimalExpressionLength = optimalExpressionLength;
+        }
 
         public IEnumerable<IExpressionToken> SplitLongExpression(string value)
         {
-            if (value.Length > 15 && !string.IsNullOrEmpty(value))
+            if (value.Length > this._optimalExpressionLength && !string.IsNullOrEmpty(value))
             {
                 var editedValue = TryRemoveOuterBrackets(value);
                 var expressions = new List<IExpressionToken>();
@@ -38,21 +45,20 @@ namespace ResolveMe.MathCompiler
             var tokenStringValue = token.GetStringRepresentation();
 
             var expressions = new List<IExpressionToken>();
-            var operators = new HashSet<char>() { '*', '/', '+', '-', '^' };
             var brackets = 0;
 
             for (var i = 0; i < tokenStringValue.Length; i++)
             {
-                if (tokenStringValue[i].Equals(leftBracket))
+                if (tokenStringValue[i].Equals(_leftBracket))
                 {
                     brackets++;
                 }
-                else if (tokenStringValue[i].Equals(rightBracket))
+                else if (tokenStringValue[i].Equals(_rightBracket))
                 {
                     brackets--;
                 }
 
-                if (operators.Contains(tokenStringValue[i]) && brackets == 0 && i != 0)
+                if (this._operators.Contains(tokenStringValue[i]) && brackets == 0 && i != 0)
                 { 
                     expressions.AddRange(SplitLongExpression(tokenStringValue[..i]));
                     expressions.Add(new OperatorToken(tokenStringValue[i]));
@@ -71,21 +77,21 @@ namespace ResolveMe.MathCompiler
         {
             var result = new List<IExpressionToken>();
 
-            if (value[0].Equals(leftBracket) && value[^1].Equals(rightBracket))
+            if (value[0].Equals(_leftBracket) && value[^1].Equals(_rightBracket))
             {
                 var innerValue = value[1..^1];
                 var brackets = 0;
 
                 for (var i = 0; i < innerValue.Length; i++)
                 {
-                    var equalsRightBracket = innerValue[i].Equals(rightBracket);
+                    var equalsRightBracket = innerValue[i].Equals(_rightBracket);
 
                     if (brackets.Equals(0) && equalsRightBracket)
                     {
                         result.Add(new RawToken(value));
                         return result;
                     }
-                    else if (innerValue[i].Equals(leftBracket))
+                    else if (innerValue[i].Equals(_leftBracket))
                     {
                         brackets++;
                     }
