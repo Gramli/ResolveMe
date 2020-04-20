@@ -10,7 +10,8 @@ namespace ResolveMe.MathCompiler.PerformanceAndOptimalization
     {
         static void Main(string[] args)
         {
-            var summary = BenchmarkRunner.Run<CompilePerformance>();
+            BenchmarkRunner.Run<CompileBenchmark>();
+            BenchmarkRunner.Run<OptimizerBenchmark>();
         }
     }
 }

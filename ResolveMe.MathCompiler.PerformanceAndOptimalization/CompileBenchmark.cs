@@ -6,7 +6,7 @@ using ResolveMe.MathCompiler.Compilers.EBNF;
 namespace ResolveMe.MathCompiler.PerformanceAndOptimalization
 {
     [MemoryDiagnoser]
-    public class CompilePerformance
+    public class CompileBenchmark
     {
         EBNFGrammarParserCustom parser;
         MathEBNFGrammarDefinition definition;
