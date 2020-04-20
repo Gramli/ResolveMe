@@ -1,6 +1,7 @@
 ﻿using Amy;
 using Amy.Grammars.EBNF;
 using ResolveMe.MathCompiler.ExpressionTokens;
+using System;
 using System.Collections.Generic;
 
 namespace ResolveMe.MathCompiler.Compilers.EBNF
@@ -12,7 +13,7 @@ namespace ResolveMe.MathCompiler.Compilers.EBNF
         public MathEBNFGrammarCompiler(IStartSymbol startSymbol)
             : base(startSymbol)
         {
-            this.optimizer = new ExpressionOptimizer(30);
+            this.optimizer = new ExpressionOptimizer(20);
         }
 
         public IEnumerable<IExpressionToken> Compile(string value)

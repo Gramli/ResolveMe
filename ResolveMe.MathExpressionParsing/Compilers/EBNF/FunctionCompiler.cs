@@ -5,6 +5,7 @@ using ResolveMe.MathCompiler.ExpressionTokens;
 using System.Collections.Generic;
 using System.Linq;
 using ResolveMe.MathCompiler.Extensions;
+using System;
 
 namespace ResolveMe.MathCompiler.Compilers.EBNF
 {
@@ -38,7 +39,7 @@ namespace ResolveMe.MathCompiler.Compilers.EBNF
 
         private IExpressionToken[] Compile(IEnumerable<IExpressionItem> structure)
         {
-            var result = structure.SplitToArray(2, 3);
+            var result = structure.SplitToArray(2, 3); // TODO DAN FIX!!
             var name = GetName(result[0]);
             var arguments = GetArguments(result[1]);
             return new IExpressionToken[] { new FunctionToken(name, arguments) };

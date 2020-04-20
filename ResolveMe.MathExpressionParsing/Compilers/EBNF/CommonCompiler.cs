@@ -2,6 +2,7 @@
 using Amy.Grammars.EBNF.EBNFItems;
 using ResolveMe.MathCompiler.Exceptions;
 using ResolveMe.MathCompiler.Extensions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 

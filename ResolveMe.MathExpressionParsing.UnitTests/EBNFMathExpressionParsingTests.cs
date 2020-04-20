@@ -28,20 +28,6 @@ namespace ResolveMe.MathCompiler.UnitTests
         }
 
         [TestMethod]
-        public void ParserPerformance()
-        {
-            TimeSpan timeResult = Time(() =>
-            {
-                var parser = new EBNFGrammarParserCustom(50);
-                var definition = new MathEBNFGrammarDefinition();
-                var startSymbol = parser.Parse(definition);
-            });
-
-            Assert.IsTrue(timeResult.TotalMilliseconds < 1);
-        }
-
-
-        [TestMethod]
         public void CheckExpression()
         {
             var ebnfStartSymbol = (EBNFStartSymbol)this.startSymbol;
@@ -175,14 +161,6 @@ namespace ResolveMe.MathCompiler.UnitTests
             {
                 Assert.IsTrue(result[i].GetType().Equals(argumentsTypes[i]));
             }
-        }
-
-        private TimeSpan Time(Action toTime)
-        {
-            var timer = Stopwatch.StartNew();
-            toTime();
-            timer.Stop();
-            return timer.Elapsed;
         }
     }
 }

@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ResolveMe.MathCompiler.Unit
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Amy", "..\Amy\Amy\Amy.csproj", "{134198B1-DDBD-4D02-A860-6CC6A7A8C508}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ResolveMe.MathCompiler.PerformanceAndOptimalization", "ResolveMe.MathCompiler.PerformanceAndOptimalization\ResolveMe.MathCompiler.PerformanceAndOptimalization.csproj", "{EB8AFDCD-CEE1-4DC2-B114-90725D8EB93C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{134198B1-DDBD-4D02-A860-6CC6A7A8C508}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{134198B1-DDBD-4D02-A860-6CC6A7A8C508}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{134198B1-DDBD-4D02-A860-6CC6A7A8C508}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EB8AFDCD-CEE1-4DC2-B114-90725D8EB93C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EB8AFDCD-CEE1-4DC2-B114-90725D8EB93C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EB8AFDCD-CEE1-4DC2-B114-90725D8EB93C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EB8AFDCD-CEE1-4DC2-B114-90725D8EB93C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
