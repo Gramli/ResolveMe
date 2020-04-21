@@ -8,9 +8,7 @@ namespace ResolveMe.MathCompiler.PerformanceAndOptimalization
     [MemoryDiagnoser]
     public class CompileBenchmark
     {
-        EBNFGrammarParserCustom parser;
-        MathEBNFGrammarDefinition definition;
-        MathEBNFGrammarCompiler grammar;
+        private MathCompilerEBNF compiler;
 
         [Benchmark]
         [Arguments("log10(5)/cos(0.2)*sin(45)")]
@@ -18,24 +16,15 @@ namespace ResolveMe.MathCompiler.PerformanceAndOptimalization
         [Arguments("onscreentime+(((count)-1)*0.9-4564564878913)")]
         [Arguments("-argsin(0.9,40)*456-54+(-12.987)")]
         [Arguments("(-9.98745514578944321647644)")]
-        public void Compile(string value)
+        public INotation Compile(string value)
         {
-            grammar.Compile(value);
-        }
-
-        [Benchmark]
-        public IStartSymbol Parse()
-        {
-            return parser.Parse(definition);
+            return compiler.CompileToInfix(value);
         }
 
         [GlobalSetup]
         public void GlobalSetup()
         {
-            parser = new EBNFGrammarParserCustom(50);
-            definition = new MathEBNFGrammarDefinition();
-            var startSymbol = parser.Parse(definition);
-            grammar = new MathEBNFGrammarCompiler(startSymbol);
+            compiler = new MathCompilerEBNF();
         }
     }
 }

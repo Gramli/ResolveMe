@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace ResolveMe.MathCompiler.Compilers.EBNF
 {
-    public class CommonCompiler : NonTerminal, ICompiler
+    internal class CommonCompiler : NonTerminal, ICompiler
     {
         public CommonCompiler(string name)
             : base(name)

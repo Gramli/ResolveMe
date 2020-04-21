@@ -10,7 +10,7 @@ using System.Threading;
 
 namespace ResolveMe.MathCompiler.Compilers.EBNF
 {
-    public class NumberCompiler : NonTerminal, ICompiler
+    internal class NumberCompiler : NonTerminal, ICompiler
     {
         public NumberCompiler(string name) 
             : base(name)

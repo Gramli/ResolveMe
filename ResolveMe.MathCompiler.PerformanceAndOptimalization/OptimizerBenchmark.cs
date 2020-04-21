@@ -1,4 +1,5 @@
 ﻿using BenchmarkDotNet.Attributes;
+using ResolveMe.MathCompiler.Algorithms;
 using System;
 using System.Collections.Generic;
 using System.Text;

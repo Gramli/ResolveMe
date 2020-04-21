@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace ResolveMe.MathCompiler.Compilers.EBNF
 {
-    public class StringCompiler<T> : NonTerminal, ICompiler where T : IExpressionToken, new()
+    internal class StringCompiler<T> : NonTerminal, ICompiler where T : IExpressionToken, new()
     {
         public StringCompiler(string name)
             : base(name)

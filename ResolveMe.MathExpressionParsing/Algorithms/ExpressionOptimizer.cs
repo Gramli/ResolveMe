@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using ResolveMe.MathCompiler.ExpressionTokens;
 
-namespace ResolveMe.MathCompiler
+namespace ResolveMe.MathCompiler.Algorithms
 {
     public class ExpressionOptimizer
     {

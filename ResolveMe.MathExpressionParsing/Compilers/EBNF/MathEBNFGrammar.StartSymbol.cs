@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace ResolveMe.MathCompiler.Compilers.EBNF
 {
-    public class MathEBNFGrammarStartSymbol : EBNFStartSymbol, ICompiler
+    internal class MathEBNFGrammarStartSymbol : EBNFStartSymbol, ICompiler
     {
         public MathEBNFGrammarStartSymbol(NonTerminal startSymbolNonTerminal, IEnumerable<NonTerminal> productionRules) 
             : base(startSymbolNonTerminal, productionRules)

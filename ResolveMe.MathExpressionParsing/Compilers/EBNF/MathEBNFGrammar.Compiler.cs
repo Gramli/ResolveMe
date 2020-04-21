@@ -1,12 +1,12 @@
 ﻿using Amy;
 using Amy.Grammars.EBNF;
+using ResolveMe.MathCompiler.Algorithms;
 using ResolveMe.MathCompiler.ExpressionTokens;
-using System;
 using System.Collections.Generic;
 
 namespace ResolveMe.MathCompiler.Compilers.EBNF
 {
-    public class MathEBNFGrammarCompiler : EBNFGrammar, ICompiler
+    internal class MathEBNFGrammarCompiler : EBNFGrammar, ICompiler
     {
         private readonly ExpressionOptimizer optimizer;
 

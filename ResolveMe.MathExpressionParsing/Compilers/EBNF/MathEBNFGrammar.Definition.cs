@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace ResolveMe.MathCompiler.Compilers.EBNF
 {
-    public class MathEBNFGrammarDefinition : EBNFGrammarDefinition
+    internal class MathEBNFGrammarDefinition : EBNFGrammarDefinition
     {
         private string[] _productionRules = new string[]
         {

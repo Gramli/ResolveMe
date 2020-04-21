@@ -2,6 +2,7 @@
 {
     public class OperatorToken : CharToken
     {
+        //TODO DAN SET PRECEDENCE
         public OperatorToken()
         {
         }

@@ -9,7 +9,7 @@ using System;
 
 namespace ResolveMe.MathCompiler.Compilers.EBNF
 {
-    public class FunctionCompiler : NonTerminal, ICompiler
+    internal class FunctionCompiler : NonTerminal, ICompiler
     {
         public FunctionCompiler(string nonTerminalName)
             : base(nonTerminalName)
