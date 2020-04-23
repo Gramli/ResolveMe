@@ -12,21 +12,27 @@ namespace ResolveMe.MathCompiler.Algorithms
 
         }
 
-        public PostfixNotation ConvertToPostfix(IEnumerable<IExpressionToken> infixNotation)
+        public PostfixNotation ConvertToPostfix(IEnumerable<IExpressionToken> rawNotation)
         {
-            var postfixNotation = Postfix(infixNotation);
+            var postfixNotation = Postfix(rawNotation);
             return new PostfixNotation(postfixNotation);
         }
 
-        private IEnumerable<IExpressionToken> Postfix(IEnumerable<IExpressionToken> infixNotation)
+        private IEnumerable<IExpressionToken> Postfix(IEnumerable<IExpressionToken> rawNotation, IEnumerator<IExpressionToken> enumerator = null, int length = 0)
         {
             var output = new List<IExpressionToken>();
             var stack = new Stack<IExpressionToken>();
 
-            foreach (var item in infixNotation)
+            //foreach (var item in infixNotation)
+            using var actualEnumerator = enumerator ?? rawNotation.GetEnumerator();
+            for (var i = 0; (length == 0 || i < length) && actualEnumerator.MoveNext(); i++)
             {
+                var item = actualEnumerator.Current;
                 switch (item)
                 {
+                    case SignToken signToken:
+                        output.Add(signToken);
+                        break;
                     case VariableToken variable:
                         output.Add(variable);
                         break;
@@ -38,39 +44,34 @@ namespace ResolveMe.MathCompiler.Algorithms
                         break;
                     case RightBracketToken rightBracket:
                         {
-                            IExpressionToken token;
-                            while (stack.TryPop(out token))
+                            while (stack.TryPop(out var token))
                             {
                                 if (token is LeftBracketToken)
                                 {
                                     break;
                                 }
-                                output.Add(stack.Pop());
+                                output.Add(token);
                             }
                         }
                         break;
-                    case FunctionToken function:
-                        {
-                            stack.Push(function.GetNameAsToken());
-                            var argumentsPostfix = Postfix(function.Arguments);
-                            output.AddRange(argumentsPostfix);
-                        }
+                    case FunctionNameToken functionName:
+                        stack.Push(functionName);
+                        output.AddRange( Postfix(rawNotation, actualEnumerator, functionName.FunctionTokensCount));
                         break;
                     case OperatorToken operatorToken:
                         {
-                            IExpressionToken token;
-                            while (stack.TryPeek(out token))
+                            while (stack.TryPop(out var token))
                             {
                                 switch (token)
                                 {
                                     case FunctionNameToken functionTokenName:
-                                        output.Add(stack.Pop());
+                                        output.Add(functionTokenName);
                                         break;
                                     case OperatorToken stackOperatorToken:
                                         if (stackOperatorToken.Precedence > operatorToken.Precedence ||
                                             (stackOperatorToken.Precedence == operatorToken.Precedence && stackOperatorToken.OperatorAssociativity == OperatorAssociativity.Left))
                                         {
-                                            output.Add(stack.Pop());
+                                            output.Add(stackOperatorToken);
                                         }
                                         break;
                                 }

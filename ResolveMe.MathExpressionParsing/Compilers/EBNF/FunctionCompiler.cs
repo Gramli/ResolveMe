@@ -2,10 +2,9 @@
 using Amy.Grammars.EBNF.EBNFItems;
 using ResolveMe.MathCompiler.Exceptions;
 using ResolveMe.MathCompiler.ExpressionTokens;
+using ResolveMe.MathCompiler.Extensions;
 using System.Collections.Generic;
 using System.Linq;
-using ResolveMe.MathCompiler.Extensions;
-using System;
 
 namespace ResolveMe.MathCompiler.Compilers.EBNF
 {
@@ -38,33 +37,12 @@ namespace ResolveMe.MathCompiler.Compilers.EBNF
             return Compile(item.Childs);
         }
 
-        private IExpressionToken[] Compile(IEnumerable<IExpressionItem> structure)
-        {
-            var nameAndArguments = GetName(structure);
-            var arguments = GetArguments(nameAndArguments.Item2);
-            return new IExpressionToken[] { nameAndArguments.Item1,  };
-            //TODO DAN
-        }
-
-        private IEnumerable<IExpressionToken> GetArguments(IEnumerable<IExpressionItem> structure)
-        {
-            var result = new List<IExpressionToken>();
-            foreach (var expressionItem in structure)
-            {
-                if (!(expressionItem.Item is ICompiler))
-                {
-                    ThrowICompileException(expressionItem.Expression);
-                }
-                var tempResult = ((ICompiler)expressionItem.Item).Compile(expressionItem);
-                result.AddRange(tempResult);
-            }
-            return result;
-        }
-
-        private (FunctionNameToken, IList<IExpressionItem>) GetName(IEnumerable<IExpressionItem> structure)
+        private IList<IExpressionToken> Compile(IEnumerable<IExpressionItem> structure)
         {
             var name = new FunctionNameToken();
-            var index = 0;
+            var result = new List<IExpressionToken>(5) {name};
+            var lefBracketReached = false;
+
             foreach (var expressionItem in structure)
             {
                 if (!(expressionItem.Item is ICompiler))
@@ -72,21 +50,34 @@ namespace ResolveMe.MathCompiler.Compilers.EBNF
                     ThrowICompileException(expressionItem.Expression);
                 }
 
-                if (!(expressionItem.Item is StringCompiler<TextToken>))
-                    break;
+                if (!lefBracketReached)
+                {
+                    lefBracketReached = expressionItem.Item is CharCompiler<LeftBracketToken>;
+                }
 
                 var compileResults = ((ICompiler)expressionItem.Item).Compile(expressionItem);
-                var textToken = ReadTextToken(compileResults);
-                name.Concat(textToken);
-                index++;
+
+                if (lefBracketReached)
+                {
+                    name.FunctionTokensCount += compileResults.Count();
+                    result.AddRange(compileResults);
+                    continue;
+                }
+
+                if ((expressionItem.Item is StringCompiler<TextToken>))
+                {
+                    var textToken = ReadTextToken(compileResults);
+                    name.Concat(textToken);
+                    continue;
+                }
+
+                if (name.Text.Length < MinFunctionNameLength)
+                {
+                    throw new CompileException("Invalid function name, function name has small number of characters.");
+                }
             }
 
-            if(name.Text.Length < MinFunctionNameLength)
-            {
-                throw new CompileException("Invalid function name, function name has small number of characters.");
-            }
-
-            return (name, structure.Slice(index));
+            return result;
         }
 
         private TextToken ReadTextToken(IEnumerable<IExpressionToken> expressionTokens)

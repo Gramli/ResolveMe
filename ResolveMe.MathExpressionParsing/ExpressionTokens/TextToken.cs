@@ -1,6 +1,6 @@
 ﻿namespace ResolveMe.MathCompiler.ExpressionTokens
 {
-    internal class TextToken : IExpressionToken
+    public class TextToken : IExpressionToken
     {
         public string Text { get; private set; }
 
