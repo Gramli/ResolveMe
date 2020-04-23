@@ -18,34 +18,34 @@ namespace ResolveMe.MathCompiler.UnitTests
         [TestMethod]
         public void CompileComplexExpression()
         {
-            CheckExpression("max(25,1)+45-ab*bc+log5(12)", new Type[]
-            {
-                typeof(NumberToken),
-                typeof(NumberToken),
-                typeof(FunctionNameToken),
-                typeof(LeftBracketToken),
-                typeof(NumberToken),
-                typeof(CommaToken),
-                typeof(NumberToken),
-                typeof(RightBracketToken),
-                typeof(OperatorToken),
-                typeof(NumberToken),
-                typeof(OperatorToken),
-                typeof(VariableToken),
-                typeof(OperatorToken),
-                typeof(VariableToken),
-                typeof(OperatorToken),
-                typeof(FunctionNameToken),
-                typeof(LeftBracketToken),
-                typeof(NumberToken),
-                typeof(RightBracketToken),
+            //CheckExpression("max(25,1)+45-ab*bc+log5(12)", new Type[]
+            //{
+            //    typeof(NumberToken),
+            //    typeof(NumberToken),
+            //    typeof(FunctionNameToken),
+            //    typeof(NumberToken),
+            //    typeof(VariableToken),
+            //    typeof(VariableToken),
+            //    typeof(OperatorToken),
+            //    typeof(NumberToken),
+            //    typeof(FunctionNameToken),
+            //    typeof(OperatorToken),
 
-            });
+            //});
 
-            CheckExpression("-cos(0.9)*456-54+(-12.987)/log10(0.5)/cos(0.2)*sin(0.6)", new Type[]
-            {
-                
-            });
+            //CheckExpression("-cos(0.9)*456-54+(-12.987)/log10(0.5)/cos(0.2)*sin(0.6)", new Type[]
+            //{
+            //    typeof(SignToken),
+            //    typeof(NumberToken),
+            //    typeof(FunctionNameToken),
+            //    typeof(NumberToken),
+            //    typeof(OperatorToken),
+            //    typeof(VariableToken),
+            //    typeof(OperatorToken),
+            //    typeof(NumberToken),
+            //    typeof(FunctionNameToken),
+            //    typeof(OperatorToken),
+            //});
         }
 
         [TestMethod]

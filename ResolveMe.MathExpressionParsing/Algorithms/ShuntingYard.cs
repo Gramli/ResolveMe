@@ -60,19 +60,23 @@ namespace ResolveMe.MathCompiler.Algorithms
                         break;
                     case OperatorToken operatorToken:
                         {
-                            while (stack.TryPop(out var token))
+                            var look = true;
+                            while (look && stack.TryPop(out var token))
                             {
                                 switch (token)
                                 {
                                     case FunctionNameToken functionTokenName:
                                         output.Add(functionTokenName);
                                         break;
-                                    case OperatorToken stackOperatorToken:
-                                        if (stackOperatorToken.Precedence > operatorToken.Precedence ||
-                                            (stackOperatorToken.Precedence == operatorToken.Precedence && stackOperatorToken.OperatorAssociativity == OperatorAssociativity.Left))
+                                    case OperatorToken stackOperatorToken when stackOperatorToken.Precedence > operatorToken.Precedence ||
+                                            (stackOperatorToken.Precedence == operatorToken.Precedence && stackOperatorToken.OperatorAssociativity == OperatorAssociativity.Left):
                                         {
                                             output.Add(stackOperatorToken);
                                         }
+                                        break;
+                                    default:
+                                        look = false;
+                                        stack.Push(token);
                                         break;
                                 }
 
