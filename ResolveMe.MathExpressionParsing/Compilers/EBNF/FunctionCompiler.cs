@@ -11,6 +11,7 @@ namespace ResolveMe.MathCompiler.Compilers.EBNF
 {
     internal class FunctionCompiler : NonTerminal, ICompiler
     {
+        internal static int MinFunctionNameLength { get; set; }
         public FunctionCompiler(string nonTerminalName)
             : base(nonTerminalName)
         {
@@ -39,10 +40,10 @@ namespace ResolveMe.MathCompiler.Compilers.EBNF
 
         private IExpressionToken[] Compile(IEnumerable<IExpressionItem> structure)
         {
-            var result = structure.SplitToArray(2, 3); // TODO DAN FIX!!
-            var name = GetName(result[0]);
-            var arguments = GetArguments(result[1]);
-            return new IExpressionToken[] { new FunctionToken(name, arguments) };
+            var nameAndArguments = GetName(structure);
+            var arguments = GetArguments(nameAndArguments.Item2);
+            return new IExpressionToken[] { nameAndArguments.Item1,  };
+            //TODO DAN
         }
 
         private IEnumerable<IExpressionToken> GetArguments(IEnumerable<IExpressionItem> structure)
@@ -60,9 +61,10 @@ namespace ResolveMe.MathCompiler.Compilers.EBNF
             return result;
         }
 
-        private string GetName(IEnumerable<IExpressionItem> structure)
+        private (FunctionNameToken, IList<IExpressionItem>) GetName(IEnumerable<IExpressionItem> structure)
         {
-            var result = new TextToken();
+            var name = new FunctionNameToken();
+            var index = 0;
             foreach (var expressionItem in structure)
             {
                 if (!(expressionItem.Item is ICompiler))
@@ -70,17 +72,35 @@ namespace ResolveMe.MathCompiler.Compilers.EBNF
                     ThrowICompileException(expressionItem.Expression);
                 }
 
+                if (!(expressionItem.Item is StringCompiler<TextToken>))
+                    break;
+
                 var compileResults = ((ICompiler)expressionItem.Item).Compile(expressionItem);
-                foreach (var compileResult in compileResults)
-                {
-                    if (!(compileResult is TextToken))
-                    {
-                        throw new CompileException(expressionItem.Expression, typeof(TextToken));
-                    }
-                    result.Concat((TextToken)compileResult);
-                }
+                var textToken = ReadTextToken(compileResults);
+                name.Concat(textToken);
+                index++;
             }
-            return result.Text;
+
+            if(name.Text.Length < MinFunctionNameLength)
+            {
+                throw new CompileException("Invalid function name, function name has small number of characters.");
+            }
+
+            return (name, structure.Slice(index));
+        }
+
+        private TextToken ReadTextToken(IEnumerable<IExpressionToken> expressionTokens)
+        {
+            var result = new TextToken();
+            foreach (var expressionToken in expressionTokens)
+            {
+                if (expressionToken is TextToken textToken)
+                {
+                    result.Concat(textToken);
+                }
+                break;
+            }
+            return result;
         }
 
         private void ThrowICompileException(string expression)

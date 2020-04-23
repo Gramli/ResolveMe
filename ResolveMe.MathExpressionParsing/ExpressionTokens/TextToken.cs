@@ -1,6 +1,6 @@
 ﻿namespace ResolveMe.MathCompiler.ExpressionTokens
 {
-    public class TextToken : IExpressionToken
+    internal class TextToken : IExpressionToken
     {
         public string Text { get; private set; }
 
@@ -21,6 +21,11 @@
         public void Concat(TextToken other)
         {
             this.Text = $"{this.Text}{other.Text}";
+        }
+
+        public bool IsEmpty()
+        {
+            return string.IsNullOrEmpty(this.Text);
         }
     }
 }

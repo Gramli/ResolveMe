@@ -1,7 +1,4 @@
-﻿using Amy;
-using Amy.Grammars.EBNF;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using ResolveMe.MathCompiler.Compilers.EBNF;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ResolveMe.MathCompiler.ExpressionTokens;
 using System;
 using System.Linq;
@@ -9,11 +6,11 @@ using System.Linq;
 namespace ResolveMe.MathCompiler.UnitTests
 {
     [TestClass]
-    public class EBNFMathExpressionParsingTests
+    public class EBNFMathExpressionCompileTests
     {
         IMathCompiler mathCompiler;
 
-        public EBNFMathExpressionParsingTests()
+        public EBNFMathExpressionCompileTests()
         {
             this.mathCompiler = new MathCompilerEBNF();
         }

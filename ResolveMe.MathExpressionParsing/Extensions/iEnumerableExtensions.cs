@@ -5,6 +5,24 @@ namespace ResolveMe.MathCompiler.Extensions
 {
     public static class IEnumerableExtensions
     {
+        public static IList<T> Slice<T>(
+            this IEnumerable<T> source, int start)
+        {
+            var result = new List<T>();
+            using (var enumerator = source.GetEnumerator())
+            {
+                for (var i = 0; enumerator.MoveNext(); i++)
+                {
+                    if (i >= start)
+                    {
+                        result.Add(enumerator.Current);
+                    }
+                }
+            }
+            return result;
+
+        }
+
         public static IEnumerable<IEnumerable<T>> Split<T>(
             this IEnumerable<T> source, int batchCount, int batchLength)
         {

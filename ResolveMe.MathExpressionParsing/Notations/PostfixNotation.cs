@@ -6,6 +6,11 @@ namespace ResolveMe.MathCompiler.Notations
 {
     public class PostfixNotation : INotation
     {
-        public IEnumerable<IExpressionToken> ExpressionTokens => throw new NotImplementedException();
+        public IEnumerable<IExpressionToken> ExpressionTokens { get; private set; }
+
+        public PostfixNotation(IEnumerable<IExpressionToken> postfixNotation)
+        {
+            this.ExpressionTokens = postfixNotation;
+        }
     }
 }

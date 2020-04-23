@@ -3,7 +3,7 @@ using System.Text;
 
 namespace ResolveMe.MathCompiler.ExpressionTokens
 {
-    public class FunctionToken : IExpressionToken
+    internal class FunctionToken : IExpressionToken
     {
         public string FunctionName { get; private set; }
 
@@ -25,6 +25,11 @@ namespace ResolveMe.MathCompiler.ExpressionTokens
             }
 
             return result.ToString();
+        }
+
+        public IExpressionToken GetNameAsToken()
+        {
+            return new FunctionNameToken(this.FunctionName);
         }
     }
 }

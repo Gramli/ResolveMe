@@ -14,6 +14,12 @@ namespace ResolveMe.MathCompiler.Algorithms
 
         public PostfixNotation ConvertToPostfix(IEnumerable<IExpressionToken> infixNotation)
         {
+            var postfixNotation = Postfix(infixNotation);
+            return new PostfixNotation(postfixNotation);
+        }
+
+        private IEnumerable<IExpressionToken> Postfix(IEnumerable<IExpressionToken> infixNotation)
+        {
             var output = new List<IExpressionToken>();
             var stack = new Stack<IExpressionToken>();
 
@@ -24,7 +30,6 @@ namespace ResolveMe.MathCompiler.Algorithms
                     case VariableToken variable:
                         output.Add(variable);
                         break;
-
                     case NumberToken number:
                         output.Add(number);
                         break;
@@ -32,10 +37,57 @@ namespace ResolveMe.MathCompiler.Algorithms
                         stack.Push(leftBracket);
                         break;
                     case RightBracketToken rightBracket:
+                        {
+                            IExpressionToken token;
+                            while (stack.TryPop(out token))
+                            {
+                                if (token is LeftBracketToken)
+                                {
+                                    break;
+                                }
+                                output.Add(stack.Pop());
+                            }
+                        }
+                        break;
+                    case FunctionToken function:
+                        {
+                            stack.Push(function.GetNameAsToken());
+                            var argumentsPostfix = Postfix(function.Arguments);
+                            output.AddRange(argumentsPostfix);
+                        }
+                        break;
+                    case OperatorToken operatorToken:
+                        {
+                            IExpressionToken token;
+                            while (stack.TryPeek(out token))
+                            {
+                                switch (token)
+                                {
+                                    case FunctionNameToken functionTokenName:
+                                        output.Add(stack.Pop());
+                                        break;
+                                    case OperatorToken stackOperatorToken:
+                                        if (stackOperatorToken.Precedence > operatorToken.Precedence ||
+                                            (stackOperatorToken.Precedence == operatorToken.Precedence && stackOperatorToken.OperatorAssociativity == OperatorAssociativity.Left))
+                                        {
+                                            output.Add(stack.Pop());
+                                        }
+                                        break;
+                                }
+
+                            }
+                            stack.Push(operatorToken);
+                        }
                         break;
                 }
             }
-            throw new NotImplementedException();
+
+            if (stack.Count > 0)
+            {
+                output.AddRange(stack.ToArray());
+            }
+
+            return output;
         }
     }
 }
