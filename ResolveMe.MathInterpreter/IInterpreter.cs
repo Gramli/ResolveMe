@@ -4,6 +4,8 @@ namespace ResolveMe.MathInterpreter
 {
     public interface IInterpreter
     {
-        double Interpret(INotation notation);
+        IMathCompiler MathCompiler { get; }
+
+        double Interpret(string exIContext context);
     }
 }

@@ -21,13 +21,13 @@ namespace ResolveMe.MathCompiler
         }
         public InfixNotation CompileToInfix(string value)
         {
-            return new InfixNotation(grammarCompiler.Compile(value));
+            throw  new NotImplementedException();
         }
 
         public PostfixNotation CompileToPostfix(string value)
         {
-            var infixNotation = grammarCompiler.Compile(value);
-            return shuntingYard.ConvertToPostfix(infixNotation);
+            var rawNotation = grammarCompiler.Compile(value);
+            return shuntingYard.ConvertToPostfix(rawNotation);
         }
 
         public PrefixNotation CompileToPrefix(string value)

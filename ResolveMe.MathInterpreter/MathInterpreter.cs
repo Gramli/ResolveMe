@@ -8,9 +8,17 @@ namespace ResolveMe.MathInterpreter
 {
     public class MathInterpreter : IInterpreter
     {
-        public double Interpret(PostfixNotation notation)
+        public IMathCompiler MathCompiler { get; private set; }
+
+       private double Interpret(IContext context)
         {
             
+        }
+
+        public double Evaluate(string expression, IContext context)
+        {
+            var postfixNotation = MathCompiler.CompileToPostfix(expression);
+
         }
     }
 }
