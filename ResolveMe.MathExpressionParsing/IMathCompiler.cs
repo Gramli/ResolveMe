@@ -1,4 +1,5 @@
 ﻿using ResolveMe.MathCompiler.Notations;
+using System.Collections.Generic;
 
 namespace ResolveMe.MathCompiler
 {
@@ -9,5 +10,7 @@ namespace ResolveMe.MathCompiler
         PostfixNotation CompileToPostfix(string value);
 
         PrefixNotation CompileToPrefix(string value);
+
+        IEnumerable<IExpressionToken> GetRawNotation(string expression);
     }
 }
