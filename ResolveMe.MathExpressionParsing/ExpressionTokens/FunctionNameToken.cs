@@ -2,7 +2,7 @@
 {
     public class FunctionNameToken : TextToken
     {
-        internal int FunctionTokensCount { get; set; }
+        public int FunctionTokensCount { get; set; }
 
         internal FunctionNameToken()
         {

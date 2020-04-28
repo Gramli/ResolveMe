@@ -22,6 +22,11 @@ namespace ResolveMe.MathInterpreter
 
         private void InicializeFunctions()
         {
+            var plus = new Func<object[], object>((args) => { return (double)args[0] + (double)args[1]; });
+            var minus = new Func<object[], object>((args) => { return (double)args[0] - (double)args[1]; });
+            var times = new Func<object[], object>((args) => { return (double)args[0] * (double)args[1]; });
+            var divide = new Func<object[], object>((args) => { return (double)args[0] / (double)args[1]; });
+            var power = new Func<object[], object>((args) => { return Math.Pow((double)args[0], (double)args[1]); });
             var sin = new Func<object[], object>((args) => OneArgumentFunc(args, Math.Sin));
             var asin = new Func<object[], object>((args) => OneArgumentFunc(args, Math.Asin));
             var cos = new Func<object[], object>((args) => OneArgumentFunc(args, Math.Cos));
@@ -39,12 +44,17 @@ namespace ResolveMe.MathInterpreter
             functions.Add("atan", atan);
             functions.Add("min", min);
             functions.Add("max", max);
+            functions.Add("+", plus);
+            functions.Add("-", minus);
+            functions.Add("*", times);
+            functions.Add("/", divide);
+            functions.Add("^", power);
         }
 
         private void InicializeVariables()
         {
             this.variables.Add("pi", Math.PI);
-            this.variables.Add("euler" ,Math.E);
+            this.variables.Add("euler", Math.E);
         }
 
         private double OneArgumentFunc(object[] args, Func<double, double> function)

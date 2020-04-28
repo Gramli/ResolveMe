@@ -45,7 +45,7 @@ namespace ResolveMe.MathInterpreter
 
         public T Calculate<T>(params string[] expressions)
         {
-
+            throw new NotImplementedException();
         }
 
         public PostfixNotation GetPostifixNotation(string expression)
