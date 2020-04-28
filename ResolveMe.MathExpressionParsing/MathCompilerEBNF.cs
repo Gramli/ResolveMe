@@ -3,6 +3,7 @@ using ResolveMe.MathCompiler.Compilers.EBNF;
 using ResolveMe.MathCompiler.Notations;
 using System;
 using ResolveMe.MathCompiler.Algorithms;
+using System.Collections.Generic;
 
 namespace ResolveMe.MathCompiler
 {
@@ -31,6 +32,11 @@ namespace ResolveMe.MathCompiler
         }
 
         public PrefixNotation CompileToPrefix(string value)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<IExpressionToken> GetRawNotation(string expression)
         {
             throw new NotImplementedException();
         }

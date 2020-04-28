@@ -1,9 +1,10 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using ResolveMe.MathCompiler;
 using ResolveMe.MathCompiler.ExpressionTokens;
 using System;
 using System.Linq;
 
-namespace ResolveMe.MathCompiler.UnitTests
+namespace ResolveMe.UnitTests
 {
     [TestClass]
     public class EBNFMathExpressionCompileTestsPostfix

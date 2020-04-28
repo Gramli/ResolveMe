@@ -1,8 +1,12 @@
 ﻿namespace ResolveMe.MathCompiler.ExpressionTokens
 {
+    //TODO DAN RENAME to FunctionToken
+    //TODO DAN THINK ABOUT SETTING COUNTS
     public class FunctionNameToken : TextToken
     {
-        public int FunctionTokensCount { get; set; }
+        internal int FunctionTokensCount { get; set; }
+
+        public int ArgumentsCount { get; internal set; }
 
         internal FunctionNameToken()
         {

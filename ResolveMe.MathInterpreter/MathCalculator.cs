@@ -17,6 +17,7 @@ namespace ResolveMe.MathInterpreter
         {
             this.Context = new DefaultContext();
             this.mathCompiler = new MathCompilerEBNF();
+            this.mathInterpreter = new MathInterpreter();
         }
 
         public MathCalculator(IContext context)

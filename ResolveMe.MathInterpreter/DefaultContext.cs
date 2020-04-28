@@ -33,6 +33,7 @@ namespace ResolveMe.MathInterpreter
             var acos = new Func<object[], object>((args) => OneArgumentFunc(args, Math.Acos));
             var tan = new Func<object[], object>((args) => OneArgumentFunc(args, Math.Tan));
             var atan = new Func<object[], object>((args) => OneArgumentFunc(args, Math.Atan));
+            var log10 = new Func<object[], object>((args) => OneArgumentFunc(args, Math.Log10));
             var max = new Func<object[], object>((args) => ArrayArgumentCompareFunc(args, (result, value) => value > result));
             var min = new Func<object[], object>((args) => ArrayArgumentCompareFunc(args, (result, value) => value < result));
 
@@ -44,6 +45,7 @@ namespace ResolveMe.MathInterpreter
             functions.Add("atan", atan);
             functions.Add("min", min);
             functions.Add("max", max);
+            functions.Add("log10", log10);
             functions.Add("+", plus);
             functions.Add("-", minus);
             functions.Add("*", times);

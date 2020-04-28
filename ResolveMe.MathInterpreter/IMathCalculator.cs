@@ -6,6 +6,7 @@ namespace ResolveMe.MathInterpreter
 {
     public interface IMathCalculator
     {
+        public IContext Context { get; }
         T Calculate<T>(string expression);
 
         T Calculate<T>(params string[] expressions);

@@ -19,6 +19,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Amy\Amy\Amy.csproj" />
     <ProjectReference Include="..\ResolveMe.MathExpressionParsing\ResolveMe.MathCompiler.csproj" />
+    <ProjectReference Include="..\ResolveMe.MathInterpreter\ResolveMe.MathInterpreter.csproj" />
   </ItemGroup>
 
   <ItemGroup>

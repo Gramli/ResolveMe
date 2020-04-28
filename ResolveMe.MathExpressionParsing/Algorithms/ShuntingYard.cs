@@ -1,6 +1,6 @@
 ﻿using ResolveMe.MathCompiler.ExpressionTokens;
 using ResolveMe.MathCompiler.Notations;
-using System;
+using System.Linq;
 using System.Collections.Generic;
 
 namespace ResolveMe.MathCompiler.Algorithms
@@ -44,19 +44,25 @@ namespace ResolveMe.MathCompiler.Algorithms
                         break;
                     case RightBracketToken rightBracket:
                         {
-                            while (stack.TryPop(out var token))
+                            //TODO DAN WRONG, it should check if can pop token
+                            while (stack.TryPop(out var token)) //peek
                             {
                                 if (token is LeftBracketToken)
                                 {
                                     break;
                                 }
-                                output.Add(token);
+                                if (token is FunctionNameToken || length != 0)
+                                {
+                                    output.Add(token);
+                                }
                             }
                         }
                         break;
                     case FunctionNameToken functionName:
                         stack.Push(functionName);
-                        output.AddRange( Postfix(rawNotation, actualEnumerator, functionName.FunctionTokensCount));
+                        var arguments = Postfix(rawNotation, actualEnumerator, functionName.FunctionTokensCount);
+                        functionName.ArgumentsCount = arguments.Count();
+                        output.AddRange(arguments);
                         break;
                     case OperatorToken operatorToken:
                         {

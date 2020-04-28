@@ -39,7 +39,7 @@ namespace ResolveMe.MathInterpreter
                         InterpretFunction(operandsStack, context, operatorToken.Char.ToString(), 2);
                         break;
                     case FunctionNameToken functionToken:
-                        InterpretFunction(operandsStack, context, functionToken.Text, functionToken.FunctionTokensCount);
+                        InterpretFunction(operandsStack, context, functionToken.Text, functionToken.ArgumentsCount);
                         break;
                 }
             }
@@ -48,8 +48,10 @@ namespace ResolveMe.MathInterpreter
 
         private void InterpretFunction(Stack<object> operandsStack, IContext context, string functionName, int argumentsCount)
         {
+            //TODO DAN PUSH TO OPERAND STACK SHOULD BE IN MAIN ALGORITHM
+            //TODO DAN CREATE ARGUMENTS CAN BE IN DIFFERENT METHOD
             var args = new object[argumentsCount];
-            for (int i = 0; i < args.Length; i++)
+            for (int i = args.Length-1; i >= 0; i--)
             {
                 args[i] = operandsStack.Pop();
             }
