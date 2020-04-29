@@ -21,7 +21,7 @@ namespace ResolveMe.UnitTests
         {
             CheckExpression("max(25,1)+45-ab*bc+log5(12)", new Type[]
             {
-                typeof(FunctionNameToken),
+                typeof(FunctionToken),
                 typeof(LeftBracketToken),
                 typeof(NumberToken),
                 typeof(CommaToken),
@@ -34,7 +34,7 @@ namespace ResolveMe.UnitTests
                 typeof(OperatorToken),
                 typeof(VariableToken),
                 typeof(OperatorToken),
-                typeof(FunctionNameToken),
+                typeof(FunctionToken),
                 typeof(LeftBracketToken),
                 typeof(NumberToken),
                 typeof(RightBracketToken),
@@ -44,7 +44,7 @@ namespace ResolveMe.UnitTests
             CheckExpression("-cos(0.9)*456-54+(-12.987)/log10(0.5)/cos(0.2)*sin(0.6)", new Type[]
             {
                 typeof(SignToken),
-                typeof(FunctionNameToken),
+                typeof(FunctionToken),
                 typeof(LeftBracketToken),
                 typeof(NumberToken),
                 typeof(RightBracketToken),
@@ -58,17 +58,17 @@ namespace ResolveMe.UnitTests
                 typeof(NumberToken),
                 typeof(RightBracketToken),
                 typeof(OperatorToken),
-                typeof(FunctionNameToken),
+                typeof(FunctionToken),
                 typeof(LeftBracketToken),
                 typeof(NumberToken),
                 typeof(RightBracketToken),
                 typeof(OperatorToken),
-                typeof(FunctionNameToken),
+                typeof(FunctionToken),
                 typeof(LeftBracketToken),
                 typeof(NumberToken),
                 typeof(RightBracketToken),
                 typeof(OperatorToken),
-                typeof(FunctionNameToken),
+                typeof(FunctionToken),
                 typeof(LeftBracketToken),
                 typeof(NumberToken),
                 typeof(RightBracketToken),
@@ -80,7 +80,7 @@ namespace ResolveMe.UnitTests
         {
             CheckExpression("sin(a*b)", new Type[]
             {
-                typeof(FunctionNameToken),
+                typeof(FunctionToken),
                 typeof(LeftBracketToken),
                 typeof(VariableToken),
                 typeof(OperatorToken),
@@ -90,7 +90,7 @@ namespace ResolveMe.UnitTests
 
             CheckExpression("sin(a)", new Type[]
             {
-                typeof(FunctionNameToken),
+                typeof(FunctionToken),
                 typeof(LeftBracketToken),
                 typeof(VariableToken),
                 typeof(RightBracketToken)
@@ -98,7 +98,7 @@ namespace ResolveMe.UnitTests
 
             CheckExpression("sin(0.2)", new Type[]
             {
-                typeof(FunctionNameToken),
+                typeof(FunctionToken),
                 typeof(LeftBracketToken),
                 typeof(NumberToken),
                 typeof(RightBracketToken)
@@ -106,7 +106,7 @@ namespace ResolveMe.UnitTests
 
             CheckExpression("sin(0.2+a)", new Type[]
             {
-                typeof(FunctionNameToken),
+                typeof(FunctionToken),
                 typeof(LeftBracketToken),
                 typeof(NumberToken),
                 typeof(OperatorToken),
@@ -116,7 +116,7 @@ namespace ResolveMe.UnitTests
 
             CheckExpression("cos(-9.9874551)", new Type[]
             {
-                typeof(FunctionNameToken),
+                typeof(FunctionToken),
                 typeof(LeftBracketToken),
                 typeof(SignToken),
                 typeof(NumberToken),
@@ -125,7 +125,7 @@ namespace ResolveMe.UnitTests
 
             CheckExpression("max(25,a)", new Type[]
             {
-                typeof(FunctionNameToken),
+                typeof(FunctionToken),
                 typeof(LeftBracketToken),
                 typeof(NumberToken),
                 typeof(CommaToken),
@@ -136,7 +136,7 @@ namespace ResolveMe.UnitTests
 
         private void CheckExpression(string expresion, Type[] argumentsTypes)
         {
-            var result = this.mathCompiler.CompileToInfix(expresion).ExpressionTokens.ToList();
+            var result = this.mathCompiler.GetRawNotation(expresion).ToList();
             Assert.IsTrue(result.Count().Equals(argumentsTypes.Length));
 
 

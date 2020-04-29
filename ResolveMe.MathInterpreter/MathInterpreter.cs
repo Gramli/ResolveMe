@@ -1,9 +1,7 @@
 ﻿using ResolveMe.MathCompiler;
 using ResolveMe.MathCompiler.ExpressionTokens;
 using ResolveMe.MathCompiler.Notations;
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace ResolveMe.MathInterpreter
 {
@@ -38,7 +36,7 @@ namespace ResolveMe.MathInterpreter
                     case OperatorToken operatorToken:
                         InterpretFunction(operandsStack, context, operatorToken.Char.ToString(), 2);
                         break;
-                    case FunctionNameToken functionToken:
+                    case FunctionToken functionToken:
                         InterpretFunction(operandsStack, context, functionToken.Text, functionToken.ArgumentsCount);
                         break;
                 }
@@ -51,7 +49,7 @@ namespace ResolveMe.MathInterpreter
             //TODO DAN PUSH TO OPERAND STACK SHOULD BE IN MAIN ALGORITHM
             //TODO DAN CREATE ARGUMENTS CAN BE IN DIFFERENT METHOD
             var args = new object[argumentsCount];
-            for (int i = args.Length-1; i >= 0; i--)
+            for (var i = args.Length-1; i >= 0; i--)
             {
                 args[i] = operandsStack.Pop();
             }

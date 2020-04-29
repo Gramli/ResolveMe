@@ -17,39 +17,6 @@ namespace ResolveMe.UnitTests
         }
 
         [TestMethod]
-        public void CompileComplexExpression()
-        {
-            //CheckExpression("max(25,1)+45-ab*bc+log5(12)", new Type[]
-            //{
-            //    typeof(NumberToken),
-            //    typeof(NumberToken),
-            //    typeof(FunctionNameToken),
-            //    typeof(NumberToken),
-            //    typeof(VariableToken),
-            //    typeof(VariableToken),
-            //    typeof(OperatorToken),
-            //    typeof(NumberToken),
-            //    typeof(FunctionNameToken),
-            //    typeof(OperatorToken),
-
-            //});
-
-            //CheckExpression("-cos(0.9)*456-54+(-12.987)/log10(0.5)/cos(0.2)*sin(0.6)", new Type[]
-            //{
-            //    typeof(SignToken),
-            //    typeof(NumberToken),
-            //    typeof(FunctionNameToken),
-            //    typeof(NumberToken),
-            //    typeof(OperatorToken),
-            //    typeof(VariableToken),
-            //    typeof(OperatorToken),
-            //    typeof(NumberToken),
-            //    typeof(FunctionNameToken),
-            //    typeof(OperatorToken),
-            //});
-        }
-
-        [TestMethod]
         public void CompileExpression()
         {
             CheckExpression("sin(a*b)", new Type[]
@@ -57,7 +24,7 @@ namespace ResolveMe.UnitTests
                 typeof(VariableToken),
                 typeof(VariableToken),
                 typeof(OperatorToken),
-                typeof(FunctionNameToken)
+                typeof(FunctionToken)
             });
 
             CheckExpression("sin(a*b)+25", new Type[]
@@ -65,7 +32,7 @@ namespace ResolveMe.UnitTests
                 typeof(VariableToken),
                 typeof(VariableToken),
                 typeof(OperatorToken),
-                typeof(FunctionNameToken),
+                typeof(FunctionToken),
                 typeof(NumberToken),
                 typeof(OperatorToken),
             });
@@ -73,13 +40,13 @@ namespace ResolveMe.UnitTests
             CheckExpression("sin(a)", new Type[]
             {
                 typeof(VariableToken),
-                typeof(FunctionNameToken)
+                typeof(FunctionToken)
             });
 
             CheckExpression("sin(0.2)", new Type[]
             {
                 typeof(NumberToken),
-                typeof(FunctionNameToken),
+                typeof(FunctionToken),
             });
 
             CheckExpression("sin(0.2+a)", new Type[]
@@ -87,21 +54,21 @@ namespace ResolveMe.UnitTests
                 typeof(NumberToken),
                 typeof(VariableToken),
                 typeof(OperatorToken),
-                typeof(FunctionNameToken)
+                typeof(FunctionToken)
             });
 
             CheckExpression("cos(-9.9874551)", new Type[]
             {
                 typeof(SignToken),
                 typeof(NumberToken),
-                typeof(FunctionNameToken),
+                typeof(FunctionToken),
             });
 
             CheckExpression("max(25,a)", new Type[]
             {
                 typeof(NumberToken),
                 typeof(VariableToken),
-                typeof(FunctionNameToken),
+                typeof(FunctionToken),
             });
         }
 

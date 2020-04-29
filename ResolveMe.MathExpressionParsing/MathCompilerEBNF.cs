@@ -20,25 +20,25 @@ namespace ResolveMe.MathCompiler
             this.grammarCompiler = new MathEBNFGrammarCompiler(startSymbol);
             shuntingYard = new ShuntingYard();
         }
-        public InfixNotation CompileToInfix(string value)
+        public InfixNotation CompileToInfix(string expression)
         {
             throw  new NotImplementedException();
         }
 
-        public PostfixNotation CompileToPostfix(string value)
+        public PostfixNotation CompileToPostfix(string expression)
         {
-            var rawNotation = grammarCompiler.Compile(value);
+            var rawNotation = grammarCompiler.Compile(expression);
             return shuntingYard.ConvertToPostfix(rawNotation);
         }
 
-        public PrefixNotation CompileToPrefix(string value)
+        public PrefixNotation CompileToPrefix(string expression)
         {
             throw new NotImplementedException();
         }
 
         public IEnumerable<IExpressionToken> GetRawNotation(string expression)
         {
-            throw new NotImplementedException();
+            return grammarCompiler.Compile(expression);
         }
     }
 }

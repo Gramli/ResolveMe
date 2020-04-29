@@ -61,7 +61,7 @@ namespace ResolveMe.MathCompiler.Algorithms
                 if (this._operators.Contains(tokenStringValue[i]) && brackets == 0 && i != 0)
                 { 
                     expressions.AddRange(SplitLongExpression(tokenStringValue[..i]));
-                    expressions.Add(new OperatorToken(tokenStringValue[i]));
+                    expressions.Add(CreateOperatorToken(tokenStringValue[i]));
                     expressions.AddRange(SplitLongExpression(tokenStringValue[(i + 1)..]));
                     break;
 
@@ -109,6 +109,13 @@ namespace ResolveMe.MathCompiler.Algorithms
 
             result.Add(new RawToken(value));
             return result;
+        }
+
+        private OperatorToken CreateOperatorToken(char token)
+        {
+            var (precedence, operatorAssociativity) = MathDefinitions.OperatorDefinitions[token];
+            return new OperatorToken(token, precedence, operatorAssociativity);
+
         }
     }
 }

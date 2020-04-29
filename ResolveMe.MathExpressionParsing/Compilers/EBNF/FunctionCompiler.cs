@@ -39,7 +39,7 @@ namespace ResolveMe.MathCompiler.Compilers.EBNF
 
         private IList<IExpressionToken> Compile(IEnumerable<IExpressionItem> structure)
         {
-            var name = new FunctionNameToken();
+            var name = new FunctionToken();
             var result = new List<IExpressionToken>(5) {name};
             var lefBracketReached = false;
 
