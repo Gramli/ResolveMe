@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Text;
 using ResolveMe.MathCompiler.ExpressionTokens;
 
 namespace ResolveMe.MathCompiler.Algorithms
@@ -8,7 +9,7 @@ namespace ResolveMe.MathCompiler.Algorithms
         private readonly char _leftBracket = '(';
         private readonly char _rightBracket = ')';
         private readonly uint _optimalExpressionLength;
-        private readonly HashSet<char> _operators = new HashSet<char>() { '*', '/', '+', '-', '^' };
+        //private readonly HashSet<char> _operators = new HashSet<char>() { '*', '/', '+', '-', '^' };
 
         public ExpressionOptimizer(uint optimalExpressionLength)
         {
@@ -58,8 +59,8 @@ namespace ResolveMe.MathCompiler.Algorithms
                     brackets--;
                 }
 
-                if (this._operators.Contains(tokenStringValue[i]) && brackets == 0 && i != 0)
-                { 
+                if (MathDefinitions.OperatorDefinitions.ContainsKey(tokenStringValue[i]) && brackets == 0 && i != 0)
+                {
                     expressions.AddRange(SplitLongExpression(tokenStringValue[..i]));
                     expressions.Add(CreateOperatorToken(tokenStringValue[i]));
                     expressions.AddRange(SplitLongExpression(tokenStringValue[(i + 1)..]));
@@ -67,6 +68,35 @@ namespace ResolveMe.MathCompiler.Algorithms
 
                 }
 
+                if (tokenStringValue[i].Equals(','))
+                {
+                    //TODO DAN zase pocitat pocet zavorek a pokud jsem na 0 a je leva ukonci nebo carka
+                    var stringhBuilder = new StringBuilder();
+                    //pridej token pred carkou, ukoncujici levou zavorkou
+                    for (var j = i - 1; j >= 0; j--)
+                    {
+                        if (tokenStringValue[j].Equals(_leftBracket)) break;
+                        stringhBuilder.Insert(0,tokenStringValue[j]);
+                    }
+                    expressions.AddRange(SplitLongExpression(stringhBuilder.ToString()));
+                    expressions.Add(new CommaToken());
+
+                    //TODO DAN tohle neni potreba, na zbytek proste zavolam rekurzi
+                    stringhBuilder.Clear();
+                    for (; i < tokenStringValue.Length; i++)
+                    {
+                        if (tokenStringValue[i].Equals(_rightBracket)) break;
+                        stringhBuilder.Append(tokenStringValue[i]);
+                    }
+
+                    expressions.AddRange(SplitLongExpression(stringhBuilder.ToString()));
+                    //pokracuj dopredu po dalsi carku nebo pravou zavorku
+                }
+            }
+
+            if (expressions.Count == 0)
+            {
+                expressions.Add(token);
             }
 
             return expressions;

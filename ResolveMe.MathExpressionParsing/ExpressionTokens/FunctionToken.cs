@@ -5,7 +5,7 @@
     {
         internal int FunctionTokensCount { get; set; }
 
-        public int ArgumentsCount { get; internal set; }
+        public int ArgumentsCount { get; internal set; } = 1;
 
         internal FunctionToken()
         {

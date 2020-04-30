@@ -46,7 +46,15 @@ namespace ResolveMe.UnitTests
         {
             var expression = "cos(24-23.8*0.2)";
             var result = this.calculator.Calculate<double>(expression);
-            Assert.AreEqual((double)0.944, (double)Math.Round(result, 3, MidpointRounding.AwayFromZero));
+            Assert.AreEqual((double)0.925, (double)Math.Round(result, 3, MidpointRounding.AwayFromZero));
+        }
+
+        [TestMethod]
+        public void TestInnerFunction()
+        {
+            var expression = "max(cos(24-23.8*0.2), sin(1))";
+            var result = this.calculator.Calculate<double>(expression);
+            Assert.AreEqual((double)0.925, (double)Math.Round(result, 3, MidpointRounding.AwayFromZero));
         }
     }
 }
