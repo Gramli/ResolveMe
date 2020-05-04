@@ -9,7 +9,6 @@ namespace ResolveMe.MathCompiler.Algorithms
         private readonly char _leftBracket = '(';
         private readonly char _rightBracket = ')';
         private readonly uint _optimalExpressionLength;
-        //private readonly HashSet<char> _operators = new HashSet<char>() { '*', '/', '+', '-', '^' };
 
         public ExpressionOptimizer(uint optimalExpressionLength)
         {
@@ -65,32 +64,42 @@ namespace ResolveMe.MathCompiler.Algorithms
                     expressions.Add(CreateOperatorToken(tokenStringValue[i]));
                     expressions.AddRange(SplitLongExpression(tokenStringValue[(i + 1)..]));
                     break;
-
                 }
 
                 if (tokenStringValue[i].Equals(','))
                 {
-                    //TODO DAN zase pocitat pocet zavorek a pokud jsem na 0 a je leva ukonci nebo carka
-                    var stringhBuilder = new StringBuilder();
-                    //pridej token pred carkou, ukoncujici levou zavorkou
-                    for (var j = i - 1; j >= 0; j--)
-                    {
-                        if (tokenStringValue[j].Equals(_leftBracket)) break;
-                        stringhBuilder.Insert(0,tokenStringValue[j]);
-                    }
-                    expressions.AddRange(SplitLongExpression(stringhBuilder.ToString()));
-                    expressions.Add(new CommaToken());
 
-                    //TODO DAN tohle neni potreba, na zbytek proste zavolam rekurzi
-                    stringhBuilder.Clear();
-                    for (; i < tokenStringValue.Length; i++)
-                    {
-                        if (tokenStringValue[i].Equals(_rightBracket)) break;
-                        stringhBuilder.Append(tokenStringValue[i]);
-                    }
 
-                    expressions.AddRange(SplitLongExpression(stringhBuilder.ToString()));
-                    //pokracuj dopredu po dalsi carku nebo pravou zavorku
+
+                    //var stringhBuilder = new StringBuilder();
+                    //var argumentsBracket = 0;
+                    //for (var j = i - 1; j >= 0; j--)
+                    //{
+                    //    if (tokenStringValue[j].Equals(_leftBracket))
+                    //    {
+                    //        expressions.Add(new LeftBracketToken());
+                    //        argumentsBracket++;
+                    //        if (argumentsBracket == 0)
+                    //        {
+                    //            expressions.Add(new FunctionToken()
+                    //            break;
+                    //        }
+                    //    }
+                    //    else if (tokenStringValue[j].Equals(_rightBracket))
+                    //    {
+                    //        expressions.Add(new RightBracketToken());
+                    //        argumentsBracket--;
+                    //    }
+                    //    else
+                    //    {
+                    //        stringhBuilder.Insert(0, tokenStringValue[j]);
+                    //    }
+                    //}
+                    //expressions.AddRange(SplitLongExpression(stringhBuilder.ToString()));
+                    //expressions.Add(new CommaToken());
+                    //expressions.AddRange(SplitLongExpression(tokenStringValue[(i + 1)..^1]));
+                    //expressions.Add(new RightBracketToken());
+                    //break;
                 }
             }
 
