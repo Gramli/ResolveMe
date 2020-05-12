@@ -1,8 +1,6 @@
-﻿using System;
+﻿using ResolveMe.MathCompiler.ExpressionTokens;
+using System;
 using System.Collections.Generic;
-using System.Diagnostics.Tracing;
-using System.Text;
-using ResolveMe.MathCompiler.ExpressionTokens;
 
 namespace ResolveMe.MathCompiler.Algorithms
 {
@@ -14,36 +12,37 @@ namespace ResolveMe.MathCompiler.Algorithms
         private const char _rightSquareBracket = ']';
         private readonly uint _optimalExpressionLength;
 
-        private readonly Dictionary<string, List<IExpressionToken>> variableTokens;
-
         public ExpressionOptimizer(uint optimalExpressionLength)
         {
             this._optimalExpressionLength = optimalExpressionLength;
         }
 
-        public IEnumerable<IExpressionToken> SplitLongExpression(string value)
+        public OptimizerResult OptimizeExpression(string value)
         {
+            //Is necessary to optimize expression
             if (value.Length > this._optimalExpressionLength && !string.IsNullOrEmpty(value) || IsFunctionRecursion(value))
             {
-                var editedValue = TryRemoveOuterBrackets(value);
-                var expressions = new List<IExpressionToken>();
+                var result = new OptimizerResult();
+                //convert unecessary brackets to tokens and get raw expression
+                var editedValue = SeparateOuterBrackets(value);
 
                 foreach (var token in editedValue)
                 {
                     if (!(token is RawToken))
                     {
-                        expressions.Add(token);
+                        result.ExpressionTokens.Add(token);
                     }
                     else
                     {
-                        expressions.AddRange(GetTokenTokens(token));
+
+                        result.Add(OptimizeRawToken((RawToken)token));
                     }
                 }
 
-                return expressions;
+                return result;
             }
 
-            return new List<IExpressionToken>(1) { new RawToken(value) };
+            return new OptimizerResult(new RawToken(value));
         }
 
         private bool IsFunctionRecursion(string value)
@@ -59,13 +58,14 @@ namespace ResolveMe.MathCompiler.Algorithms
             return functionBracketes >= 4;
         }
 
-        private IEnumerable<IExpressionToken> GetTokenTokens(IExpressionToken token)
+        private OptimizerResult OptimizeRawToken(RawToken token)
         {
             var tokenStringValue = token.GetStringRepresentation();
 
-            var expressions = new List<IExpressionToken>();
+            //var expressions = new List<IExpressionToken>();
             var roundBrackets = 0;
             var squareBrackets = 0;
+            var wasRight = false;
 
             for (var i = 0; i < tokenStringValue.Length; i++)
             {
@@ -76,6 +76,7 @@ namespace ResolveMe.MathCompiler.Algorithms
                         break;
                     case _rightBracket:
                         roundBrackets--;
+                        wasRight = true;
                         break;
                     case _leftSquareBracket:
                         squareBrackets++;
@@ -88,54 +89,80 @@ namespace ResolveMe.MathCompiler.Algorithms
                 //spliting by operator
                 if (MathDefinitions.OperatorDefinitions.ContainsKey(tokenStringValue[i]) && roundBrackets == 0 && i != 0)
                 {
-                    expressions.AddRange(SplitLongExpression(tokenStringValue[..i]));
-                    expressions.Add(CreateOperatorToken(tokenStringValue[i]));
-                    expressions.AddRange(SplitLongExpression(tokenStringValue[(i + 1)..]));
-                    break;
+                    var result = new OptimizerResult();
+                    result.Add(OptimizeExpression(tokenStringValue[..i]));
+                    result.ExpressionTokens.Add(CreateOperatorToken(tokenStringValue[i]));
+                    result.Add(OptimizeExpression(tokenStringValue[(i + 1)..]));
+
+                    return result;
                 }
 
                 //spliting by arguments
                 if (tokenStringValue[i].Equals(',') && squareBrackets == 0)
                 {
+                    var result = new OptimizerResult();
                     var leftArgumentStartIndex = CountBracketsUntil(tokenStringValue, i, -1, 1);
-                    var leftArgument = tokenStringValue[leftArgumentStartIndex..^i];
+                    var leftArgument = tokenStringValue[(leftArgumentStartIndex + 1)..i];
                     var rightArgumentEndIndex = CountBracketsUntil(tokenStringValue, i, 1, -1);
-                    var rightArgument = tokenStringValue[i..^rightArgumentEndIndex];
-                    var functionName = GetFunctionName(tokenStringValue, i);
+                    var rightArgument = tokenStringValue[(i + 1)..rightArgumentEndIndex];
 
-                    expressions.Add(new FunctionToken(functionName));
-                    expressions.Add(new LeftBracketToken());
-                    expressions.AddRange(SplitLongExpression(leftArgument));
-                    expressions.Add(new CommaToken());
-                    expressions.AddRange(SplitLongExpression(rightArgument));
-                    expressions.Add(new RightBracketToken());
+                    var editedExpression = ReplaceInnerExpressionWithVariable(tokenStringValue, leftArgument, out var leftArgumentVariable);
+                    editedExpression = ReplaceInnerExpressionWithVariable(editedExpression, rightArgument, out var rightArgumentVariable);
 
+                    var expressionTokens = OptimizeExpression(editedExpression);
+                    var leftArgumentTokens = OptimizeExpression(leftArgument);
+                    var rightArgumentTokens = OptimizeExpression(rightArgument);
 
-                    //create new string with replacement
+                    result.AddVariable(leftArgumentVariable, leftArgumentTokens);
+                    result.AddVariable(rightArgumentVariable, rightArgumentTokens);
+                    result.Add(expressionTokens);
+
+                    return result;
                 }
                 //splitting by function
-                if (roundBrackets % 2 == 1)
+                if (roundBrackets % 2 == 1 && wasRight)
                 {
                     var lastChar = tokenStringValue[i - 1];
                     if (!MathDefinitions.OperatorDefinitions.ContainsKey(lastChar) && !lastChar.Equals(','))
                     {
-                        //read to brackets = 0
-                        //go left for name, end is left bracket or 0
-                        //go right end is right bracket and brackets %2 == 0
+                        var result = new OptimizerResult();
+
+                        var tempRoundBrackets = roundBrackets;
+                        var wasLeft = false;
+                        var start = 0;
+                        for (var j = i - 1; j >= 0; j--)
+                        {
+                            if (tokenStringValue[j].Equals(_leftBracket))
+                            {
+                                tempRoundBrackets--;
+                                wasLeft = true;
+                            }
+
+                            if (tempRoundBrackets % 2 != 1 || !wasLeft) continue;
+
+                            start = j;
+                            break;
+                        }
+
+                        var argument = tokenStringValue[(start + 1)..(i + 1)];
+                        var editedExpression = ReplaceInnerExpressionWithVariable(tokenStringValue, argument, out var argumentVariable);
+
+                        var expressionTokens = OptimizeExpression(editedExpression);
+                        var argumentTokens = OptimizeExpression(argument);
+
+                        result.AddVariable(argumentVariable, argumentTokens);
+                        result.Add(expressionTokens);
+
+                        return result;
                     }
                 }
             }
 
-            if (expressions.Count == 0)
-            {
-                expressions.Add(token);
-            }
-
-            return expressions;
+            return new OptimizerResult(token);
 
         }
 
-        public IEnumerable<IExpressionToken> TryRemoveOuterBrackets(string value)
+        public IEnumerable<IExpressionToken> SeparateOuterBrackets(string value)
         {
             var result = new List<IExpressionToken>();
 
@@ -173,6 +200,32 @@ namespace ResolveMe.MathCompiler.Algorithms
             return result;
         }
 
+        private string ReplaceInnerExpressionWithVariable(string expression, string innerExpression, out string variable)
+        {
+            do
+            {
+                variable = GenerateVariable(2);
+
+            } while (expression.Contains(variable));
+
+            return expression.Replace(innerExpression, variable);
+        }
+
+        private string GenerateVariable(int length)
+        {
+            var result = string.Empty;
+
+            var charArray = "abcdefghijklmnopqrstuvwxyz";
+            var generator = new Random();
+            for (var i = 0; i < length; i++)
+            {
+                var index = generator.Next(0, charArray.Length - 1);
+                result += charArray[index];
+            }
+
+            return result;
+        }
+
         private int CountBracketsUntil(string tokenStringValue, int actualPosition, int step, int endValue)
         {
             var functionBrackets = 0;
@@ -189,7 +242,7 @@ namespace ResolveMe.MathCompiler.Algorithms
                 }
 
                 if (functionBrackets != endValue) continue;
-                
+
                 result = j;
                 break;
             }
@@ -197,19 +250,19 @@ namespace ResolveMe.MathCompiler.Algorithms
             return result;
         }
 
-        private string GetFunctionName(string tokenStringValue, int actualPosition)
-        {
-            var start = 0;
-            for (var j = actualPosition; j >= 0; j--)
-            {
-                if(!tokenStringValue[j].Equals(_leftBracket)) continue;
+        //private string GetFunctionName(string tokenStringValue, int actualPosition)
+        //{
+        //    var start = 0;
+        //    for (var j = actualPosition; j >= 0; j--)
+        //    {
+        //        if(!tokenStringValue[j].Equals(_leftBracket)) continue;
 
-                start = j;
-                break;
-            }
+        //        start = j;
+        //        break;
+        //    }
 
-            return tokenStringValue[start..^actualPosition];
-        }
+        //    return tokenStringValue[start..^actualPosition];
+        //}
 
         private OperatorToken CreateOperatorToken(char token)
         {

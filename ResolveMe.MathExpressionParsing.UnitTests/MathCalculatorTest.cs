@@ -52,9 +52,17 @@ namespace ResolveMe.UnitTests
         [TestMethod]
         public void TestInnerFunction()
         {
-            var expression = "max(cos(24-23.8*0.2),sin(1),[4,5,6])";
+            var expression = "max(cos(24-23.8*0.2),sin(1))";
             var result = this.calculator.Calculate<double>(expression);
             Assert.AreEqual((double)0.925, (double)Math.Round(result, 3, MidpointRounding.AwayFromZero));
+        }
+
+        [TestMethod]
+        public void TestRecursiveInnerFunction()
+        {
+            var expression = "sin(cos(sin(cos(0.1))))";
+            var result = this.calculator.Calculate<double>(expression);
+            Assert.AreEqual((double)0.62, (double)Math.Round(result, 3, MidpointRounding.AwayFromZero));
         }
     }
 }
