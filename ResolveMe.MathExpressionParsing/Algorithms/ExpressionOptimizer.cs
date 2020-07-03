@@ -202,21 +202,21 @@ namespace ResolveMe.MathCompiler.Algorithms
 
         private string ReplaceInnerExpressionWithVariable(string expression, string innerExpression, out string variable)
         {
+            var generator = new Random();
             do
             {
-                variable = GenerateVariable(2);
+                variable = GenerateVariable(2, generator);
 
             } while (expression.Contains(variable));
 
             return expression.Replace(innerExpression, variable);
         }
 
-        private string GenerateVariable(int length)
+        private string GenerateVariable(int length, Random generator)
         {
             var result = string.Empty;
 
             var charArray = "abcdefghijklmnopqrstuvwxyz";
-            var generator = new Random();
             for (var i = 0; i < length; i++)
             {
                 var index = generator.Next(0, charArray.Length - 1);
@@ -249,20 +249,6 @@ namespace ResolveMe.MathCompiler.Algorithms
 
             return result;
         }
-
-        //private string GetFunctionName(string tokenStringValue, int actualPosition)
-        //{
-        //    var start = 0;
-        //    for (var j = actualPosition; j >= 0; j--)
-        //    {
-        //        if(!tokenStringValue[j].Equals(_leftBracket)) continue;
-
-        //        start = j;
-        //        break;
-        //    }
-
-        //    return tokenStringValue[start..^actualPosition];
-        //}
 
         private OperatorToken CreateOperatorToken(char token)
         {

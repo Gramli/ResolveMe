@@ -2,7 +2,6 @@
 using ResolveMe.MathCompiler.Notations;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace ResolveMe.MathInterpreter
 {

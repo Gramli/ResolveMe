@@ -38,7 +38,6 @@ namespace ResolveMe.UnitTests
                 typeof(LeftBracketToken),
                 typeof(NumberToken),
                 typeof(RightBracketToken),
-
             });
 
             CheckExpression("-cos(0.9)*456-54+(-12.987)/log10(0.5)/cos(0.2)*sin(0.6)", new Type[]

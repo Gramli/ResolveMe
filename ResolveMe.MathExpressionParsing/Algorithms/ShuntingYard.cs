@@ -22,18 +22,18 @@ namespace ResolveMe.MathCompiler.Algorithms
 
             var rawNotationArray = rawNotation.ToArray();
 
-            for(var i =0;i< rawNotationArray.Length;i++)
+            for (var i = 0; i < rawNotationArray.Length; i++)
             {
                 var token = rawNotationArray[i];
 
-                switch(token)
+                switch (token)
                 {
                     case SignToken _:
                     case VariableToken _:
                     case NumberToken _:
                         output.Add(token);
                         break;
-                    case CommaToken _: 
+                    case CommaToken _:
                         break;
                     case LeftBracketToken leftBracketToken:
                         stack.Push(leftBracketToken);
@@ -42,7 +42,7 @@ namespace ResolveMe.MathCompiler.Algorithms
                         {
                             while (stack.TryPop(out var stackOperator))
                             {
-                                if(stackOperator is LeftBracketToken)
+                                if (stackOperator is LeftBracketToken)
                                 {
                                     break;
                                 }
@@ -52,7 +52,9 @@ namespace ResolveMe.MathCompiler.Algorithms
                         break;
                     case FunctionToken functionToken:
                         {
-                            var functionTokens = rawNotationArray[(i+1)..(functionToken.FunctionTokensCount+1)];
+                            var rangeStart = i + 1;
+                            var rangeEnd = i + functionToken.FunctionTokensCount + 1;
+                            var functionTokens = rawNotationArray[rangeStart..rangeEnd];
                             i += functionToken.FunctionTokensCount;
                             var result = Postfix(functionTokens);
                             output.AddRange(result);
@@ -63,7 +65,9 @@ namespace ResolveMe.MathCompiler.Algorithms
                         {
                             if (stack.TryPeek(out var stackOperator))
                             {
-                                if (stackOperator is OperatorToken stackOperatorToken && stackOperatorToken.Precedence > operatorToken.Precedence)
+                                if (stackOperator is OperatorToken stackOperatorToken &&
+                                    (stackOperatorToken.Precedence > operatorToken.Precedence && operatorToken.OperatorAssociativity == OperatorAssociativity.Right ||
+                                    stackOperatorToken.Precedence >= operatorToken.Precedence && operatorToken.OperatorAssociativity == OperatorAssociativity.Left))
                                 {
                                     stack.Pop();
                                     output.Add(stackOperatorToken);
@@ -77,9 +81,9 @@ namespace ResolveMe.MathCompiler.Algorithms
                 }
             }
 
-            if(stack.Count > 0)
+            if (stack.Count > 0)
             {
-                while(stack.TryPop(out var stackToken))
+                while (stack.TryPop(out var stackToken))
                 {
                     output.Add(stackToken);
                 }

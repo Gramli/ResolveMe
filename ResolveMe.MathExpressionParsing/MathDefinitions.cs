@@ -14,7 +14,16 @@ namespace ResolveMe.MathCompiler
             { '*',(3, OperatorAssociativity.Left) },
             { '/',(3, OperatorAssociativity.Left) },
             { '^',(4, OperatorAssociativity.Right) },
+        };
 
+        public static readonly Dictionary<char, bool> BracketsDefinitions = new Dictionary<char, bool>()
+        {
+            { '(', true },
+            { ')', false },
+            { '[', true },
+            { ']', false },
+            { '{', true },
+            { '}', false },
         };
     }
 }

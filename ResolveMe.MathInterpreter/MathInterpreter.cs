@@ -34,28 +34,39 @@ namespace ResolveMe.MathInterpreter
                         operandsStack.Push(numberToken.Value);
                         break;
                     case OperatorToken operatorToken:
-                        InterpretFunction(operandsStack, context, operatorToken.Char.ToString(), 2);
+                        {
+                            var arguments = operatorToken.OperatorAssociativity == OperatorAssociativity.Left ?
+                                GetArguments(operandsStack, 2) : GetArguments(operandsStack, 1);
+                            var result = InterpretFunction(arguments, context, operatorToken.Char.ToString());
+                            operandsStack.Push(result);
+                        }
                         break;
                     case FunctionToken functionToken:
-                        InterpretFunction(operandsStack, context, functionToken.Text, functionToken.ArgumentsCount);
+                        {
+                            var arguments = GetArguments(operandsStack, functionToken.ArgumentsCount);
+                            var result = InterpretFunction(arguments, context, functionToken.Text);
+                            operandsStack.Push(result);
+                        }
                         break;
                 }
             }
             return operandsStack.Pop();
         }
 
-        private void InterpretFunction(Stack<object> operandsStack, IContext context, string functionName, int argumentsCount)
+        private object[] GetArguments(Stack<object> operandsStack, int argumentsCount)
         {
-            //TODO DAN PUSH TO OPERAND STACK SHOULD BE IN MAIN ALGORITHM
-            //TODO DAN CREATE ARGUMENTS CAN BE IN DIFFERENT METHOD
             var args = new object[argumentsCount];
-            for (var i = args.Length-1; i >= 0; i--)
+            for (var i = args.Length - 1; i >= 0; i--)
             {
                 args[i] = operandsStack.Pop();
             }
+            return args;
+        }
+
+        private object InterpretFunction(object[] arguments, IContext context, string functionName)
+        {
             context.TryGetFunction(functionName, out var func);
-            var result = func.Invoke(args);
-            operandsStack.Push(result);
+            return func.Invoke(arguments);
         }
     }
 }
