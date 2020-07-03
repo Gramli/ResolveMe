@@ -6,5 +6,10 @@ namespace ResolveMe.MathCompiler.ExpressionTokens
             : base(',')
         {
         }
+
+        public CommaToken(char value)
+            : base(value)
+        {
+        }
     }
 }

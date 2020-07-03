@@ -122,7 +122,7 @@ namespace ResolveMe.MathCompiler.Algorithms
                 //splitting by function
                 if (roundBrackets % 2 == 1 && wasRight)
                 {
-                    var lastChar = tokenStringValue[i - 1];
+                    var lastChar = tokenStringValue[i-1];
                     if (!MathDefinitions.OperatorDefinitions.ContainsKey(lastChar) && !lastChar.Equals(','))
                     {
                         var result = new OptimizerResult();
@@ -138,13 +138,13 @@ namespace ResolveMe.MathCompiler.Algorithms
                                 wasLeft = true;
                             }
 
-                            if (tempRoundBrackets % 2 != 1 || !wasLeft) continue;
+                            if (tempRoundBrackets % 2 != 0 || !wasLeft) continue;
 
                             start = j;
                             break;
                         }
 
-                        var argument = tokenStringValue[(start + 1)..(i + 1)];
+                        var argument = tokenStringValue[(start + 1)..(i)];
                         var editedExpression = ReplaceInnerExpressionWithVariable(tokenStringValue, argument, out var argumentVariable);
 
                         var expressionTokens = OptimizeExpression(editedExpression);

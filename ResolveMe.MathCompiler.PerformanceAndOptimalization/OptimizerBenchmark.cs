@@ -21,7 +21,7 @@ namespace ResolveMe.MathCompiler.PerformanceAndOptimalization
         public void Optimize(string value)
         {
             var optimizer = new ExpressionOptimizer(ExpressionLength);
-            optimizer.SplitLongExpression(value);
+            //optimizer.SplitLongExpression(value);
         }
     }
 }
