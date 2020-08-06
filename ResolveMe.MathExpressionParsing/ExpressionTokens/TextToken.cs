@@ -22,5 +22,10 @@
         {
             this.Text = $"{this.Text}{other.Text}";
         }
+
+        public bool IsEmpty()
+        {
+            return string.IsNullOrEmpty(this.Text);
+        }
     }
 }

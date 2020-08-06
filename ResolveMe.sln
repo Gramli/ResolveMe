@@ -5,13 +5,13 @@ VisualStudioVersion = 16.0.29102.190
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ResolveMe.MathCompiler", "ResolveMe.MathExpressionParsing\ResolveMe.MathCompiler.csproj", "{24B93552-AD8D-4341-A453-2402C6FA1E8C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ResolveMe.MathCompiler.UnitTests", "ResolveMe.MathExpressionParsing.UnitTests\ResolveMe.MathCompiler.UnitTests.csproj", "{99E5A1B6-2A14-4000-87CB-9CCABFE4D3FB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ResolveMe.UnitTests", "ResolveMe.MathExpressionParsing.UnitTests\ResolveMe.UnitTests.csproj", "{99E5A1B6-2A14-4000-87CB-9CCABFE4D3FB}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Amy", "..\Amy\Amy\Amy.csproj", "{134198B1-DDBD-4D02-A860-6CC6A7A8C508}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ResolveMe.MathCompiler.PerformanceAndOptimalization", "ResolveMe.MathCompiler.PerformanceAndOptimalization\ResolveMe.MathCompiler.PerformanceAndOptimalization.csproj", "{EB8AFDCD-CEE1-4DC2-B114-90725D8EB93C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ResolveMe.MathInterpreter", "ResolveMe.MathInterpreter\ResolveMe.MathInterpreter.csproj", "{250DEA32-AA19-4966-B8DC-01458B637B44}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ResolveMe.MathInterpreter", "ResolveMe.MathInterpreter\ResolveMe.MathInterpreter.csproj", "{250DEA32-AA19-4966-B8DC-01458B637B44}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

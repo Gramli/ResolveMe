@@ -1,30 +1,18 @@
-﻿using System.Collections.Generic;
-using System.Text;
-
-namespace ResolveMe.MathCompiler.ExpressionTokens
+﻿namespace ResolveMe.MathCompiler.ExpressionTokens
 {
-    public class FunctionToken : IExpressionToken
+    //TODO DAN THINK ABOUT SETTING COUNTS
+    public class FunctionToken : TextToken
     {
-        public string FunctionName { get; private set; }
+        internal int FunctionTokensCount { get; set; }
 
-        public List<IExpressionToken> Arguments { get; private set; }
+        public int ArgumentsCount { get; internal set; } = 1;
 
-        public FunctionToken(string name, IEnumerable<IExpressionToken> arguments)
+        internal FunctionToken()
         {
-            this.FunctionName = name;
-            this.Arguments = new List<IExpressionToken>(arguments);
         }
-
-        public string GetStringRepresentation()
+        public FunctionToken(string functionName)
+            : base(functionName)
         {
-            StringBuilder result = new StringBuilder();
-            result.Append(this.FunctionName);
-            foreach (var argument in this.Arguments)
-            {
-                result.Append(argument.GetStringRepresentation());
-            }
-
-            return result.ToString();
         }
     }
 }

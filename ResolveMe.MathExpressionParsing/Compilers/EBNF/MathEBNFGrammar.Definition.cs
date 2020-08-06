@@ -39,11 +39,11 @@ namespace ResolveMe.MathCompiler.Compilers.EBNF
         {
             { "digit", typeof(StringCompiler<TextToken>) },
             { "letter", typeof(StringCompiler<TextToken>) },
-            { "exponent", typeof(CharCompiler<OperatorToken>) },
-            { "divide", typeof(CharCompiler<OperatorToken>) },
-            { "times", typeof(CharCompiler<OperatorToken>) },
-            { "minus", typeof(CharCompiler<OperatorToken>) },
-            { "plus", typeof(CharCompiler<OperatorToken>) },
+            { "exponent", typeof(OperatorCompiler) },
+            { "divide", typeof(OperatorCompiler) },
+            { "times", typeof(OperatorCompiler) },
+            { "minus", typeof(OperatorCompiler) },
+            { "plus", typeof(OperatorCompiler) },
             { "comma", typeof(CharCompiler<CommaToken>) },
             { "r_square", typeof(CharCompiler<RightBracketToken>) },
             { "l_square", typeof(CharCompiler<LeftBracketToken>) },
@@ -60,10 +60,12 @@ namespace ResolveMe.MathCompiler.Compilers.EBNF
             { "expression", typeof(CommonCompiler) },
         };
 
-        private  readonly Dictionary<string, NonTerminal> _createdInstances = new Dictionary<string, NonTerminal>();
+        private readonly Dictionary<string, NonTerminal> _createdInstances;
 
         public MathEBNFGrammarDefinition()
         {
+            this._createdInstances = new Dictionary<string, NonTerminal>(this._emptyNonTerminals.Count);
+            FunctionCompiler.MinFunctionNameLength = 3;
         }
 
         private object GetInstance(Type type, string name)

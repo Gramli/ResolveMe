@@ -3,6 +3,7 @@ using Amy.Grammars.EBNF;
 using ResolveMe.MathCompiler.Algorithms;
 using ResolveMe.MathCompiler.ExpressionTokens;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ResolveMe.MathCompiler.Compilers.EBNF
 {
@@ -13,15 +14,19 @@ namespace ResolveMe.MathCompiler.Compilers.EBNF
         public MathEBNFGrammarCompiler(IStartSymbol startSymbol)
             : base(startSymbol)
         {
-            this.optimizer = new ExpressionOptimizer(20);
+            this.optimizer = new ExpressionOptimizer(15);
         }
 
         public IEnumerable<IExpressionToken> Compile(string value)
         {
-            var result = new List<IExpressionToken>();
-            var rawTokens = optimizer.SplitLongExpression(value);
+            var optimizeResult = optimizer.OptimizeExpression(value);
+            return Compile(optimizeResult);
+        }
 
-            foreach (var token in rawTokens)
+        private IEnumerable<IExpressionToken> Compile(OptimizerResult optimizeResult)
+        {
+            var result = new List<IExpressionToken>();
+            foreach (var token in optimizeResult.ExpressionTokens)
             {
                 if (!(token is RawToken))
                 {
@@ -30,7 +35,31 @@ namespace ResolveMe.MathCompiler.Compilers.EBNF
                 else
                 {
                     var rawTokenString = token.GetStringRepresentation();
-                    result.AddRange(CompileStringValue(rawTokenString));
+                    var functionTokens = new List<FunctionToken>();
+
+                    foreach (var compiledToken in CompileStringValue(rawTokenString))
+                    {
+                        if (compiledToken is VariableToken variableToken && optimizeResult.VariableTokens.ContainsKey(variableToken.Text))
+                        {
+                            var variableOptimizer = optimizeResult.VariableTokens[variableToken.Text];
+                            var variableOptimizerResult = Compile(variableOptimizer);
+                            result.AddRange(variableOptimizerResult);
+                            //i need to set new function tokens count
+                            foreach (var item in functionTokens)
+                            {
+                                item.FunctionTokensCount += variableOptimizerResult.Count() - 1;
+                            }
+                            continue;
+                        }
+                        else if (compiledToken is FunctionToken functionToken)
+                        {
+                            functionTokens.Add(functionToken);
+                        }
+
+                        result.Add(compiledToken);
+
+                    }
+
                 }
             }
 

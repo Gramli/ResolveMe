@@ -1,13 +1,16 @@
 ﻿using ResolveMe.MathCompiler.Notations;
+using System.Collections.Generic;
 
 namespace ResolveMe.MathCompiler
 {
     public interface IMathCompiler
     {
-        InfixNotation CompileToInfix(string value);
+        InfixNotation CompileToInfix(string expression);
 
-        PostfixNotation CompileToPostfix(string value);
+        PostfixNotation CompileToPostfix(string expression);
 
-        PrefixNotation CompileToPrefix(string value);
+        PrefixNotation CompileToPrefix(string expression);
+
+        IEnumerable<IExpressionToken> GetRawNotation(string expression);
     }
 }

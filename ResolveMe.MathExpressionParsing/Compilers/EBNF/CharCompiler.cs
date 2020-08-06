@@ -13,16 +13,16 @@ namespace ResolveMe.MathCompiler.Compilers.EBNF
         {
         }
 
-        public IEnumerable<IExpressionToken> Compile(string value)
+        public virtual IEnumerable<IExpressionToken> Compile(string value)
         {
             if (!IsExpression(value))
             {
                 throw new CompileException(value, typeof(CharCompiler<T>));
             }
-            return new IExpressionToken[] { (T)Activator.CreateInstance(typeof(T), Convert.ToChar(value)) };
+            return new IExpressionToken[] { CreateInstance(value) };
         }
 
-        public IEnumerable<IExpressionToken> Compile(IExpressionItem item)
+        public virtual IEnumerable<IExpressionToken> Compile(IExpressionItem item)
         {
             if (item is null)
             {
@@ -30,6 +30,11 @@ namespace ResolveMe.MathCompiler.Compilers.EBNF
             }
 
             return Compile(item.Expression);
+        }
+
+        protected T CreateInstance(string value)
+        {
+            return (T)Activator.CreateInstance(typeof(T), Convert.ToChar(value));
         }
     }
 }

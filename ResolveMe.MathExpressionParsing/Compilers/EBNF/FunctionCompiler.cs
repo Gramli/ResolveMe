@@ -2,15 +2,15 @@
 using Amy.Grammars.EBNF.EBNFItems;
 using ResolveMe.MathCompiler.Exceptions;
 using ResolveMe.MathCompiler.ExpressionTokens;
+using ResolveMe.MathCompiler.Extensions;
 using System.Collections.Generic;
 using System.Linq;
-using ResolveMe.MathCompiler.Extensions;
-using System;
 
 namespace ResolveMe.MathCompiler.Compilers.EBNF
 {
     internal class FunctionCompiler : NonTerminal, ICompiler
     {
+        internal static int MinFunctionNameLength { get; set; }
         public FunctionCompiler(string nonTerminalName)
             : base(nonTerminalName)
         {
@@ -37,50 +37,61 @@ namespace ResolveMe.MathCompiler.Compilers.EBNF
             return Compile(item.Childs);
         }
 
-        private IExpressionToken[] Compile(IEnumerable<IExpressionItem> structure)
+        private IList<IExpressionToken> Compile(IEnumerable<IExpressionItem> structure)
         {
-            var result = structure.SplitToArray(2, 3); // TODO DAN FIX!!
-            var name = GetName(result[0]);
-            var arguments = GetArguments(result[1]);
-            return new IExpressionToken[] { new FunctionToken(name, arguments) };
-        }
+            var functionToken = new FunctionToken();
+            var result = new List<IExpressionToken>(5) { functionToken };
+            var lefBracketReached = false;
 
-        private IEnumerable<IExpressionToken> GetArguments(IEnumerable<IExpressionItem> structure)
-        {
-            var result = new List<IExpressionToken>();
             foreach (var expressionItem in structure)
             {
                 if (!(expressionItem.Item is ICompiler))
                 {
                     ThrowICompileException(expressionItem.Expression);
                 }
-                var tempResult = ((ICompiler)expressionItem.Item).Compile(expressionItem);
-                result.AddRange(tempResult);
-            }
-            return result;
-        }
 
-        private string GetName(IEnumerable<IExpressionItem> structure)
-        {
-            var result = new TextToken();
-            foreach (var expressionItem in structure)
-            {
-                if (!(expressionItem.Item is ICompiler))
+                if (!lefBracketReached)
                 {
-                    ThrowICompileException(expressionItem.Expression);
+                    lefBracketReached = expressionItem.Item is CharCompiler<LeftBracketToken>;
                 }
 
                 var compileResults = ((ICompiler)expressionItem.Item).Compile(expressionItem);
-                foreach (var compileResult in compileResults)
+
+                if (lefBracketReached)
                 {
-                    if (!(compileResult is TextToken))
-                    {
-                        throw new CompileException(expressionItem.Expression, typeof(TextToken));
-                    }
-                    result.Concat((TextToken)compileResult);
+                    functionToken.FunctionTokensCount += compileResults.Count();
+                    result.AddRange(compileResults);
+                    continue;
+                }
+
+                if ((expressionItem.Item is StringCompiler<TextToken>))
+                {
+                    var textToken = ReadTextToken(compileResults);
+                    functionToken.Concat(textToken);
+                    continue;
+                }
+
+                if (functionToken.Text.Length < MinFunctionNameLength)
+                {
+                    throw new CompileException("Invalid function name, function name has small number of characters.");
                 }
             }
-            return result.Text;
+
+            return result;
+        }
+
+        private TextToken ReadTextToken(IEnumerable<IExpressionToken> expressionTokens)
+        {
+            var result = new TextToken();
+            foreach (var expressionToken in expressionTokens)
+            {
+                if (expressionToken is TextToken textToken)
+                {
+                    result.Concat(textToken);
+                }
+                break;
+            }
+            return result;
         }
 
         private void ThrowICompileException(string expression)
