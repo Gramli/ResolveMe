@@ -3,17 +3,18 @@ using Amy.Grammars.EBNF;
 using ResolveMe.MathCompiler.Algorithms;
 using ResolveMe.MathCompiler.ExpressionTokens;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ResolveMe.MathCompiler.Compilers.EBNF
 {
     internal class MathEBNFGrammarCompiler : EBNFGrammar, ICompiler
     {
-        private readonly ExpressionOptimizer optimizer;
+        private readonly ExpressionOptimizer2 optimizer;
 
         public MathEBNFGrammarCompiler(IStartSymbol startSymbol)
             : base(startSymbol)
         {
-            this.optimizer = new ExpressionOptimizer(20);
+            this.optimizer = new ExpressionOptimizer2(15);
         }
 
         public IEnumerable<IExpressionToken> Compile(string value)
@@ -34,6 +35,7 @@ namespace ResolveMe.MathCompiler.Compilers.EBNF
                 else
                 {
                     var rawTokenString = token.GetStringRepresentation();
+                    var functionTokens = new List<FunctionToken>();
 
                     foreach (var compiledToken in CompileStringValue(rawTokenString))
                     {
@@ -42,32 +44,22 @@ namespace ResolveMe.MathCompiler.Compilers.EBNF
                             var variableOptimizer = optimizeResult.VariableTokens[variableToken.Text];
                             var variableOptimizerResult = Compile(variableOptimizer);
                             result.AddRange(variableOptimizerResult);
+                            //i need to set new function tokens count
+                            foreach (var item in functionTokens)
+                            {
+                                item.FunctionTokensCount += variableOptimizerResult.Count() - 1;
+                            }
+                            continue;
                         }
-                        else
+                        else if (compiledToken is FunctionToken functionToken)
                         {
-                            result.Add(compiledToken);
+                            functionTokens.Add(functionToken);
                         }
+
+                        result.Add(compiledToken);
+
                     }
 
-                }
-            }
-
-            return result;
-        }
-
-        private List<IExpressionToken> ReplaceVariableTokenWithExpressionTokens(IEnumerable<IExpressionToken> expressionTokens, string variableName, IEnumerable<IExpressionToken> variableTokens)
-        {
-            var result = new List<IExpressionToken>();
-
-            foreach (var token in expressionTokens)
-            {
-                if (token is VariableToken variableToken && variableToken.Text.Equals(variableName))
-                {
-                    result.AddRange(variableTokens);
-                }
-                else
-                {
-                    result.Add(token);
                 }
             }
 

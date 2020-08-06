@@ -60,7 +60,7 @@ namespace ResolveMe.UnitTests
         [TestMethod]
         public void TestRecursiveInnerFunction()
         {
-            var expression = "sin(cos(sin(cos(0.1))))";
+            var expression = "sin(cos(sin(cos(max(0.1,0.01)))))";
             var result = this.calculator.Calculate<double>(expression);
             Assert.AreEqual((double)0.62, (double)Math.Round(result, 3, MidpointRounding.AwayFromZero));
         }

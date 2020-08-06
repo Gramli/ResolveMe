@@ -39,8 +39,8 @@ namespace ResolveMe.MathCompiler.Compilers.EBNF
 
         private IList<IExpressionToken> Compile(IEnumerable<IExpressionItem> structure)
         {
-            var name = new FunctionToken();
-            var result = new List<IExpressionToken>(5) {name};
+            var functionToken = new FunctionToken();
+            var result = new List<IExpressionToken>(5) { functionToken };
             var lefBracketReached = false;
 
             foreach (var expressionItem in structure)
@@ -59,7 +59,7 @@ namespace ResolveMe.MathCompiler.Compilers.EBNF
 
                 if (lefBracketReached)
                 {
-                    name.FunctionTokensCount += compileResults.Count();
+                    functionToken.FunctionTokensCount += compileResults.Count();
                     result.AddRange(compileResults);
                     continue;
                 }
@@ -67,11 +67,11 @@ namespace ResolveMe.MathCompiler.Compilers.EBNF
                 if ((expressionItem.Item is StringCompiler<TextToken>))
                 {
                     var textToken = ReadTextToken(compileResults);
-                    name.Concat(textToken);
+                    functionToken.Concat(textToken);
                     continue;
                 }
 
-                if (name.Text.Length < MinFunctionNameLength)
+                if (functionToken.Text.Length < MinFunctionNameLength)
                 {
                     throw new CompileException("Invalid function name, function name has small number of characters.");
                 }

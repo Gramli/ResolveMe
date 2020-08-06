@@ -7,6 +7,14 @@ namespace ResolveMe.MathCompiler
 {
     public static class MathDefinitions
     {
+        public const char leftRoundBracket = '(';
+        public const char rightRoundBracket = ')';
+        public const char leftSqareBracket = '[';
+        public const char rightSqareBracket = ']';
+        public const char leftBrace = '{';
+        public const char rightBrace = '}';
+        public const char argumentSeparator = ',';
+
         public static readonly Dictionary<char, (int, OperatorAssociativity)> OperatorDefinitions = new Dictionary<char, (int, OperatorAssociativity)>()
         {
             { '+',(2, OperatorAssociativity.Left) },
@@ -18,12 +26,12 @@ namespace ResolveMe.MathCompiler
 
         public static readonly Dictionary<char, bool> BracketsDefinitions = new Dictionary<char, bool>()
         {
-            { '(', true },
-            { ')', false },
-            { '[', true },
-            { ']', false },
-            { '{', true },
-            { '}', false },
+            { leftRoundBracket, true },
+            { rightRoundBracket, false },
+            { leftSqareBracket, true },
+            { rightSqareBracket, false },
+            { leftBrace, true },
+            { rightBrace, false },
         };
     }
 }

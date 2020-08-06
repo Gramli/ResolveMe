@@ -15,13 +15,13 @@ namespace ResolveMe.MathCompiler.Algorithms
             return new PostfixNotation(postfixNotation);
         }
 
-        private IEnumerable<IExpressionToken> Postfix(IEnumerable<IExpressionToken> rawNotation)
+        private IEnumerable<IExpressionToken> Postfix(IEnumerable<IExpressionToken> rawNotation, FunctionToken recursiveFunctionToken = null)
         {
             var output = new List<IExpressionToken>();
             var stack = new Stack<IExpressionToken>();
 
             var rawNotationArray = rawNotation.ToArray();
-
+            var functionArguments = 1;
             for (var i = 0; i < rawNotationArray.Length; i++)
             {
                 var token = rawNotationArray[i];
@@ -34,6 +34,7 @@ namespace ResolveMe.MathCompiler.Algorithms
                         output.Add(token);
                         break;
                     case CommaToken _:
+                        functionArguments++;
                         break;
                     case LeftBracketToken leftBracketToken:
                         stack.Push(leftBracketToken);
@@ -56,14 +57,14 @@ namespace ResolveMe.MathCompiler.Algorithms
                             var rangeEnd = i + functionToken.FunctionTokensCount + 1;
                             var functionTokens = rawNotationArray[rangeStart..rangeEnd];
                             i += functionToken.FunctionTokensCount;
-                            var result = Postfix(functionTokens);
+                            var result = Postfix(functionTokens, functionToken);
                             output.AddRange(result);
                             output.Add(functionToken);
                         }
                         break;
                     case OperatorToken operatorToken:
                         {
-                            if (stack.TryPeek(out var stackOperator))
+                            while (stack.TryPeek(out var stackOperator))
                             {
                                 if (stackOperator is OperatorToken stackOperatorToken &&
                                     (stackOperatorToken.Precedence > operatorToken.Precedence && operatorToken.OperatorAssociativity == OperatorAssociativity.Right ||
@@ -71,7 +72,9 @@ namespace ResolveMe.MathCompiler.Algorithms
                                 {
                                     stack.Pop();
                                     output.Add(stackOperatorToken);
+                                    continue;
                                 }
+                                break;
                             }
                             stack.Push(operatorToken);
                         }
@@ -79,6 +82,11 @@ namespace ResolveMe.MathCompiler.Algorithms
                     default:
                         throw new ArgumentException($"Unknown token: {token.GetStringRepresentation()}");
                 }
+            }
+
+            if(recursiveFunctionToken != null)
+            {
+                recursiveFunctionToken.ArgumentsCount = functionArguments;
             }
 
             if (stack.Count > 0)

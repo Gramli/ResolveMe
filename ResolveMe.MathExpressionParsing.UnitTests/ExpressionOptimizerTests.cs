@@ -1,8 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ResolveMe.MathCompiler.Algorithms;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Linq;
 
 namespace ResolveMe.UnitTests
 {
@@ -34,12 +32,51 @@ namespace ResolveMe.UnitTests
         }
 
         [TestMethod]
-        public void OptimizeExpressionUsingFunctionArguments()
+        public void OptimizeExpressionUsingArguments()
         {
-            var expression = "sint(a+ b,c+(d+a+b),c+d+e+s+dsa+a)";
+            var expression = "(sint(a+ b,c+(d+a+b),c+d+e+s+dsa+a))";
             var result = expressionOptimizer2.OptimizeExpression(expression);
             Assert.AreEqual(result.ExpressionTokens.Count, 1);
             Assert.AreEqual(result.VariableTokens.Count, 2);
+        }
+
+        [TestMethod]
+        public void OptimizeExpressionUsingRecursiveFunction()
+        {
+            var expression = "(sint(cos(max(1,2))))";
+            var result = expressionOptimizer2.OptimizeExpression(expression);
+            CheckRecursiveExpressions(2, result);
+        }
+
+        [TestMethod]
+        public void OptimizeExpressionUsingRecursiveFunction_1()
+        {
+            var expression = "sin(cos(0,5))";
+            var result = expressionOptimizer2.OptimizeExpression(expression);
+            CheckRecursiveExpressions(1, result);
+        }
+
+        [TestMethod]
+        public void OptimizeExpressionUsingRecursiveFunction_2()
+        {
+            var expression = "sin(cos(sin(cos(0.1))))";
+            var result = expressionOptimizer2.OptimizeExpression(expression);
+            CheckRecursiveExpressions(3, result);
+        }
+
+        private void CheckRecursiveExpressions(int recursionCount, OptimizerResult result)
+        {
+            if(recursionCount == 0)
+            {
+                return;
+            }
+
+            for(var i=0;i<recursionCount;i++)
+            {
+                Assert.AreEqual(result.ExpressionTokens.Count, 1);
+                Assert.AreEqual(result.VariableTokens.Count, 1);
+                CheckRecursiveExpressions(recursionCount - 1, result.VariableTokens.First().Value);
+            }
         }
     }
 }

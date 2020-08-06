@@ -72,47 +72,6 @@ namespace ResolveMe.UnitTests
             });
         }
 
-        [TestMethod]
-        public void CompileComplexExpression()
-        {
-            CheckExpression("cos(0.9)*456-54+(12.987)/log10(0.5)/cos(0.2)*sin(0.6)", new Type[]
-            {
-                typeof(NumberToken),
-                typeof(FunctionToken),
-                typeof(NumberToken),
-                typeof(OperatorToken),
-                typeof(NumberToken),
-                typeof(NumberToken),
-                typeof(NumberToken),
-                typeof(FunctionToken),
-                typeof(NumberToken),
-                typeof(FunctionToken),
-                typeof(NumberToken),
-                typeof(FunctionToken),
-                typeof(OperatorToken),
-                typeof(OperatorToken),
-                typeof(OperatorToken),
-                typeof(OperatorToken),
-                typeof(OperatorToken),
-            });
-
-            CheckExpression("max(25,1)+45-ab*bc+log5(12)", new Type[]
-            {
-                typeof(NumberToken),
-                typeof(NumberToken),
-                typeof(FunctionToken),
-                typeof(NumberToken),
-                typeof(VariableToken),
-                typeof(VariableToken),
-                typeof(OperatorToken),
-                typeof(NumberToken),
-                typeof(FunctionToken),
-                typeof(OperatorToken),
-                typeof(OperatorToken),
-                typeof(OperatorToken),
-            });
-        }
-
         private void CheckExpression(string expresion, Type[] argumentsTypes)
         {
             var result = this.mathCompiler.CompileToPostfix(expresion).ExpressionTokens.ToList();
