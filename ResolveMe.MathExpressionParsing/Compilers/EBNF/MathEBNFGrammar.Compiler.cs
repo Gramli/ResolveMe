@@ -9,12 +9,12 @@ namespace ResolveMe.MathCompiler.Compilers.EBNF
 {
     internal class MathEBNFGrammarCompiler : EBNFGrammar, ICompiler
     {
-        private readonly ExpressionOptimizer2 optimizer;
+        private readonly ExpressionOptimizer optimizer;
 
         public MathEBNFGrammarCompiler(IStartSymbol startSymbol)
             : base(startSymbol)
         {
-            this.optimizer = new ExpressionOptimizer2(15);
+            this.optimizer = new ExpressionOptimizer(15);
         }
 
         public IEnumerable<IExpressionToken> Compile(string value)

@@ -1,253 +1,188 @@
-﻿using ResolveMe.MathCompiler.ExpressionTokens;
-using System;
-using System.Collections.Generic;
+﻿using Amy.Extensions;
+using ResolveMe.MathCompiler.ExpressionTokens;
+using ResolveMe.MathCompiler.Extensions;
 
 namespace ResolveMe.MathCompiler.Algorithms
 {
     public class ExpressionOptimizer
     {
-        private const char _leftBracket = '(';
-        private const char _rightBracket = ')';
-        private const char _leftSquareBracket = '[';
-        private const char _rightSquareBracket = ']';
         private readonly uint _optimalExpressionLength;
+        private readonly uint _optimalArgumentLength = 5;
 
         public ExpressionOptimizer(uint optimalExpressionLength)
         {
-            this._optimalExpressionLength = optimalExpressionLength;
+            _optimalExpressionLength = optimalExpressionLength;
         }
-
-        public OptimizerResult OptimizeExpression(string value)
+        public OptimizerResult OptimizeExpression(string expression)
         {
-            //Is necessary to optimize expression
-            if (value.Length > this._optimalExpressionLength && !string.IsNullOrEmpty(value) || IsFunctionRecursion(value))
+            var cleanExpression = expression.RemoveSpaces().RemoveOuterBrackets();
+
+            if (cleanExpression.Length > _optimalExpressionLength || IsFunctionRecursion(expression))
             {
-                var result = new OptimizerResult();
-                //convert unecessary brackets to tokens and get raw expression
-                var editedValue = SeparateOuterBrackets(value);
-
-                foreach (var token in editedValue)
+                if (TryOptimizeByOperatorSplit(cleanExpression, out var result) ||
+                    TryOptimizeByArguments(cleanExpression, out result) ||
+                    TryOptimizeByRecursiveFunction(cleanExpression, out result))
                 {
-                    if (!(token is RawToken))
-                    {
-                        result.ExpressionTokens.Add(token);
-                    }
-                    else
-                    {
-
-                        result.Add(OptimizeRawToken((RawToken)token));
-                    }
+                    return result;
                 }
-
-                return result;
             }
 
-            return new OptimizerResult(new RawToken(value));
+            var rawToken = new RawToken(expression);
+            return new OptimizerResult(rawToken);
         }
 
-        private bool IsFunctionRecursion(string value)
+        private bool IsFunctionRecursion(string expression)
         {
             var functionBracketes = 0;
-            for (var i = 1; i < value.Length; i++)
+            for (var i = 1; i < expression.Length; i++)
             {
-                if (value[i].Equals(_leftBracket) &&
-                    !(MathDefinitions.OperatorDefinitions.ContainsKey(value[i - 1]) || value[i - 1].Equals(',')))
+                if (expression[i] == MathDefinitions.leftRoundBracket &&
+                    !(MathDefinitions.OperatorDefinitions.ContainsKey(expression[i - 1]) || expression[i - 1] == MathDefinitions.argumentSeparator))
+                {
                     functionBracketes++;
+                }
             }
 
-            return functionBracketes >= 4;
+            return functionBracketes >= 2;
         }
 
-        private OptimizerResult OptimizeRawToken(RawToken token)
+        private bool TryOptimizeByRecursiveFunction(string expression, out OptimizerResult result)
         {
-            var tokenStringValue = token.GetStringRepresentation();
-
-            //var expressions = new List<IExpressionToken>();
-            var roundBrackets = 0;
-            var squareBrackets = 0;
-            var wasRight = false;
-
-            for (var i = 0; i < tokenStringValue.Length; i++)
+            result = new OptimizerResult();
+            var countStarted = false;
+            var bracketsCount = 0;
+            var leftBracketLocation = -1;
+            for (var i = 1; i < expression.Length; i++)
             {
-                switch (tokenStringValue[i])
+                if (MathDefinitions.BracketsDefinitions.TryGetValue(expression[i], out var left))
                 {
-                    case _leftBracket:
-                        roundBrackets++;
-                        break;
-                    case _rightBracket:
-                        roundBrackets--;
-                        wasRight = true;
-                        break;
-                    case _leftSquareBracket:
-                        squareBrackets++;
-                        break;
-                    case _rightSquareBracket:
-                        squareBrackets--;
-                        break;
+                    if (!countStarted)
+                    {
+                        var charBefore = expression[i - 1];
+                        countStarted = left && (charBefore.IsLetter() || charBefore.IsNumber());
+                    }
+
+                    if (countStarted)
+                    {
+                        bracketsCount = left ? bracketsCount += 1 : bracketsCount -= 1;
+
+                        if(leftBracketLocation == -1)
+                        {
+                            leftBracketLocation = i;
+                        }
+                    }
                 }
 
-                //spliting by operator
-                if (MathDefinitions.OperatorDefinitions.ContainsKey(tokenStringValue[i]) && roundBrackets == 0 && i != 0)
+                if(countStarted && bracketsCount == 0)
                 {
-                    var result = new OptimizerResult();
-                    result.Add(OptimizeExpression(tokenStringValue[..i]));
-                    result.ExpressionTokens.Add(CreateOperatorToken(tokenStringValue[i]));
-                    result.Add(OptimizeExpression(tokenStringValue[(i + 1)..]));
-
-                    return result;
-                }
-
-                //spliting by arguments
-                if (tokenStringValue[i].Equals(',') && squareBrackets == 0)
-                {
-                    var result = new OptimizerResult();
-                    var leftArgumentStartIndex = CountBracketsUntil(tokenStringValue, i, -1, 1);
-                    var leftArgument = tokenStringValue[(leftArgumentStartIndex + 1)..i];
-                    var rightArgumentEndIndex = CountBracketsUntil(tokenStringValue, i, 1, -1);
-                    var rightArgument = tokenStringValue[(i + 1)..rightArgumentEndIndex];
-
-                    var editedExpression = ReplaceInnerExpressionWithVariable(tokenStringValue, leftArgument, out var leftArgumentVariable);
-                    editedExpression = ReplaceInnerExpressionWithVariable(editedExpression, rightArgument, out var rightArgumentVariable);
+                    var innerFunction = expression[(leftBracketLocation+1)..i];
+                    var editedExpression = expression.ReplaceInnerExpressionWithVariable(innerFunction, out var innerFunctionVariable);
 
                     var expressionTokens = OptimizeExpression(editedExpression);
-                    var leftArgumentTokens = OptimizeExpression(leftArgument);
-                    var rightArgumentTokens = OptimizeExpression(rightArgument);
+                    var innerFunctionTokens = OptimizeExpression(innerFunction);
 
-                    result.AddVariable(leftArgumentVariable, leftArgumentTokens);
-                    result.AddVariable(rightArgumentVariable, rightArgumentTokens);
+                    result.AddVariable(innerFunctionVariable, innerFunctionTokens);
                     result.Add(expressionTokens);
 
-                    return result;
+                    return true;
                 }
-                //splitting by function
-                if (roundBrackets % 2 == 1 && wasRight)
+            }
+
+            result = null;
+            return false;
+        }
+
+        private bool TryOptimizeByArguments(string expression, out OptimizerResult result)
+        {
+            result = new OptimizerResult();
+            var bracketsCount = 0;
+            var lastCommaPosition = -1;
+
+            var editedExpression = expression;
+
+            for (var i = 0; i < expression.Length; i++)
+            {
+                if (MathDefinitions.BracketsDefinitions.TryGetValue(expression[i], out var left))
                 {
-                    var lastChar = tokenStringValue[i-1];
-                    if (!MathDefinitions.OperatorDefinitions.ContainsKey(lastChar) && !lastChar.Equals(','))
+                    bracketsCount = left ? bracketsCount += 1 : bracketsCount -= 1;
+                }
+
+                var zeroBrackets = bracketsCount == 0;
+                var wasComma = lastCommaPosition != -1;
+                //its separator or its last argument
+                if (expression[i] == MathDefinitions.argumentSeparator || wasComma && zeroBrackets)
+                {
+                    var tempBracketsCount = 0;
+                    var bracketOrCommaPosition = -1;
+                    for (var j = i - 1; j >= 0; j--)
                     {
-                        var result = new OptimizerResult();
-
-                        var tempRoundBrackets = roundBrackets;
-                        var wasLeft = false;
-                        var start = 0;
-                        for (var j = i - 1; j >= 0; j--)
+                        if(expression[j] == MathDefinitions.argumentSeparator && tempBracketsCount == 0)
                         {
-                            if (tokenStringValue[j].Equals(_leftBracket))
-                            {
-                                tempRoundBrackets--;
-                                wasLeft = true;
-                            }
-
-                            if (tempRoundBrackets % 2 != 0 || !wasLeft) continue;
-
-                            start = j;
+                            bracketOrCommaPosition = j;
                             break;
                         }
 
-                        var argument = tokenStringValue[(start + 1)..(i)];
-                        var editedExpression = ReplaceInnerExpressionWithVariable(tokenStringValue, argument, out var argumentVariable);
+                        if (MathDefinitions.BracketsDefinitions.TryGetValue(expression[j], out var tempLeft))
+                        {
+                            tempBracketsCount = tempLeft ? tempBracketsCount += 1 : tempBracketsCount -= 1;
+                        }
 
-                        var expressionTokens = OptimizeExpression(editedExpression);
-                        var argumentTokens = OptimizeExpression(argument);
-
-                        result.AddVariable(argumentVariable, argumentTokens);
-                        result.Add(expressionTokens);
-
-                        return result;
+                        if(tempBracketsCount % 2 == 1)
+                        {
+                            bracketOrCommaPosition = j;
+                            break;
+                        }
                     }
-                }
-            }
 
-            return new OptimizerResult(token);
-
-        }
-
-        public IEnumerable<IExpressionToken> SeparateOuterBrackets(string value)
-        {
-            var result = new List<IExpressionToken>();
-
-            if (value[0].Equals(_leftBracket) && value[^1].Equals(_rightBracket))
-            {
-                var innerValue = value[1..^1];
-                var brackets = 0;
-
-                for (var i = 0; i < innerValue.Length; i++)
-                {
-                    var equalsRightBracket = innerValue[i].Equals(_rightBracket);
-
-                    if (brackets.Equals(0) && equalsRightBracket)
+                    if (i - bracketOrCommaPosition > _optimalArgumentLength)
                     {
-                        result.Add(new RawToken(value));
-                        return result;
+                        var leftArgument = expression[(bracketOrCommaPosition + 1)..i];
+                        editedExpression = editedExpression.ReplaceInnerExpressionWithVariable(leftArgument, out var leftArgumentVariable);
+
+                        var leftArgumentTokens = OptimizeExpression(leftArgument);
+                        result.AddVariable(leftArgumentVariable, leftArgumentTokens);
                     }
-                    else if (innerValue[i].Equals(_leftBracket))
-                    {
-                        brackets++;
-                    }
-                    else if (equalsRightBracket)
-                    {
-                        brackets--;
-                    }
+
+                    lastCommaPosition = zeroBrackets ? -1 : i;
                 }
-
-                result.Add(new LeftBracketToken());
-                result.Add(new RawToken(innerValue));
-                result.Add(new RightBracketToken());
-                return result;
             }
 
-            result.Add(new RawToken(value));
-            return result;
-        }
-
-        private string ReplaceInnerExpressionWithVariable(string expression, string innerExpression, out string variable)
-        {
-            var generator = new Random();
-            do
+            if (editedExpression == expression)
             {
-                variable = GenerateVariable(2, generator);
-
-            } while (expression.Contains(variable));
-
-            return expression.Replace(innerExpression, variable);
-        }
-
-        private string GenerateVariable(int length, Random generator)
-        {
-            var result = string.Empty;
-
-            var charArray = "abcdefghijklmnopqrstuvwxyz";
-            for (var i = 0; i < length; i++)
-            {
-                var index = generator.Next(0, charArray.Length - 1);
-                result += charArray[index];
+                result = null;
+                return false;
             }
 
-            return result;
+            var expressionTokens = OptimizeExpression(editedExpression);
+            result.Add(expressionTokens);
+            return true;
         }
 
-        private int CountBracketsUntil(string tokenStringValue, int actualPosition, int step, int endValue)
+        private bool TryOptimizeByOperatorSplit(string expression, out OptimizerResult result)
         {
-            var functionBrackets = 0;
-            var result = 0;
-            for (var j = actualPosition; j < tokenStringValue.Length; j += step)
+            var bracketsCount = 0;
+            for (var i = 0; i < expression.Length; i++)
             {
-                if (tokenStringValue[j].Equals(_leftBracket))
+                if (MathDefinitions.BracketsDefinitions.TryGetValue(expression[i], out var left))
                 {
-                    functionBrackets++;
+                    bracketsCount = left ? bracketsCount += 1 : bracketsCount -= 1;
+                    continue;
                 }
-                else if (tokenStringValue[j].Equals(_rightBracket))
+
+                var isOperator = MathDefinitions.OperatorDefinitions.ContainsKey(expression[i]);
+                if (isOperator && bracketsCount == 0)
                 {
-                    functionBrackets--;
+                    result = new OptimizerResult();
+                    result.Add(OptimizeExpression(expression[..i]));
+                    result.ExpressionTokens.Add(CreateOperatorToken(expression[i]));
+                    result.Add(OptimizeExpression(expression[(i + 1)..]));
+
+                    return true;
                 }
-
-                if (functionBrackets != endValue) continue;
-
-                result = j;
-                break;
             }
 
-            return result;
+            result = null;
+            return false;
         }
 
         private OperatorToken CreateOperatorToken(char token)

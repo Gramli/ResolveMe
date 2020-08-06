@@ -7,10 +7,10 @@ namespace ResolveMe.UnitTests
     [TestClass]
     public class ExpressionOptimizerTests
     {
-        private readonly ExpressionOptimizer2 expressionOptimizer2;
+        private readonly ExpressionOptimizer expressionOptimizer2;
         public ExpressionOptimizerTests()
         {
-            this.expressionOptimizer2 = new ExpressionOptimizer2(15);
+            this.expressionOptimizer2 = new ExpressionOptimizer(15);
         }
 
         [TestMethod]
