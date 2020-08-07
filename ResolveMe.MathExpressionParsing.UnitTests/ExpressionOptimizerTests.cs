@@ -30,11 +30,19 @@ namespace ResolveMe.UnitTests
             Assert.AreEqual(result.ExpressionTokens.Count, 11);
             Assert.AreEqual(result.VariableTokens.Count, 0);
         }
-
         [TestMethod]
         public void OptimizeExpressionUsingArguments()
         {
             var expression = "(sint(a+ b,c+(d+a+b),c+d+e+s+dsa+a))";
+            var result = expressionOptimizer2.OptimizeExpression(expression);
+            Assert.AreEqual(result.ExpressionTokens.Count, 1);
+            Assert.AreEqual(result.VariableTokens.Count, 2);
+        }
+
+        [TestMethod]
+        public void OptimizeExpressionUsingArguments2()
+        {
+            var expression = "(max(ab+2, bc*(2+4),ab+bc-4))";
             var result = expressionOptimizer2.OptimizeExpression(expression);
             Assert.AreEqual(result.ExpressionTokens.Count, 1);
             Assert.AreEqual(result.VariableTokens.Count, 2);

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace ResolveMe.MathInterpreter
 {
@@ -22,18 +21,18 @@ namespace ResolveMe.MathInterpreter
 
         private void InicializeFunctions()
         {
-            var plus = new Func<object[], object>((args) => { return (double)args[0] + (double)args[1]; });
-            var minus = new Func<object[], object>((args) => { return (double)args[0] - (double)args[1]; });
-            var times = new Func<object[], object>((args) => { return (double)args[0] * (double)args[1]; });
-            var divide = new Func<object[], object>((args) => { return (double)args[0] / (double)args[1]; });
-            var power = new Func<object[], object>((args) => { return Math.Pow((double)args[0], (double)args[1]); });
+            var plus = new Func<object[], object>((args) => (double)args[0] + (double)args[1]);
+            var minus = new Func<object[], object>((args) => (double)args[0] - (double)args[1]);
+            var times = new Func<object[], object>((args) => (double)args[0] * (double)args[1]);
+            var divide = new Func<object[], object>((args) => (double)args[0] / (double)args[1]);
+            var power = new Func<object[], object>((args) => Math.Pow((double)args[0], (double)args[1]));
             var sin = new Func<object[], object>((args) => OneArgumentFunc(args, Math.Sin));
             var asin = new Func<object[], object>((args) => OneArgumentFunc(args, Math.Asin));
             var cos = new Func<object[], object>((args) => OneArgumentFunc(args, Math.Cos));
             var acos = new Func<object[], object>((args) => OneArgumentFunc(args, Math.Acos));
             var tan = new Func<object[], object>((args) => OneArgumentFunc(args, Math.Tan));
             var atan = new Func<object[], object>((args) => OneArgumentFunc(args, Math.Atan));
-            var log10 = new Func<object[], object>((args) => OneArgumentFunc(args, Math.Log10));
+            var ln = new Func<object[], object>((args) => OneArgumentFunc(args, Math.Log));
             var max = new Func<object[], object>((args) => ArrayArgumentCompareFunc(args, (result, value) => value > result));
             var min = new Func<object[], object>((args) => ArrayArgumentCompareFunc(args, (result, value) => value < result));
 
@@ -45,12 +44,27 @@ namespace ResolveMe.MathInterpreter
             functions.Add("atan", atan);
             functions.Add("min", min);
             functions.Add("max", max);
-            functions.Add("log10", log10);
+            functions.Add("ln", ln);
             functions.Add("+", plus);
             functions.Add("-", minus);
             functions.Add("*", times);
             functions.Add("/", divide);
             functions.Add("^", power);
+
+            InicializeLogFunctions(0,1,0.1);
+            InicializeLogFunctions(2,10, 1);
+        }
+
+        private void InicializeLogFunctions(double start, int max, double step)
+        {
+            for (var i = start; i <= max; i += step)
+            {
+                var i1 = Math.Truncate(Math.Round(i,1) * 10) / 10;
+                var logFunc = new Func<double, double>((arg) => Math.Log(arg, i1));
+                var log = new Func<object[], object>((args) => OneArgumentFunc(args, logFunc));
+                var name = $"log{i1}";
+                functions.Add(name, log);
+            }
         }
 
         private void InicializeVariables()

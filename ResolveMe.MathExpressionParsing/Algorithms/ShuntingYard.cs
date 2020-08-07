@@ -1,9 +1,8 @@
 ﻿using ResolveMe.MathCompiler.ExpressionTokens;
 using ResolveMe.MathCompiler.Notations;
-using System.Linq;
-using System.Collections.Generic;
-using ResolveMe.MathCompiler.Exceptions;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace ResolveMe.MathCompiler.Algorithms
 {
@@ -33,8 +32,18 @@ namespace ResolveMe.MathCompiler.Algorithms
                     case NumberToken _:
                         output.Add(token);
                         break;
-                    case CommaToken _:
+                    case CommaToken commaToken:
                         functionArguments++;
+                        while (stack.TryPop(out var stackOperator))
+                        {
+                            if (stackOperator is LeftBracketToken)
+                            {
+                                break;
+                            }
+                            output.Add(stackOperator);
+                        }
+                        stack.Push(commaToken);
+
                         break;
                     case LeftBracketToken leftBracketToken:
                         stack.Push(leftBracketToken);
@@ -43,7 +52,8 @@ namespace ResolveMe.MathCompiler.Algorithms
                         {
                             while (stack.TryPop(out var stackOperator))
                             {
-                                if (stackOperator is LeftBracketToken)
+                                if (stackOperator is LeftBracketToken 
+                                    || stackOperator is CommaToken)
                                 {
                                     break;
                                 }
@@ -68,7 +78,7 @@ namespace ResolveMe.MathCompiler.Algorithms
                             {
                                 if (stackOperator is OperatorToken stackOperatorToken &&
                                     (stackOperatorToken.Precedence > operatorToken.Precedence && operatorToken.OperatorAssociativity == OperatorAssociativity.Right ||
-                                    stackOperatorToken.Precedence >= operatorToken.Precedence && operatorToken.OperatorAssociativity == OperatorAssociativity.Left))
+                                     stackOperatorToken.Precedence >= operatorToken.Precedence && operatorToken.OperatorAssociativity == OperatorAssociativity.Left))
                                 {
                                     stack.Pop();
                                     output.Add(stackOperatorToken);

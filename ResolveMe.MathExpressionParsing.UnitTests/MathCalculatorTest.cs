@@ -2,7 +2,6 @@
 using ResolveMe.MathInterpreter;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace ResolveMe.UnitTests
 {
@@ -20,10 +19,14 @@ namespace ResolveMe.UnitTests
         {
             this.calculator.Context.AddVariable("ab", (double)10);
             this.calculator.Context.AddVariable("bc", (double)5);
+            this.calculator.Context.AddVariable("cd", (double)25);
             var expressions = new Dictionary<string, double>()
             {
                 { "max(25,1)+45-ab*bc+12", (double)32},
-                { "max(25,12)+45-ab*bc+log10(1)", (double)20 }
+                { "max(25,12)+45-ab*bc+log10(1)", (double)20 },
+                { "max(10+2,5*(2+4),10+5-4)", (double)30 },
+                { "max(ab+2,bc*(2+4),ab+bc-4)", (double)30 },
+                { "min(ab,bc,cd)", (double)5 }
 
             };
             foreach (var expression in expressions)

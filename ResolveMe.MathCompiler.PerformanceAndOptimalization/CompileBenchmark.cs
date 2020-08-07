@@ -1,7 +1,4 @@
-﻿using Amy;
-using Amy.Grammars.EBNF;
-using BenchmarkDotNet.Attributes;
-using ResolveMe.MathCompiler.Compilers.EBNF;
+﻿using BenchmarkDotNet.Attributes;
 
 namespace ResolveMe.MathCompiler.PerformanceAndOptimalization
 {
