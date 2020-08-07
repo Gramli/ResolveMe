@@ -13,7 +13,7 @@ Actual version supports:
 * Return expression in tokens postfix notation
 * And much more..
 
-##Performance
+## Performance
 
 ## How to use it
 It's simply to use, just create new instance of MathCalculator class and call Calculate method with arguments. MathCalculator use default context which has defined all basic functions.
