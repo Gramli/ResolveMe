@@ -13,22 +13,24 @@ Actual version supports:
 * Return expression in tokens postfix notation
 * And much more..
 
+##Performance
+
 ## How to use it
 It's simply to use, just create new instance of MathCalculator class and call Calculate method with arguments. MathCalculator use default context which has defined all basic functions.
 
 ```C#
 var calculator = new MathCalculator();
 var expression = "cos(24-23.8*0.2)";
-var result = this.calculator.Calculate<double>(expression);
+var result = calculator.Calculate<double>(expression);
 ```
 
 ### Custom Variable
 If you want to use custom variables just add it.
 ```C#
 var calculator = new MathCalculator();
-this.calculator.Context.AddVariable("ab", (double)10);
+calculator.Context.AddVariable("ab", (double)10);
 var expression = "max(25,1)+45-ab*bc+12";
-var result = this.calculator.Calculate<double>(expression);
+var result = calculator.Calculate<double>(expression);
 ```
 
 ### Custom Function
@@ -39,7 +41,7 @@ You can define your own context which has to inherite from IContext interface an
 ```C#
 var context = new MyOwnContext();
 var calculator = new MathCalculator(context);
-this.calculator.Context.AddVariable("ab", (double)10);
+calculator.Context.AddVariable("ab", (double)10);
 var expression = "max(25,1)+45-ab*bc+12";
-var result = this.calculator.Calculate<double>(expression);
+var result = calculator.Calculate<double>(expression);
 ```
