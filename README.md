@@ -34,7 +34,32 @@ var result = calculator.Calculate<double>(expression);
 ```
 
 ### Custom Function
+Example of defining custom standart deviation function.
+```C#
+var calculator = new MathCalculator();
+var stdv = new Func<object[], object>((args) =>
+{
+  calculator.Context.TryGetFunction("avg", out var avgFunct);
+  var avg = (double)avgFunct(args);
+  var result = (double)0;
+  foreach (var arg in args)
+  {
+      if (arg is double number)
+      {
+        var temp = number - avg;
+        result += Math.Pow(temp, 2);
+        continue;
+      }
 
+      throw new ArgumentException("args", "Function expects double");
+   }
+   return Math.Sqrt(result / (double)args.Length);
+});
+            
+calculator.Context.TryAddFunction("stdv", stdv);
+var expression = "stdv(25,1,6,15,17)";
+var result = this.calculator.Calculate<double>(expression);
+```
 
 ### Custom Context
 You can define your own context which has to inherite from IContext interface and then pass it as argument to calculator constructor.
