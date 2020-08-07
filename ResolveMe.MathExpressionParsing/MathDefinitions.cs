@@ -21,6 +21,7 @@ namespace ResolveMe.MathCompiler
             { '-',(2, OperatorAssociativity.Left) },
             { '*',(3, OperatorAssociativity.Left) },
             { '/',(3, OperatorAssociativity.Left) },
+            { '%',(3, OperatorAssociativity.Left) },
             { '^',(4, OperatorAssociativity.Right) },
         };
 

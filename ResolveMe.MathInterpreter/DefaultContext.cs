@@ -21,10 +21,12 @@ namespace ResolveMe.MathInterpreter
 
         private void InicializeFunctions()
         {
+            //add sum, avg
             var plus = new Func<object[], object>((args) => (double)args[0] + (double)args[1]);
             var minus = new Func<object[], object>((args) => (double)args[0] - (double)args[1]);
             var times = new Func<object[], object>((args) => (double)args[0] * (double)args[1]);
             var divide = new Func<object[], object>((args) => (double)args[0] / (double)args[1]);
+            var modulo = new Func<object[], object>((args) => (double)args[0] % (double)args[1]);
             var power = new Func<object[], object>((args) => Math.Pow((double)args[0], (double)args[1]));
             var sin = new Func<object[], object>((args) => OneArgumentFunc(args, Math.Sin));
             var asin = new Func<object[], object>((args) => OneArgumentFunc(args, Math.Asin));
@@ -50,6 +52,7 @@ namespace ResolveMe.MathInterpreter
             functions.Add("*", times);
             functions.Add("/", divide);
             functions.Add("^", power);
+            functions.Add("%", modulo);
 
             InicializeLogFunctions(0,1,0.1);
             InicializeLogFunctions(2,10, 1);

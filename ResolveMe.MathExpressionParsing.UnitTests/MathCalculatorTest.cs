@@ -26,7 +26,8 @@ namespace ResolveMe.UnitTests
                 { "max(25,12)+45-ab*bc+log10(1)", (double)20 },
                 { "max(10+2,5*(2+4),10+5-4)", (double)30 },
                 { "max(ab+2,bc*(2+4),ab+bc-4)", (double)30 },
-                { "min(ab,bc,cd)", (double)5 }
+                { "min(ab,bc,cd)", (double)5 },
+                { "5%2", (double)1 }
 
             };
             foreach (var expression in expressions)

@@ -11,7 +11,7 @@ namespace ResolveMe.MathCompiler.Compilers.EBNF
         private string[] _productionRules = new string[]
         {
             "expression = [ sign ], term , { ( plus | minus ) , term };",
-            "term = exponentiation, { (times | divide) , exponentiation };",
+            "term = exponentiation, { (times | divide | modulo) , exponentiation };",
             "exponentiation = factor  | (factor, exponent, factor);",
             "factor = variable | double | function | (l_round, expression, r_round);",
             "function = letter, letter, word , l_round, expression, { comma, expression }, r_round;",
@@ -28,6 +28,7 @@ namespace ResolveMe.MathCompiler.Compilers.EBNF
             "minus  =\"-\" ; ",
             "times  =\"*\" ; ",
             "divide =\"/\" ; ",
+            "modulo =\"%\" ; ",
             "exponent = \"^\";",
             "letter = \"a\" | \"b\" | \"c\" | \"d\" | \"e\" | \"f\" | \"g\" | \"h\" | \"i\" | \"j\" | \"k\" | \"l\" | \"m\" " +
             "| \"n\" | \"o\" | \"p\" | \"q\" | \"r\" | \"s\" | \"t\" | \"u\" | \"v\" | \"w\" | \"x\" | \"y\" | \"z\" ; ",
@@ -44,6 +45,7 @@ namespace ResolveMe.MathCompiler.Compilers.EBNF
             { "times", typeof(OperatorCompiler) },
             { "minus", typeof(OperatorCompiler) },
             { "plus", typeof(OperatorCompiler) },
+            { "modulo", typeof(OperatorCompiler) },
             { "comma", typeof(CharCompiler<CommaToken>) },
             { "r_square", typeof(CharCompiler<RightBracketToken>) },
             { "l_square", typeof(CharCompiler<LeftBracketToken>) },
