@@ -19,38 +19,42 @@ namespace ResolveMe.UnitTests
         [TestMethod]
         public void TestExpressionWithCustomFunction()
         {
-            var sum = new Func<object[], object>((args) => SumFunction(args));
+            var stdv = new Func<object[], object>((args) => StdvFunction(args));
 
-            this.calculator.Context.TryAddFunction("sum", sum);
+            this.calculator.Context.TryAddFunction("stdv", stdv);
 
             var expressions = new Dictionary<string, double>()
             {
-                { "sum(25,1,6,7)", (double)39},
+                { "stdv(25,1,6,15,17)", (double)8.45},
 
             };
 
             foreach (var expression in expressions)
             {
                 var result = this.calculator.Calculate<double>(expression.Key);
-                Assert.AreEqual(expression.Value, (double)result);
+                Assert.AreEqual(expression.Value, (double)Math.Round(result, 2, MidpointRounding.AwayFromZero));
             }
         }
 
-        private double SumFunction(object[] args)
+        private double StdvFunction(object[] args)
         {
-            var result = (double) 0;
+            this.calculator.Context.TryGetFunction("avg", out var avgFunct);
+            var avg = (double)avgFunct(args);
+
+            var result = (double)0;
             foreach (var arg in args)
             {
                 if (arg is double number)
                 {
-                    result += number;
+                    var temp = number - avg;
+                    result += Math.Pow(temp, 2);
                     continue;
                 }
 
                 throw new ArgumentException("args", "Function expects double");
             }
 
-            return result;
+            return Math.Sqrt(result / (double)args.Length);
         }
     }
 }

@@ -21,7 +21,6 @@ namespace ResolveMe.MathInterpreter
 
         private void InicializeFunctions()
         {
-            //add sum, avg
             var plus = new Func<object[], object>((args) => (double)args[0] + (double)args[1]);
             var minus = new Func<object[], object>((args) => (double)args[0] - (double)args[1]);
             var times = new Func<object[], object>((args) => (double)args[0] * (double)args[1]);
@@ -37,7 +36,11 @@ namespace ResolveMe.MathInterpreter
             var ln = new Func<object[], object>((args) => OneArgumentFunc(args, Math.Log));
             var max = new Func<object[], object>((args) => ArrayArgumentCompareFunc(args, (result, value) => value > result));
             var min = new Func<object[], object>((args) => ArrayArgumentCompareFunc(args, (result, value) => value < result));
+            var sum = new Func<object[], object>((args) => SumFunction(args));
+            var avg = new Func<object[], object>((args) => SumFunction(args) / args.Length);
 
+            functions.Add("avg", avg);
+            functions.Add("sum", sum);
             functions.Add("sin", sin);
             functions.Add("cos", cos);
             functions.Add("asin", asin);
@@ -97,6 +100,22 @@ namespace ResolveMe.MathInterpreter
             return result;
         }
 
+        private double SumFunction(object[] args)
+        {
+            var result = (double)0;
+            foreach (var arg in args)
+            {
+                if (arg is double number)
+                {
+                    result += number;
+                    continue;
+                }
+
+                throw new ArgumentException("args", "Sum Function expects double.");
+            }
+
+            return result;
+        }
 
         public void AddVariable(string name, object value)
         {

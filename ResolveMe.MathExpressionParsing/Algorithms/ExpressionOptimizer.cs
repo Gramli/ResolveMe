@@ -17,11 +17,13 @@ namespace ResolveMe.MathCompiler.Algorithms
         {
             var cleanExpression = expression.RemoveSpaces().RemoveOuterBrackets();
 
-            if (cleanExpression.Length > _optimalExpressionLength || IsFunctionRecursion(expression))
+            var isFunctionRecursion = IsFunctionRecursion(expression);
+
+            if (cleanExpression.Length > _optimalExpressionLength || isFunctionRecursion)
             {
                 if (TryOptimizeByOperatorSplit(cleanExpression, out var result) ||
                     TryOptimizeByArguments(cleanExpression, out result) ||
-                    TryOptimizeByRecursiveFunction(cleanExpression, out result))
+                    TryOptimizeByRecursiveFunction(cleanExpression, out result) && isFunctionRecursion)
                 {
                     return result;
                 }
