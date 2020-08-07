@@ -5,7 +5,7 @@ C# .NET Core solution for parsing and resolving mathematical expressions. Projec
 Actual version supports:
 
 * operators +,-,*,/,^
-* Functions: sin, cos, argsin, argcos, tan, argtang, log10, min, max
+* Functions: sin, cos, argsin, argcos, tan, argtang, logx, ln, min, max
 * Variables: PI, e,
 * Using of Recursive Functions `sin(cos(sin(cos(0.1))))`
 * Custom Context
