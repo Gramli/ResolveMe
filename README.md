@@ -11,6 +11,7 @@ Actual version supports:
 * Custom Context
 * Return expression in tokens
 * Return expression in tokens postfix notation
+* Using custom types as a results or as function parameters
 * And much more..
 
 ## How to use it
@@ -57,6 +58,34 @@ var stdv = new Func<object[], object>((args) =>
 calculator.Context.TryAddFunction("stdv", stdv);
 var expression = "stdv(25,1,6,15,17)";
 var result = this.calculator.Calculate<double>(expression);
+```
+
+### Custom Function with custom type
+Example of defining custom function which expects array as one of input parameter.
+```C#
+var calculator = new MathCalculator();
+var sumArray = new Func<object[], object>((args) =>
+{
+  var constant = (double)args[0];
+  var array = (double[])args[1];
+
+  for (var i = 0; i < array.Length; i++)
+  {
+    array[i] += constant;
+  }
+
+  return array;
+ });
+
+var inputArray = new double[] { 1, 2, 3, 4, 5, 6 };
+var constant = (double)1;
+
+calculator.Context.AddVariable("ar", inputArray);
+calculator.Context.AddVariable("con", constant);
+calculator.Context.TryAddFunction("addarray", sumArray);
+
+var expression = "addarray(con,ar)";
+var result = calculator.Calculate<double[]>(expression);
 ```
 
 ### Custom Context
