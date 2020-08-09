@@ -60,7 +60,7 @@ var expression = "stdv(25,1,6,15,17)";
 var result = this.calculator.Calculate<double>(expression);
 ```
 
-### Custom Function with custom type
+### Custom Function with array as parameter and as result
 Example of defining custom function which expects array as one of input parameter.
 ```C#
 var calculator = new MathCalculator();
