@@ -28,7 +28,7 @@ If you want to use custom variables just add it.
 ```C#
 var calculator = new MathCalculator();
 calculator.Context.AddVariable("ab", (double)10);
-var expression = "max(25,1)+45-ab*bc+12";
+var expression = "max(25,1)+45-ab*12";
 var result = calculator.Calculate<double>(expression);
 ```
 
