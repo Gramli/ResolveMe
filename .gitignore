@@ -12,3 +12,7 @@ packages/
 *.suo
 
 *.user
+
+ResolveMe.MathInterpreter/nuget.config
+
+ResolveMe.MathExpressionParsing/nuget.config
